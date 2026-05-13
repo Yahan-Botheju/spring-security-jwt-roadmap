@@ -2,6 +2,7 @@ package lk.spring_security.stateless_jwt.infrastructure.task.persistence.entitie
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lk.spring_security.stateless_jwt.infrastructure.user.persistence.entities.UserEntity;
 import lombok.*;
 
@@ -20,6 +21,7 @@ public class TaskEntity {
     @NotBlank(message = "Description cannot be empty")
     private String taskDescription;
 
+    @NotNull(message = "Status cannot be empty")
     private Boolean completed = false ;
 
     @ManyToOne
