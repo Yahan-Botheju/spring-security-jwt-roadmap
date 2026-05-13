@@ -2,3 +2,9 @@ project-02-refresh-token
 project-03-token-rotation
 project-04-cookie-auth
 project-05-role-based-auth
+
+.idea
+**/target/
+**/.idea/
+**/.vscode/
+**/*.iml
