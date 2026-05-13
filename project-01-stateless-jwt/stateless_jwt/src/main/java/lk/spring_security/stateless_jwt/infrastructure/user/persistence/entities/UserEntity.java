@@ -1,4 +1,4 @@
-package lk.spring_security.stateless_jwt.infrastructure.persistence.entities;
+package lk.spring_security.stateless_jwt.infrastructure.user.persistence.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
