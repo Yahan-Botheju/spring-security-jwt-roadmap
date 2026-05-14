@@ -1,9 +1,12 @@
-package lk.spring_security.stateless_jwt.infrastructure.persistence;
+package lk.spring_security.stateless_jwt.infrastructure.user.persistence;
 
+import lk.spring_security.stateless_jwt.domain.models.User;
 import lk.spring_security.stateless_jwt.domain.repositories.UserRepository;
-import lk.spring_security.stateless_jwt.infrastructure.persistence.jpa.JpaUserRepository;
-import lk.spring_security.stateless_jwt.infrastructure.persistence.mappers.UserPersistenceMapper;
+import lk.spring_security.stateless_jwt.infrastructure.user.persistence.jpa.JpaUserRepository;
+import lk.spring_security.stateless_jwt.infrastructure.user.persistence.mappers.UserPersistenceMapper;
 import lombok.RequiredArgsConstructor;
+
+import java.util.Optional;
 
 @RequiredArgsConstructor
 public class UserPersistenceImpl implements UserRepository {
@@ -13,4 +16,11 @@ public class UserPersistenceImpl implements UserRepository {
 
     //inject persistence mapper
     private final UserPersistenceMapper userPersistenceMapper;
+
+    /* ----- HELPER METHODS ----- */
+
+    //user find by email
+    public Optional<User> userFindByEmail(String email) {
+        return jpaUserRepository.findByEmail(email).map(userPersistenceMapper::toDomainModel);
+    }
 }
