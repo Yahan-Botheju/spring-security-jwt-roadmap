@@ -24,7 +24,8 @@ public class JwtService {
     private  String SECRET_KEY;
 
 
-    /* ----- HELPER METHODS ----- */
+    /* ----- CREATE NEW TOKEN ----- */
+
 
     //turn KEY(String) to Java secretKey object
     private SecretKey getSignInKey() {
@@ -32,41 +33,7 @@ public class JwtService {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    //extract token data
-    private Claims extractAllClaims(String token) {
-        return Jwts.parser()
-                .verifyWith(getSignInKey())
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
-    }
-
-    //create generics type method that return data from CLAIM
-    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = extractAllClaims(token);
-        return claimsResolver.apply(claims);
-    }
-
-    /* ----- PUBLIC METHODS/ LOGICS ----- */
-
-    //get username from token
-    public String extractUserName(String token) {
-        return extractClaim(token, Claims::getSubject);
-    }
-
-    //get expire data of token
-    private Date extractExpiration(String token) {
-        return extractClaim(token, Claims::getExpiration);
-    }
-
-    //check token is expired or not
-    private boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
-    }
-
-    /* ----- CREATE NEW TOKEN IN USER LOGIN ----- */
-
-    //get user details for create token
+    //get user details for create token (METHOD OVERLOADED)
     public String generateToken(UserDetails userDetails) {
         return generateToken(new HashMap<>(), userDetails);
     }
@@ -83,6 +50,44 @@ public class JwtService {
                 .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
                 .signWith(getSignInKey())
                 .compact();
+    }
+
+
+    /* ----- VALIDATION ----- */
+
+
+    /* extract token data  */
+
+    //extract token data
+    private Claims extractAllClaims(String token) {
+        return Jwts.parser()
+                .verifyWith(getSignInKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+    }
+
+    //create generics type method that return data from CLAIM
+    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+        final Claims claims = extractAllClaims(token);
+        return claimsResolver.apply(claims);
+    }
+
+    /* validate using token data  */
+
+    //get username from token
+    public String extractUserName(String token) {
+        return extractClaim(token, Claims::getSubject);
+    }
+
+    //get expire data of token
+    private Date extractExpiration(String token) {
+        return extractClaim(token, Claims::getExpiration);
+    }
+
+    //check token is expired or not
+    private boolean isTokenExpired(String token) {
+        return extractExpiration(token).before(new Date());
     }
 
     //check username and token is expired
