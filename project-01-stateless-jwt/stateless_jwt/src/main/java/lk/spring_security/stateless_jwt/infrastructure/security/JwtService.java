@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
+import java.util.Date;
 import java.util.function.Function;
 
 
@@ -50,8 +51,15 @@ public class JwtService {
         return extractClaim(token, Claims::getSubject);
     }
 
+    //get expire data of token
+    private Date extractExpiration(String token) {
+        return extractClaim(token, Claims::getExpiration);
+    }
 
-
+    //check token is expired or not
+    private boolean isTokenExpired(String token) {
+        return extractExpiration(token).before(new Date());
+    }
 
 
 }
