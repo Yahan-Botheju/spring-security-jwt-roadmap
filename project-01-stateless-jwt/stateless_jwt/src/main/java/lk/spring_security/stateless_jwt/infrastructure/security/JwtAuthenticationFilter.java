@@ -44,5 +44,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
+
+        //separate token from auth header (Bearer)
+        jwtToken = authHeader.substring(7);
     }
 }
