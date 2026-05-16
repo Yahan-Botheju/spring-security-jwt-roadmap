@@ -50,5 +50,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         //check name in token with jwtService method
         userEmail = jwtService.extractUserName(jwtToken);
+
+        //check user has email and user ain't authenticate
+        if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+
+        }
     }
 }
