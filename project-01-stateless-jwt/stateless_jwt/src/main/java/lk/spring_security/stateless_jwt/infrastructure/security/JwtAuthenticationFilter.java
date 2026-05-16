@@ -60,6 +60,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             //check token is valid
             if(jwtService.isTokenValid(jwtToken, userDetails)) {
 
+                //create new Authentication object
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                        userDetails,
+                        null,
+                        userDetails.getAuthorities()
+                );
             }
 
         }
