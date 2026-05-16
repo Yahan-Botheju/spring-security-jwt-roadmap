@@ -54,6 +54,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         //check user has email and user ain't authenticate
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
+            //get user details using interface
+            UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
         }
     }
 }
