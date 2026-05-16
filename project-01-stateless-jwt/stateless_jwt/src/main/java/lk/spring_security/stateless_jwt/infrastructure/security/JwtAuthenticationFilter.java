@@ -56,6 +56,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             //get user details using interface
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
+
+            //check token is valid
+            if(jwtService.isTokenValid(jwtToken, userDetails)) {
+
+            }
+
         }
     }
 }
