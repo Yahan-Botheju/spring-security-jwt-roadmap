@@ -47,5 +47,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         //separate token from auth header (Bearer)
         jwtToken = authHeader.substring(7);
+
+        //check name in token with jwtService method
+        userEmail = jwtService.extractUserName(jwtToken);
     }
 }
