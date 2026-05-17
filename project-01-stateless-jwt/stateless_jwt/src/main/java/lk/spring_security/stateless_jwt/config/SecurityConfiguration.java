@@ -26,7 +26,12 @@ public class SecurityConfiguration {
 
         http
                 //disable due to stateless token
-                .csrf(AbstractHttpConfigurer::disable);
-        .
+                .csrf(AbstractHttpConfigurer::disable)
+
+                //define permission enabled routes
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/v1/auth/**").permitAll()
+                        .requestMatchers("/api/v1/admin/**").hasAuthority("ADMIN")
+                        .anyRequest().authenticated())
     }
 }
