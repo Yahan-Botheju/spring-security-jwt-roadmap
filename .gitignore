@@ -2,6 +2,7 @@ project-02-method-level-security-gloabal-security-exception
 project-03-cookie-based-jwt-auth
 project-04-refresh-token
 project-05-stateful-jwt-refresh-token-rotation
+out
 
 .idea
 **/target/
@@ -9,3 +10,4 @@ project-05-stateful-jwt-refresh-token-rotation
 **/.vscode/
 **/*.iml
 src/main/resources/application.properties
+production
