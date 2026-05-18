@@ -1,10 +1,11 @@
-project-02-refresh-token
-project-03-token-rotation
-project-04-cookie-auth
-project-05-role-based-auth
+project-02-method-level-security-gloabal-security-exception
+project-03-cookie-based-jwt-auth
+project-04-refresh-token
+project-05-stateful-jwt-refresh-token-rotation
 
 .idea
 **/target/
 **/.idea/
 **/.vscode/
 **/*.iml
+src/main/resources/application.properties
