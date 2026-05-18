@@ -39,5 +39,7 @@ public class SecurityConfiguration {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
+                //set custom auth provider
+                .authenticationProvider(authenticationProvider)
     }
 }
