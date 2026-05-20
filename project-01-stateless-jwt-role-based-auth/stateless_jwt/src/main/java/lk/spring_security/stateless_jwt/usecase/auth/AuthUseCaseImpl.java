@@ -61,5 +61,9 @@ public class AuthUseCaseImpl implements AuthUseCase{
         //find user in db
         User user = userRepository.userFindByEmail(authRequest.getEmail())
                 .orElseThrow(() -> new UsernameNotFoundException("Invalid email or password"));
+
+        //generate JWT
+        String jwtToken = jwtService.generateToken(user);
+        return new AuthResponse(jwtToken);
     }
 }
