@@ -2,6 +2,8 @@ package lk.spring_security.stateless_jwt.usecase.auth;
 
 import lk.spring_security.stateless_jwt.domain.repositories.UserRepository;
 import lk.spring_security.stateless_jwt.infrastructure.security.JwtService;
+import lk.spring_security.stateless_jwt.web.auth.AuthRequest;
+import lk.spring_security.stateless_jwt.web.auth.AuthResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,4 +17,9 @@ public class AuthUseCaseImpl implements AuthUseCase{
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
+    //register new user
+    @Override
+    public AuthResponse register(AuthRequest authRequest){
+
+    }
 }
