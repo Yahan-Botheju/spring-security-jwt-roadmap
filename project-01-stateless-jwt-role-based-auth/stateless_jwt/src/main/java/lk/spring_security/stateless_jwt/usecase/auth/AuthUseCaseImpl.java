@@ -47,6 +47,7 @@ public class AuthUseCaseImpl implements AuthUseCase{
         return new AuthResponse(jwtToken);
     }
 
+    //auth response
     @Override
     public AuthResponse login(AuthRequest authRequest){
         //check email and password through spring sec
@@ -56,5 +57,9 @@ public class AuthUseCaseImpl implements AuthUseCase{
                         authRequest.getPassword()
                 )
         );
+
+        //find user in db
+        User user = userRepository.userFindByEmail(authRequest.getEmail())
+                .orElseThrow(() -> new UsernameNotFoundException("Invalid email or password"));
     }
 }
