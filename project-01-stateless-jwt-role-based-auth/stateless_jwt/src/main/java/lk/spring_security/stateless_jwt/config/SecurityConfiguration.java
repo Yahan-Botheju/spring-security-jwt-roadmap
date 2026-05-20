@@ -24,7 +24,7 @@ public class SecurityConfiguration {
 
     //initiate security filter chain config method
     @Bean
-    public SecurityFilterChain springSecurityFilterChain(HttpSecurity http) {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) {
 
         http
                 //disable due to stateless token
