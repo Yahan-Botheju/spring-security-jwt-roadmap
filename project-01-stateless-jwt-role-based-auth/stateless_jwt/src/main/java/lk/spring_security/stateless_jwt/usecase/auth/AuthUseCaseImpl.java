@@ -1,5 +1,7 @@
 package lk.spring_security.stateless_jwt.usecase.auth;
 
+import lk.spring_security.stateless_jwt.domain.models.Role;
+import lk.spring_security.stateless_jwt.domain.models.User;
 import lk.spring_security.stateless_jwt.domain.repositories.UserRepository;
 import lk.spring_security.stateless_jwt.infrastructure.security.JwtService;
 import lk.spring_security.stateless_jwt.web.auth.AuthRequest;
@@ -28,5 +30,12 @@ public class AuthUseCaseImpl implements AuthUseCase{
         if(userRepository.userFindByEmail(authRequest.getEmail()).isPresent()){
             throw new UsernameNotFoundException("Email already exists");
         }
+
+        //create domain model
+        User user = User.builder()
+                .email(authRequest.getEmail())
+                .password(passwordEncoder.encode(authRequest.getPassword()))
+                .role(Role.USER)
+                .build();
     }
 }
