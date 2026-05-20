@@ -28,13 +28,8 @@ public class UserPersistenceImpl implements UserRepository {
     //save new user
     @Override
     public User saveUser(User user) {
-
-        userFindByEmail(user.getEmail())
-                .orElseThrow(() -> new RuntimeException("User already exists"));
-
         UserEntity userEntity = userPersistenceMapper.toEntity(user);
         jpaUserRepository.save(userEntity);
-
         return userPersistenceMapper.toDomainModel(userEntity);
     }
 }
