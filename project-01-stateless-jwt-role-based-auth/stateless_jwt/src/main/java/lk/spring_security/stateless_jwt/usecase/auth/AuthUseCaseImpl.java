@@ -8,6 +8,7 @@ import lk.spring_security.stateless_jwt.web.auth.AuthRequest;
 import lk.spring_security.stateless_jwt.web.auth.AuthResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,5 +45,16 @@ public class AuthUseCaseImpl implements AuthUseCase{
         //generate JWT
         String jwtToken = jwtService.generateToken(user);
         return new AuthResponse(jwtToken);
+    }
+
+    @Override
+    public AuthResponse login(AuthRequest authRequest){
+        //check email and password through spring sec
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        authRequest.getEmail(),
+                        authRequest.getPassword()
+                )
+        );
     }
 }
