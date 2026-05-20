@@ -41,6 +41,8 @@ public class AuthUseCaseImpl implements AuthUseCase{
         //save in db
         userRepository.saveUser(user);
 
-
+        //generate JWT
+        String jwtToken = jwtService.generateToken(user);
+        return new AuthResponse(jwtToken);
     }
 }
