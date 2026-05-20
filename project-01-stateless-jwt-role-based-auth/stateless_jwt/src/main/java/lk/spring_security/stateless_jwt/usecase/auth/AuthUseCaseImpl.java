@@ -37,5 +37,10 @@ public class AuthUseCaseImpl implements AuthUseCase{
                 .password(passwordEncoder.encode(authRequest.getPassword()))
                 .role(Role.USER)
                 .build();
+
+        //save in db
+        userRepository.saveUser(user);
+
+
     }
 }
