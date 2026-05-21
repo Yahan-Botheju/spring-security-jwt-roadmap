@@ -8,5 +8,5 @@ import java.util.List;
 public interface JpaTaskRepository extends JpaRepository<TaskEntity,Long> {
 
     //create custom query for get user tasks list
-    List<TaskEntity> findByUser_Id(Long userId);
+    List<TaskEntity> findByUserUserId(Long userId);
 }
