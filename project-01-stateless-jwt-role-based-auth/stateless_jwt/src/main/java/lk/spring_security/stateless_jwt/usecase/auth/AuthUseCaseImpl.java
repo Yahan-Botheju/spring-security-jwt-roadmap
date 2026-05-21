@@ -4,8 +4,8 @@ import lk.spring_security.stateless_jwt.domain.models.Role;
 import lk.spring_security.stateless_jwt.domain.models.User;
 import lk.spring_security.stateless_jwt.domain.repositories.UserRepository;
 import lk.spring_security.stateless_jwt.infrastructure.security.JwtService;
-import lk.spring_security.stateless_jwt.web.auth.AuthRequest;
-import lk.spring_security.stateless_jwt.web.auth.AuthResponse;
+import lk.spring_security.stateless_jwt.web.auth.AuthRequestDTO;
+import lk.spring_security.stateless_jwt.web.auth.AuthResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,17 +25,17 @@ public class AuthUseCaseImpl implements AuthUseCase{
     //register new user
     @Override
     @Transactional
-    public AuthResponse register(AuthRequest authRequest){
+    public AuthResponseDTO register(AuthRequestDTO authRequestDTO){
 
         //check user by email
-        if(userRepository.userFindByEmail(authRequest.getEmail()).isPresent()){
+        if(userRepository.userFindByEmail(authRequestDTO.getEmail()).isPresent()){
             throw new UsernameNotFoundException("Email already exists");
         }
 
         //create domain model
         User user = User.builder()
-                .email(authRequest.getEmail())
-                .password(passwordEncoder.encode(authRequest.getPassword()))
+                .email(authRequestDTO.getEmail())
+                .password(passwordEncoder.encode(authRequestDTO.getPassword()))
                 .role(Role.USER)
                 .build();
 
@@ -44,26 +44,26 @@ public class AuthUseCaseImpl implements AuthUseCase{
 
         //generate JWT
         String jwtToken = jwtService.generateToken(user);
-        return new AuthResponse(jwtToken);
+        return new AuthResponseDTO(jwtToken);
     }
 
     //auth response
     @Override
-    public AuthResponse login(AuthRequest authRequest){
+    public AuthResponseDTO login(AuthRequestDTO authRequestDTO){
         //check email and password through spring sec
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        authRequest.getEmail(),
-                        authRequest.getPassword()
+                        authRequestDTO.getEmail(),
+                        authRequestDTO.getPassword()
                 )
         );
 
         //find user in db
-        User user = userRepository.userFindByEmail(authRequest.getEmail())
+        User user = userRepository.userFindByEmail(authRequestDTO.getEmail())
                 .orElseThrow(() -> new UsernameNotFoundException("Invalid email or password"));
 
         //generate JWT
         String jwtToken = jwtService.generateToken(user);
-        return new AuthResponse(jwtToken);
+        return new AuthResponseDTO(jwtToken);
     }
 }
