@@ -21,7 +21,7 @@ public class TaskPersistenceImpl implements TaskRepository {
 
     //get user tasks list
     public List<Task> findByUser_Id(Long userId) {
-        return jpaTaskRepository.findByUser_Id(userId).stream()
+        return jpaTaskRepository.findByUserUserId(userId).stream()
                 .map(taskPersistenceMapper::toDomainModel).toList();
     }
 }
