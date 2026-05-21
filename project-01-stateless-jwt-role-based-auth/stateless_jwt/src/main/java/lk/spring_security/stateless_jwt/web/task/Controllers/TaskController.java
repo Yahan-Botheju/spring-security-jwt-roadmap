@@ -4,6 +4,7 @@ import lk.spring_security.stateless_jwt.domain.models.Task;
 import lk.spring_security.stateless_jwt.usecase.task.TaskUseCase;
 import lk.spring_security.stateless_jwt.web.task.webMappers.TaskWebMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +26,8 @@ public class TaskController {
     //get all tasks
     @GetMapping
     public ResponseEntity<List<Task>> getAllTasks() {
-        List<Task> tasks =
+        List<Task> tasks =  taskUseCase.getAllTasks();
+        tasks.stream().map(taskWebMapper::toResponseDTO).toList();
+        return ResponseEntity.status(HttpStatus.OK).body(tasks);
     }
 }
