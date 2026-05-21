@@ -2,6 +2,7 @@ package lk.spring_security.stateless_jwt.infrastructure.task.persistence;
 
 import lk.spring_security.stateless_jwt.domain.models.Task;
 import lk.spring_security.stateless_jwt.domain.repositories.TaskRepository;
+import lk.spring_security.stateless_jwt.infrastructure.task.persistence.entities.TaskEntity;
 import lk.spring_security.stateless_jwt.infrastructure.task.persistence.jpa.JpaTaskRepository;
 import lk.spring_security.stateless_jwt.infrastructure.task.persistence.mappers.TaskPersistenceMapper;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +21,16 @@ public class TaskPersistenceImpl implements TaskRepository {
     /* ----- HELPER METHOD ----- */
 
     //get user tasks list
-    public List<Task> findByUser_Id(Long userId) {
+    @Override
+    public List<Task> findByUserUserId(Long userId) {
         return jpaTaskRepository.findByUserUserId(userId).stream()
                 .map(taskPersistenceMapper::toDomainModel).toList();
+    }
+
+    //get all tasks
+    @Override
+    public List<Task> getAllTasks() {
+        List<TaskEntity> taskEntities = jpaTaskRepository.findAll();
+        return taskEntities.stream().map(taskPersistenceMapper::toDomainModel).toList();
     }
 }
