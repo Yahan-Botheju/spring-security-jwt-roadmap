@@ -19,6 +19,6 @@ public class AuthBeanConfig {
             JwtService jwtService,
             AuthenticationManager authenticationManager
     ) {
-        return new AuthUseCaseImpl(userRepository,passwordEncoder, jwtService, authenticationManager)
+        return new AuthUseCaseImpl(userRepository,passwordEncoder, jwtService, authenticationManager);
     }
 }
