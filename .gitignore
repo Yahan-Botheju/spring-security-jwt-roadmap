@@ -9,5 +9,5 @@ out
 **/.idea/
 **/.vscode/
 **/*.iml
-src/main/resources/application.properties
-production
+project-01-stateless-jwt-role-based-auth/src/main/resources/application.properties
+project-01-stateless-jwt-role-based-auth/production/
