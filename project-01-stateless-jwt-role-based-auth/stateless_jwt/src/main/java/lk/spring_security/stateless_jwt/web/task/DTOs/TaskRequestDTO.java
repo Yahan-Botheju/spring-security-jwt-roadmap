@@ -17,4 +17,7 @@ public class TaskRequestDTO {
     private String taskDescription;
     @NotNull(message = "Complete status cannot be empty")
     private Boolean completed;
+
+    @NotNull(message = "User ID cannot be empty")
+    private Long userId;
 }

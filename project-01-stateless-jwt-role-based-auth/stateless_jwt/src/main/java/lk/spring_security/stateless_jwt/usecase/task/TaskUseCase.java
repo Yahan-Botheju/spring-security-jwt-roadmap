@@ -8,4 +8,7 @@ public interface TaskUseCase {
 
     //get all tasks
     List<Task> getAllTasks();
+
+    //save tasks
+    Task saveTask(Task task);
 }

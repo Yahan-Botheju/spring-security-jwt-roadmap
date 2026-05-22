@@ -17,4 +17,10 @@ public class TaskUseCaseImpl implements TaskUseCase {
     public List<Task> getAllTasks(){
         return taskRepository.getAllTasks();
     }
+
+    //save tasks
+    @Override
+    public Task saveTask(Task task){
+        return taskRepository.saveTask(task);
+    }
 }
