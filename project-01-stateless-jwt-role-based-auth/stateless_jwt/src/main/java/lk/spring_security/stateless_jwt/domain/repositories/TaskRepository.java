@@ -14,4 +14,7 @@ public interface TaskRepository {
 
     //save tasks
     Task saveTask(Task task);
+
+    //update task
+    Task updateTask(Task task, Long taskId);
 }

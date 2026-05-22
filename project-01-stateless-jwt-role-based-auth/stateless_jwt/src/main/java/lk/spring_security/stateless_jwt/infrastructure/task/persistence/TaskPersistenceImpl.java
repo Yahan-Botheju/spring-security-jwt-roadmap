@@ -51,4 +51,17 @@ public class TaskPersistenceImpl implements TaskRepository {
         return taskPersistenceMapper.toDomainModel(savedTaskEntity);
     }
 
+    //update task
+    @Override
+    public Task updateTask(Task task, Long taskId){
+        TaskEntity taskEntity = jpaTaskRepository.findById(taskId)
+                .orElseThrow(() -> new RuntimeException("Task not found"));
+        UserEntity userEntity = jpaUserRepository.findById(task.getUserId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        TaskEntity turnToEntity =  taskPersistenceMapper.updateTask(task, taskEntity);
+        turnToEntity.setUser(userEntity);
+        TaskEntity savedTaskEntity = jpaTaskRepository.save(turnToEntity);
+        return taskPersistenceMapper.toDomainModel(savedTaskEntity);
+    }
 }
