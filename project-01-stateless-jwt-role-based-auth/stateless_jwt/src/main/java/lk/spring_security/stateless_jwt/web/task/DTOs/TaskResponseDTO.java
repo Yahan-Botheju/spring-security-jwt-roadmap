@@ -13,5 +13,5 @@ public class TaskResponseDTO {
     private String taskDescription;
     private Boolean completed;
 
-    private Long UserId;
+    private Long userId;
 }
