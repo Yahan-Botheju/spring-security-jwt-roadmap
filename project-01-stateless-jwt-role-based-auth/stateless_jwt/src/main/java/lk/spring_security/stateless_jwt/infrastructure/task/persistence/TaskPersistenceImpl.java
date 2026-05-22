@@ -5,6 +5,8 @@ import lk.spring_security.stateless_jwt.domain.repositories.TaskRepository;
 import lk.spring_security.stateless_jwt.infrastructure.task.persistence.entities.TaskEntity;
 import lk.spring_security.stateless_jwt.infrastructure.task.persistence.jpa.JpaTaskRepository;
 import lk.spring_security.stateless_jwt.infrastructure.task.persistence.mappers.TaskPersistenceMapper;
+import lk.spring_security.stateless_jwt.infrastructure.user.persistence.entities.UserEntity;
+import lk.spring_security.stateless_jwt.infrastructure.user.persistence.jpa.JpaUserRepository;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -17,6 +19,10 @@ public class TaskPersistenceImpl implements TaskRepository {
 
     //inject task persistence mapper
     private final TaskPersistenceMapper taskPersistenceMapper;
+
+    //inject user jpa repo
+    private final JpaUserRepository jpaUserRepository;
+
 
     /* ----- HELPER METHOD ----- */
 
@@ -33,4 +39,16 @@ public class TaskPersistenceImpl implements TaskRepository {
         List<TaskEntity> taskEntities = jpaTaskRepository.findAll();
         return taskEntities.stream().map(taskPersistenceMapper::toDomainModel).toList();
     }
+
+    //save tasks
+    @Override
+    public Task saveTask(Task task){
+        TaskEntity taskEntity = taskPersistenceMapper.toEntity(task);
+        UserEntity userEntity = jpaUserRepository.findById(task.getUserId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        taskEntity.setUser(userEntity);
+        TaskEntity savedTaskEntity = jpaTaskRepository.save(taskEntity);
+        return taskPersistenceMapper.toDomainModel(savedTaskEntity);
+    }
+
 }
