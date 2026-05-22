@@ -41,4 +41,15 @@ public class TaskController {
         TaskResponseDTO responseDTO = taskWebMapper.toResponseDTO(taskDomainModel);
         return ResponseEntity.created(URI.create("/api/v1/tasks")).body(responseDTO.toString());
     }
+
+    //update task
+    @PutMapping("/{taskId}")
+    public ResponseEntity<TaskResponseDTO> updateTask(
+            @PathVariable Long taskId,
+            @RequestBody TaskRequestDTO taskRequestDTO
+    ){
+        Task toDomainModel = taskUseCase.updateTask(taskWebMapper.toDomainModel(taskRequestDTO), taskId);
+        TaskResponseDTO responseDTO = taskWebMapper.toResponseDTO(toDomainModel);
+        return ResponseEntity.ok(responseDTO);
+    }
 }
