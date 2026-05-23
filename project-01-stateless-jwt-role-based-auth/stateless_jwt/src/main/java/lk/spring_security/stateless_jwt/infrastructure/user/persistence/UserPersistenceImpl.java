@@ -32,4 +32,15 @@ public class UserPersistenceImpl implements UserRepository {
         jpaUserRepository.save(userEntity);
         return userPersistenceMapper.toDomainModel(userEntity);
     }
+
+    //update user
+    @Override
+    public User updateUser(User user) {
+        UserEntity userEntity = jpaUserRepository.findById(user.getUserId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        UserEntity toEntity =  userPersistenceMapper.updateUser(user, userEntity);
+        jpaUserRepository.save(toEntity);
+        return userPersistenceMapper.toDomainModel(toEntity);
+    }
 }
