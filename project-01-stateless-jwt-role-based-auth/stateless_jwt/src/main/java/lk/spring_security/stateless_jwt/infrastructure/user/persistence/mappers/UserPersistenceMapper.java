@@ -2,7 +2,7 @@ package lk.spring_security.stateless_jwt.infrastructure.user.persistence.mappers
 
 import lk.spring_security.stateless_jwt.domain.models.User;
 import lk.spring_security.stateless_jwt.infrastructure.user.persistence.entities.UserEntity;
-import org.mapstruct.Mapper;
+import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")
 public interface UserPersistenceMapper {
@@ -12,4 +12,8 @@ public interface UserPersistenceMapper {
 
     //entity to domain model
     User toDomainModel(UserEntity userEntity);
+
+    //update user
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    UserEntity updateUser(User user, @MappingTarget UserEntity userEntity );
 }
