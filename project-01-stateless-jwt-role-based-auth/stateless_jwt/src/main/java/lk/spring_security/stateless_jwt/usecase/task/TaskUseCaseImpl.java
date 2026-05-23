@@ -29,4 +29,9 @@ public class TaskUseCaseImpl implements TaskUseCase {
     public Task updateTask(Task task, Long taskId){
         return taskRepository.updateTask(task,taskId);
     }
+
+    @Override
+    public void deleteTask(Long taskId){
+        taskRepository.deleteTask(taskId);
+    }
 }
