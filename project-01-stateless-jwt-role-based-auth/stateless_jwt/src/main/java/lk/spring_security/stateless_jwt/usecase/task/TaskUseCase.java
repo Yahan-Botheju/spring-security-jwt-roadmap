@@ -14,4 +14,7 @@ public interface TaskUseCase {
 
     //update task
     Task updateTask(Task task, Long taskId);
+
+    //delete task
+    void deleteTask(Long taskId);
 }

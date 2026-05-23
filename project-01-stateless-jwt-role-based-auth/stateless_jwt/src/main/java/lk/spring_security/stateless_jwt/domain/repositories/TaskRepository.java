@@ -17,4 +17,7 @@ public interface TaskRepository {
 
     //update task
     Task updateTask(Task task, Long taskId);
+
+    //delete task
+    void deleteTask(Long taskId);
 }
