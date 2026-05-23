@@ -4,6 +4,7 @@ import lk.spring_security.stateless_jwt.domain.models.User;
 import lk.spring_security.stateless_jwt.domain.repositories.UserRepository;
 import lk.spring_security.stateless_jwt.web.user.DTOs.UserResponseDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 public class UserUseCaseImpl implements  UserUseCase {
@@ -17,5 +18,20 @@ public class UserUseCaseImpl implements  UserUseCase {
     public User getUserProfile(String email) {
         return userRepository.userFindByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
+    }
+
+    //update user profile
+    @Override
+    @Transactional
+    public User updateUser(User user,String currentEmail){
+        User checkUser = userRepository.userFindByEmail(currentEmail)
+                .orElseThrow(() ->  new IllegalArgumentException("User not found"));
+
+        //check user has given new email
+        if(user.getEmail() != null && !user.getEmail().isEmpty()){
+            checkUser.setEmail(user.getEmail());
+        }
+
+        return userRepository.updateUser(checkUser);
     }
 }

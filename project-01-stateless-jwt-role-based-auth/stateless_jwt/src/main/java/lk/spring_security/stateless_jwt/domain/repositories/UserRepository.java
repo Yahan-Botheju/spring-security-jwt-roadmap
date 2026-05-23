@@ -11,4 +11,7 @@ public interface UserRepository {
 
     //create new user
     User saveUser(User user);
+
+    //update user profile
+    User updateUser(User user);
 }

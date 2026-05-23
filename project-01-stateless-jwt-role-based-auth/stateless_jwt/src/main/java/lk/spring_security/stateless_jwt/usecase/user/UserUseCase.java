@@ -6,4 +6,7 @@ public interface UserUseCase {
 
     //user profile
     User getUserProfile(String email);
+
+    //update user profile
+    User updateUser(User user, String currentEmail);
 }
