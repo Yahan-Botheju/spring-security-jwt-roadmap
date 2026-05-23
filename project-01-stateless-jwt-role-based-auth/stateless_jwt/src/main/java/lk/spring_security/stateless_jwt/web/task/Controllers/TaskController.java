@@ -52,4 +52,13 @@ public class TaskController {
         TaskResponseDTO responseDTO = taskWebMapper.toResponseDTO(toDomainModel);
         return ResponseEntity.ok(responseDTO);
     }
+
+    //delete task
+    @DeleteMapping("/{taskId}")
+    public ResponseEntity<String> deleteTask(
+            @PathVariable Long taskId
+    ){
+        taskUseCase.deleteTask(taskId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Task deleted");
+    }
 }
