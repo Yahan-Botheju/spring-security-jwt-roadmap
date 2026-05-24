@@ -7,11 +7,9 @@ import lk.spring_security.stateless_jwt.infrastructure.task.persistence.jpa.JpaT
 import lk.spring_security.stateless_jwt.infrastructure.task.persistence.mappers.TaskPersistenceMapper;
 import lk.spring_security.stateless_jwt.infrastructure.user.persistence.entities.UserEntity;
 import lk.spring_security.stateless_jwt.infrastructure.user.persistence.jpa.JpaUserRepository;
-import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
-@RequiredArgsConstructor
 public class TaskPersistenceImpl implements TaskRepository {
 
     //inject task jpa repo
@@ -22,6 +20,12 @@ public class TaskPersistenceImpl implements TaskRepository {
 
     //inject user jpa repo
     private final JpaUserRepository jpaUserRepository;
+
+    public TaskPersistenceImpl(JpaTaskRepository jpaTaskRepository, TaskPersistenceMapper taskPersistenceMapper, JpaUserRepository jpaUserRepository) {
+        this.jpaTaskRepository = jpaTaskRepository;
+        this.taskPersistenceMapper = taskPersistenceMapper;
+        this.jpaUserRepository = jpaUserRepository;
+    }
 
 
     /* ----- HELPER METHOD ----- */
