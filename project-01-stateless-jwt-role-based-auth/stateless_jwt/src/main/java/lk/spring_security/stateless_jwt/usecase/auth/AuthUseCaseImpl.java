@@ -3,6 +3,7 @@ package lk.spring_security.stateless_jwt.usecase.auth;
 import lk.spring_security.stateless_jwt.domain.models.Role;
 import lk.spring_security.stateless_jwt.domain.models.User;
 import lk.spring_security.stateless_jwt.domain.repositories.UserRepository;
+import lk.spring_security.stateless_jwt.infrastructure.security.CustomUserDetails;
 import lk.spring_security.stateless_jwt.infrastructure.security.JwtService;
 import lk.spring_security.stateless_jwt.web.auth.AuthRequestDTO;
 import lk.spring_security.stateless_jwt.web.auth.AuthResponseDTO;
@@ -43,7 +44,7 @@ public class AuthUseCaseImpl implements AuthUseCase{
         userRepository.saveUser(user);
 
         //generate JWT
-        String jwtToken = jwtService.generateToken(user);
+        String jwtToken = jwtService.generateToken(new CustomUserDetails(user));
         return new AuthResponseDTO(jwtToken);
     }
 
@@ -63,7 +64,7 @@ public class AuthUseCaseImpl implements AuthUseCase{
                 .orElseThrow(() -> new UsernameNotFoundException("Invalid email or password"));
 
         //generate JWT
-        String jwtToken = jwtService.generateToken(user);
+        String jwtToken = jwtService.generateToken(new CustomUserDetails(user));
         return new AuthResponseDTO(jwtToken);
     }
 }

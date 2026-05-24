@@ -8,6 +8,7 @@ import lk.spring_security.stateless_jwt.web.task.webMappers.TaskWebMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -26,6 +27,7 @@ public class TaskController {
 
     //get all tasks
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<Task>> getAllTasks() {
         List<Task> tasks =  taskUseCase.getAllTasks();
         tasks.stream().map(taskWebMapper::toResponseDTO).toList();
