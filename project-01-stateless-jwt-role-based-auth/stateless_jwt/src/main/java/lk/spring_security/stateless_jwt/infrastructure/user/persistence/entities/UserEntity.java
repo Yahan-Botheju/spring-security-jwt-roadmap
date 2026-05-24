@@ -2,11 +2,14 @@ package lk.spring_security.stateless_jwt.infrastructure.user.persistence.entitie
 
 import jakarta.persistence.*;
 import lk.spring_security.stateless_jwt.domain.models.Role;
+import lk.spring_security.stateless_jwt.infrastructure.task.persistence.entities.TaskEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SoftDelete;
+
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -28,4 +31,7 @@ public class UserEntity {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TaskEntity> tasks;
 }
