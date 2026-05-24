@@ -9,4 +9,7 @@ public interface UserUseCase {
 
     //update user profile
     User updateUser(User user, String currentEmail);
+
+    //delete user
+    void deleteUser(String email);
 }
