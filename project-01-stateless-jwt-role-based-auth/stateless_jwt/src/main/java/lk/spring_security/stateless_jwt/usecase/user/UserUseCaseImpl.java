@@ -2,14 +2,16 @@ package lk.spring_security.stateless_jwt.usecase.user;
 
 import lk.spring_security.stateless_jwt.domain.models.User;
 import lk.spring_security.stateless_jwt.domain.repositories.UserRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
-@RequiredArgsConstructor
 public class UserUseCaseImpl implements  UserUseCase {
 
     //inject user domain repo
     private final UserRepository userRepository;
+
+    public UserUseCaseImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
 
     //get user profile

@@ -5,11 +5,9 @@ import lk.spring_security.stateless_jwt.domain.repositories.UserRepository;
 import lk.spring_security.stateless_jwt.infrastructure.user.persistence.entities.UserEntity;
 import lk.spring_security.stateless_jwt.infrastructure.user.persistence.jpa.JpaUserRepository;
 import lk.spring_security.stateless_jwt.infrastructure.user.persistence.mappers.UserPersistenceMapper;
-import lombok.RequiredArgsConstructor;
 
 import java.util.Optional;
 
-@RequiredArgsConstructor
 public class UserPersistenceImpl implements UserRepository {
 
     //inject jpa repo
@@ -17,6 +15,11 @@ public class UserPersistenceImpl implements UserRepository {
 
     //inject persistence mapper
     private final UserPersistenceMapper userPersistenceMapper;
+
+    public UserPersistenceImpl(JpaUserRepository jpaUserRepository, UserPersistenceMapper userPersistenceMapper) {
+        this.jpaUserRepository = jpaUserRepository;
+        this.userPersistenceMapper = userPersistenceMapper;
+    }
 
     /* ----- HELPER METHODS ----- */
 
