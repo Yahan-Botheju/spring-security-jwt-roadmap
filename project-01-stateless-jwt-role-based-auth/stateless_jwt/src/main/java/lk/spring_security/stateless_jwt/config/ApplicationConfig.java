@@ -16,9 +16,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @RequiredArgsConstructor
 public class ApplicationConfig {
 
-    //inject user repo
-    private final UserRepository userRepository;
-
     //hashed password
     @Bean
     public PasswordEncoder passwordEncoder() {
