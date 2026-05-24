@@ -5,9 +5,11 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lk.spring_security.stateless_jwt.infrastructure.user.persistence.entities.UserEntity;
 import lombok.*;
+import org.hibernate.annotations.SoftDelete;
 
 @Entity
 @Table(name = "tasks")
+@SoftDelete(columnName = "is_deleted")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
