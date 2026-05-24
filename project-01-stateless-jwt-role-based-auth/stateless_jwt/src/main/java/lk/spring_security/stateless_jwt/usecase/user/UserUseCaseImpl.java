@@ -2,7 +2,6 @@ package lk.spring_security.stateless_jwt.usecase.user;
 
 import lk.spring_security.stateless_jwt.domain.models.User;
 import lk.spring_security.stateless_jwt.domain.repositories.UserRepository;
-import lk.spring_security.stateless_jwt.web.user.DTOs.UserResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,5 +32,12 @@ public class UserUseCaseImpl implements  UserUseCase {
         }
 
         return userRepository.updateUser(checkUser);
+    }
+
+    //delete user
+    public void deleteUser(String email){
+        User existingUser = userRepository.userFindByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        userRepository.deleteUser(existingUser);
     }
 }

@@ -43,4 +43,12 @@ public class UserPersistenceImpl implements UserRepository {
         jpaUserRepository.save(toEntity);
         return userPersistenceMapper.toDomainModel(toEntity);
     }
+
+    //delete user
+    @Override
+    public void deleteUser(User user){
+        UserEntity existingUser = jpaUserRepository.findById(user.getUserId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        jpaUserRepository.delete(existingUser);
+    }
 }

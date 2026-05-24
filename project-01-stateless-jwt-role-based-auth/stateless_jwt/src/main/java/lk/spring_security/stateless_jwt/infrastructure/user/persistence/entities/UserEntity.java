@@ -6,9 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SoftDelete;
 
 @Entity
 @Table(name = "users")
+@SoftDelete(columnName = "is_Deleted")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
