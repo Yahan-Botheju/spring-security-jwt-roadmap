@@ -49,4 +49,15 @@ public class UserController {
 
         return ResponseEntity.ok(responseDTO);
     }
+
+    //delete user
+    @DeleteMapping("/profile")
+    public ResponseEntity<String> deleteUser(
+            @AuthenticationPrincipal UserDetails userDetails
+    ){
+        String  email = userDetails.getUsername();
+        userUseCase.deleteUser(email);
+
+        return ResponseEntity.ok(" user deleted successfully" + " , " +  email);
+    }
 }
