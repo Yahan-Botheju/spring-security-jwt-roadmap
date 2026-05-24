@@ -9,7 +9,6 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -19,13 +18,6 @@ public class ApplicationConfig {
 
     //inject user repo
     private final UserRepository userRepository;
-
-    //find user in db using Spring security
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return username -> userRepository.userFindByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with email" + username));
-    }
 
     //hashed password
     @Bean
@@ -43,8 +35,9 @@ public class ApplicationConfig {
 
     //create data access object auth provider
     @Bean
-    public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(userDetailsService());
+    public AuthenticationProvider authenticationProvider(UserDetailsService userDetailsService) {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(userDetailsService);
+
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
