@@ -1,4 +1,4 @@
-package lk.spring_security.stateless_jwt.web.auth;
+package lk.spring_security.stateless_jwt.web.auth.DTOs;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

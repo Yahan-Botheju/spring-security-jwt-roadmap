@@ -1,6 +1,6 @@
-package lk.spring_security.stateless_jwt.config;
+package lk.spring_security.stateless_jwt.infrastructure.security.config;
 
-import lk.spring_security.stateless_jwt.infrastructure.security.JwtAuthenticationFilter;
+import lk.spring_security.stateless_jwt.infrastructure.security.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,7 +35,7 @@ public class SecurityConfiguration {
                 //define permission enabled routes
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/auth/**").permitAll()
-                        .requestMatchers("/api/v1/admin/**").hasAuthority("ADMIN")
+                        .requestMatchers("/api/v1/admin/**").hasAuthority("ROLE_ADMIN")
                         .anyRequest().authenticated())
 
                 //make full system stateless

@@ -1,4 +1,4 @@
-package lk.spring_security.stateless_jwt.web.user.Controller;
+package lk.spring_security.stateless_jwt.web.user.controller;
 
 import lk.spring_security.stateless_jwt.domain.models.User;
 import lk.spring_security.stateless_jwt.usecase.user.UserUseCase;

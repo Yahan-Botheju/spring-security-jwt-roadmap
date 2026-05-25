@@ -5,9 +5,8 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
+import lk.spring_security.stateless_jwt.domain.services.JwtService;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
@@ -15,13 +14,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-
-@Service
-public class JwtService {
+public class JwtImpl implements JwtService {
 
     //create secret
-    @Value("${application.security.jwt.secret-key}")
-    private  String SECRET_KEY;
+    private final String SECRET_KEY;
+
+    //create constructor for inject
+    public JwtImpl(String secretKey) {
+        this.SECRET_KEY = secretKey;
+    }
 
 
     /* ----- CREATE NEW TOKEN ----- */
@@ -34,11 +35,13 @@ public class JwtService {
     }
 
     //get user details for create token (METHOD OVERLOADED)
+    @Override
     public String generateToken(UserDetails userDetails) {
         return generateToken(new HashMap<>(), userDetails);
     }
 
     //generate token with extra details added
+    @Override
     public String generateToken(
             Map<String, Object> extractClaims,
             UserDetails userDetails
@@ -76,6 +79,7 @@ public class JwtService {
     /* validate using token data  */
 
     //get username from token
+    @Override
     public String extractUserName(String token) {
         return extractClaim(token, Claims::getSubject);
     }
@@ -91,6 +95,7 @@ public class JwtService {
     }
 
     //check username and token is expired
+    @Override
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = extractUserName(token);
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);

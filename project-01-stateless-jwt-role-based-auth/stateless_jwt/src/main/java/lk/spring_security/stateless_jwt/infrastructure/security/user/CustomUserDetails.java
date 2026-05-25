@@ -1,7 +1,6 @@
-package lk.spring_security.stateless_jwt.infrastructure.security;
+package lk.spring_security.stateless_jwt.infrastructure.security.user;
 
 import lk.spring_security.stateless_jwt.domain.models.User;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;

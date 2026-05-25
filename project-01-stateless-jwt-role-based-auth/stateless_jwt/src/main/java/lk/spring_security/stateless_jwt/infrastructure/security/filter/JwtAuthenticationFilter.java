@@ -1,16 +1,15 @@
-package lk.spring_security.stateless_jwt.infrastructure.security;
+package lk.spring_security.stateless_jwt.infrastructure.security.filter;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lk.spring_security.stateless_jwt.infrastructure.security.JwtImpl;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -18,14 +17,18 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 @Component
-@RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     //inject JWT service
-    private final JwtService jwtService;
+    private final JwtImpl jwtImpl;
 
     //inject user service details
     private final UserDetailsService userDetailsService;
+
+    public JwtAuthenticationFilter(JwtImpl jwtImpl, UserDetailsService userDetailsService) {
+        this.jwtImpl = jwtImpl;
+        this.userDetailsService = userDetailsService;
+    }
 
     //initiate filter method
     @Override
@@ -49,7 +52,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         jwtToken = authHeader.substring(7);
 
         //check name in token with jwtService method
-        userEmail = jwtService.extractUserName(jwtToken);
+        userEmail = jwtImpl.extractUserName(jwtToken);
 
         //check user has email and user ain't authenticate
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -58,7 +61,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
 
             //check token is valid
-            if(jwtService.isTokenValid(jwtToken, userDetails)) {
+            if(jwtImpl.isTokenValid(jwtToken, userDetails)) {
 
                 //create new Authentication object
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(

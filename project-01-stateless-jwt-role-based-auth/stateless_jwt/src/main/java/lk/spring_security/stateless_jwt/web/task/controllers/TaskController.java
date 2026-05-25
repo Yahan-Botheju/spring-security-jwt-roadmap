@@ -1,4 +1,4 @@
-package lk.spring_security.stateless_jwt.web.task.Controllers;
+package lk.spring_security.stateless_jwt.web.task.controllers;
 
 import lk.spring_security.stateless_jwt.domain.models.Task;
 import lk.spring_security.stateless_jwt.usecase.task.TaskUseCase;
@@ -28,10 +28,10 @@ public class TaskController {
     //get all tasks
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<Task>> getAllTasks() {
+    public ResponseEntity<List<TaskResponseDTO>> getAllTasks() {
         List<Task> tasks =  taskUseCase.getAllTasks();
-        tasks.stream().map(taskWebMapper::toResponseDTO).toList();
-        return ResponseEntity.status(HttpStatus.OK).body(tasks);
+        List<TaskResponseDTO> responseDTOS =  tasks.stream().map(taskWebMapper::toResponseDTO).toList();
+        return ResponseEntity.ok(responseDTOS);
     }
 
     //save task
