@@ -3,11 +3,11 @@ project-03-cookie-based-jwt-auth
 project-04-refresh-token
 project-05-stateful-jwt-refresh-token-rotation
 out
-
+project-01-stateless-jwt-role-based-auth/production/
 .idea
 **/target/
 **/.idea/
 **/.vscode/
 **/*.iml
 project-01-stateless-jwt-role-based-auth/stateless_jwt/src/main/resources/application.properties
-project-01-stateless-jwt-role-based-auth/production/
+
