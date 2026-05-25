@@ -11,6 +11,14 @@
 Stateless JWT Authentication API is a backend REST API project built using **Java**, **Spring Boot**, and **Spring Security**.  
 The project demonstrates how to implement a secure authentication and authorization system using **JWT (JSON Web Tokens)** with a completely **stateless architecture**.
 
+---
+### 📊 Process
+
+Stateless JWT authentication means the server does not store sessions. After login, it generates a signed JWT token and sends it to the client. The client stores the token and includes it in every request.
+For each request, Spring Security extracts and validates the token, loads the user, and sets authentication if it is valid. Access is then controlled based on user roles like ADMIN or USER. After the request is completed, nothing is stored on the server. Every request is independent and must include a valid token.
+
+---
+
 The system manages:
 
 - 👤 User Authentication
