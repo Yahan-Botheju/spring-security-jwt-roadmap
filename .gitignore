@@ -1,4 +1,5 @@
-project-02-method-level-security-gloabal-security-exception
+project-01-stateless-jwt-role-based-auth
+#project-02-method-level-security-gloabal-security-exception
 project-03-cookie-based-jwt-auth
 project-04-refresh-token
 project-05-stateful-jwt-refresh-token-rotation
