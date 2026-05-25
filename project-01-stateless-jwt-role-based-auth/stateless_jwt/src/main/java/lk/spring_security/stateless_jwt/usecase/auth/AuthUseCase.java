@@ -1,7 +1,7 @@
 package lk.spring_security.stateless_jwt.usecase.auth;
 
-import lk.spring_security.stateless_jwt.web.auth.AuthRequestDTO;
-import lk.spring_security.stateless_jwt.web.auth.AuthResponseDTO;
+import lk.spring_security.stateless_jwt.web.auth.DTOs.AuthRequestDTO;
+import lk.spring_security.stateless_jwt.web.auth.DTOs.AuthResponseDTO;
 
 public interface AuthUseCase {
     //initiate auth request
