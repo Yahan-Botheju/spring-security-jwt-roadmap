@@ -3,9 +3,10 @@
 
 ---
 
-## 🔐 Stateless JWT Authentication API
+## Project 01 - Stateless JWT Authentication API
 
-## 📌 Overview
+---
+### 📌 Overview
 
 Stateless JWT Authentication API is a backend REST API project built using **Java**, **Spring Boot**, and **Spring Security**.  
 The project demonstrates how to implement a secure authentication and authorization system using **JWT (JSON Web Tokens)** with a completely **stateless architecture**.
@@ -28,9 +29,9 @@ The application follows a layered architecture with clear separation of concerns
 
 ---
 
-# ✨ Features
+### ✨ Features
 
-## 🔥 Core Features
+### 🔥 Core Features
 
 - 🔐 Stateless JWT Authentication
 - 👤 User Registration & Login
@@ -50,7 +51,7 @@ The application follows a layered architecture with clear separation of concerns
 
 ---
 
-# 🧰 Technologies Used
+### 🧰 Technologies Used
 
 | Technology | Purpose |
 |---|---|
@@ -70,9 +71,9 @@ The application follows a layered architecture with clear separation of concerns
 
 ---
 
-# 🧱 Project Architecture
+### 🧱 Project Architecture
 
-## 🏛️ Clean Architecture
+### 🏛️ Clean Architecture
 
 The project follows Clean Architecture principles.
 
@@ -92,7 +93,7 @@ The project follows Clean Architecture principles.
 
 ---
 
-# 📂 Project Structure
+### 📂 Project Structure
 
 ```text
 lk.spring_security.stateless_jwt
@@ -148,9 +149,9 @@ lk.spring_security.stateless_jwt
 
 ---
 
-# 🧠 Domain Models
+### 🧠 Domain Models
 
-## 👤 User
+### 👤 User
 
 Represents application users.
 
@@ -169,7 +170,7 @@ Represents application users.
 
 ---
 
-## 📋 Task
+### 📋 Task
 
 Represents user tasks.
 
@@ -188,7 +189,7 @@ Represents user tasks.
 
 ---
 
-## 🏷️ Role Enum
+### 🏷️ Role Enum
 
 ```java
 ADMIN
@@ -197,9 +198,9 @@ USER
 
 ---
 
-# 🔐 Authentication System
+### 🔐 Authentication System
 
-## 🛡️ Spring Security Configuration
+### 🛡️ Spring Security Configuration
 
 The project uses:
 
@@ -210,7 +211,7 @@ The project uses:
 
 ---
 
-## 🔑 JWT Authentication Flow
+### 🔑 JWT Authentication Flow
 
 ```text
 User Login
@@ -230,9 +231,9 @@ Spring Security authenticates request
 
 ---
 
-# 🎟️ JWT Token System
+### 🎟️ JWT Token System
 
-## 📦 JWT Features
+### 📦 JWT Features
 
 - Token generation
 - Token validation
@@ -242,7 +243,7 @@ Spring Security authenticates request
 
 ---
 
-## 🔐 JWT Header Format
+### 🔐 JWT Header Format
 
 ```http
 Authorization: Bearer <jwt-token>
@@ -250,9 +251,9 @@ Authorization: Bearer <jwt-token>
 
 ---
 
-# 🛡️ Custom Security Components
+### 🛡️ Custom Security Components
 
-## 👤 CustomUserDetails
+### 👤 CustomUserDetails
 
 Implements:
 
@@ -268,7 +269,7 @@ Responsibilities:
 
 ---
 
-## 🔍 CustomUserDetailsImpl
+### 🔍 CustomUserDetailsImpl
 
 Implements:
 
@@ -284,7 +285,7 @@ Responsibilities:
 
 ---
 
-## 🚦 JwtAuthenticationFilter
+### 🚦 JwtAuthenticationFilter
 
 Extends:
 
@@ -302,9 +303,9 @@ Responsibilities:
 
 ---
 
-# 🗄️ Database Design
+### 🗄️ Database Design
 
-## 👤 UserEntity
+### 👤 UserEntity
 
 ### Features
 
@@ -316,7 +317,7 @@ Responsibilities:
 
 ---
 
-## 📋 TaskEntity
+### 📋 TaskEntity
 
 ### Features
 
@@ -327,7 +328,7 @@ Responsibilities:
 
 ---
 
-# 🗑️ Soft Delete
+### 🗑️ Soft Delete
 
 The project uses Hibernate Soft Delete.
 
@@ -342,7 +343,7 @@ Used in:
 
 ---
 
-# 🔄 Object Mapping
+### 🔄 Object Mapping
 
 The project uses MapStruct for:
 
@@ -353,9 +354,9 @@ The project uses MapStruct for:
 
 ---
 
-# 🌐 REST API Endpoints
+### 🌐 REST API Endpoints
 
-## 🔐 Authentication Endpoints
+### 🔐 Authentication Endpoints
 
 | Method | Endpoint | Description |
 |---|---|---|
@@ -364,7 +365,7 @@ The project uses MapStruct for:
 
 ---
 
-## 👤 User Endpoints
+### 👤 User Endpoints
 
 | Method | Endpoint | Description |
 |---|---|---|
@@ -374,7 +375,7 @@ The project uses MapStruct for:
 
 ---
 
-## 📋 Task Endpoints
+### 📋 Task Endpoints
 
 | Method | Endpoint | Description |
 |---|---|---|
@@ -385,9 +386,9 @@ The project uses MapStruct for:
 
 ---
 
-# 🎭 Role-Based Authorization
+### 🎭 Role-Based Authorization
 
-## 👥 Supported Roles
+### 👥 Supported Roles
 
 ```java
 ADMIN
@@ -396,7 +397,7 @@ USER
 
 ---
 
-## 🔐 Security Rules
+### 🔐 Security Rules
 
 ### Public Endpoints
 
@@ -409,7 +410,7 @@ USER
 All other routes require valid JWT authentication.
 
 
-# 🔒 Password Encryption
+### 🔒 Password Encryption
 
 Passwords are encrypted using:
 
@@ -425,11 +426,11 @@ Benefits:
 
 ---
 
-# 📘 Swagger Documentation
+### 📘 Swagger Documentation
 
 Swagger UI is enabled using SpringDoc OpenAPI.
 
-## 🔗 Swagger Endpoints
+### 🔗 Swagger Endpoints
 
 ```text
 /swagger-ui.html
@@ -439,7 +440,7 @@ Swagger UI is enabled using SpringDoc OpenAPI.
 ---
 
 
-# 🧠 Key Concepts Implemented
+### 🧠 Key Concepts Implemented
 
 - REST API Development
 - JWT Authentication
@@ -459,7 +460,7 @@ Swagger UI is enabled using SpringDoc OpenAPI.
 
 ---
 
-# 🚀 Request Flow
+### 🚀 Request Flow
 
 ```text
 Client Request
@@ -481,7 +482,7 @@ Database
 
 ---
 
-# 🎯 Project Purpose
+### 🎯 Project Purpose
 
 This project was built to practice:
 
@@ -497,7 +498,7 @@ This project was built to practice:
 
 ---
 
-# 👨‍💻 Author
+### 👨‍💻 Author
 
 Developed as a practice project focusing on:
 
@@ -508,7 +509,7 @@ Developed as a practice project focusing on:
 
 ---
 
-# ⭐ Learning Outcomes
+### ⭐ Learning Outcomes
 
 After completing this project, the following concepts were practiced:
 
