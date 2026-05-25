@@ -1,12 +1,10 @@
-package lk.spring_security.stateless_jwt.web.task.Controllers;
+package lk.spring_security.stateless_jwt.web.task.controllers;
 
 import lk.spring_security.stateless_jwt.domain.models.Task;
 import lk.spring_security.stateless_jwt.usecase.task.TaskUseCase;
 import lk.spring_security.stateless_jwt.web.task.DTOs.TaskRequestDTO;
 import lk.spring_security.stateless_jwt.web.task.DTOs.TaskResponseDTO;
 import lk.spring_security.stateless_jwt.web.task.webMappers.TaskWebMapper;
-import lk.spring_security.stateless_jwt.web.user.DTOs.UserRequestDTO;
-import lk.spring_security.stateless_jwt.web.user.DTOs.UserResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
