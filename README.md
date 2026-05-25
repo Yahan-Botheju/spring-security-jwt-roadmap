@@ -571,3 +571,11 @@ After completing this project, the following concepts were practiced:
 - Clean Architecture Separation
 - Role-Based Authorization
 - JPA Relationships & Persistence
+
+---
+
+## Project 02 - Method-Level Security & Global Security Exceptions
+
+---
+
+### Ongoing project....
