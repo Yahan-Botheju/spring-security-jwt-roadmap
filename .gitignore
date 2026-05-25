@@ -11,3 +11,6 @@ out
 **/*.iml
 project-01-stateless-jwt-role-based-auth/stateless_jwt/src/main/resources/application.properties
 project-01-stateless-jwt-role-based-auth/production/
+
+project-02-method-level-security-gloabal-security-exception/method_level_security_global_security_exceptions/.gradle
+project-02-method-level-security-gloabal-security-exception/method_level_security_global_security_exceptions/.idea
