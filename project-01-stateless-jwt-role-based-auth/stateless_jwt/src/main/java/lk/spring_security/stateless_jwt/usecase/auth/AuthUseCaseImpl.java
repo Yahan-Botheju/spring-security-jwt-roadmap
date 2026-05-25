@@ -3,7 +3,7 @@ package lk.spring_security.stateless_jwt.usecase.auth;
 import lk.spring_security.stateless_jwt.domain.models.Role;
 import lk.spring_security.stateless_jwt.domain.models.User;
 import lk.spring_security.stateless_jwt.domain.repositories.UserRepository;
-import lk.spring_security.stateless_jwt.infrastructure.security.CustomUserDetails;
+import lk.spring_security.stateless_jwt.infrastructure.security.user.CustomUserDetails;
 import lk.spring_security.stateless_jwt.infrastructure.security.JwtImpl;
 import lk.spring_security.stateless_jwt.web.auth.DTOs.AuthRequestDTO;
 import lk.spring_security.stateless_jwt.web.auth.DTOs.AuthResponseDTO;

@@ -1,6 +1,6 @@
-package lk.spring_security.stateless_jwt.config;
+package lk.spring_security.stateless_jwt.infrastructure.security.config;
 
-import lk.spring_security.stateless_jwt.infrastructure.security.JwtAuthenticationFilter;
+import lk.spring_security.stateless_jwt.infrastructure.security.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,10 +1,9 @@
 package lk.spring_security.stateless_jwt.infrastructure.user.config;
 
 import lk.spring_security.stateless_jwt.domain.repositories.UserRepository;
-import lk.spring_security.stateless_jwt.infrastructure.user.persistence.UserPersistenceImpl;
+import lk.spring_security.stateless_jwt.infrastructure.user.UserPersistenceImpl;
 import lk.spring_security.stateless_jwt.infrastructure.user.persistence.jpa.JpaUserRepository;
 import lk.spring_security.stateless_jwt.infrastructure.user.persistence.mappers.UserPersistenceMapper;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

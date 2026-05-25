@@ -1,7 +1,7 @@
 package lk.spring_security.stateless_jwt.infrastructure.security.config;
 
 import lk.spring_security.stateless_jwt.domain.repositories.UserRepository;
-import lk.spring_security.stateless_jwt.infrastructure.security.CustomUserDetailsService;
+import lk.spring_security.stateless_jwt.infrastructure.security.user.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

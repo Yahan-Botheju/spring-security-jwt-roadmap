@@ -1,4 +1,4 @@
-package lk.spring_security.stateless_jwt.infrastructure.user.persistence;
+package lk.spring_security.stateless_jwt.infrastructure.user;
 
 import lk.spring_security.stateless_jwt.domain.models.User;
 import lk.spring_security.stateless_jwt.domain.repositories.UserRepository;

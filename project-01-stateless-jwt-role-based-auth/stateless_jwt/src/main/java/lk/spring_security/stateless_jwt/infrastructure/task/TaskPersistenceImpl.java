@@ -1,4 +1,4 @@
-package lk.spring_security.stateless_jwt.infrastructure.task.persistence;
+package lk.spring_security.stateless_jwt.infrastructure.task;
 
 import lk.spring_security.stateless_jwt.domain.models.Task;
 import lk.spring_security.stateless_jwt.domain.repositories.TaskRepository;

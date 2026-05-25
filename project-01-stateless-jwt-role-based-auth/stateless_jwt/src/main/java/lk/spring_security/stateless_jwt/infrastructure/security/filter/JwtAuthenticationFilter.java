@@ -1,9 +1,10 @@
-package lk.spring_security.stateless_jwt.infrastructure.security;
+package lk.spring_security.stateless_jwt.infrastructure.security.filter;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lk.spring_security.stateless_jwt.infrastructure.security.JwtImpl;
 import lombok.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
