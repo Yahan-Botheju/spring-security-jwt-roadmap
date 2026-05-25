@@ -1,6 +1,8 @@
-package lk.spring_security.stateless_jwt.web.auth;
+package lk.spring_security.stateless_jwt.web.auth.controllers;
 
 import lk.spring_security.stateless_jwt.usecase.auth.AuthUseCase;
+import lk.spring_security.stateless_jwt.web.auth.DTOs.AuthRequestDTO;
+import lk.spring_security.stateless_jwt.web.auth.DTOs.AuthResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
