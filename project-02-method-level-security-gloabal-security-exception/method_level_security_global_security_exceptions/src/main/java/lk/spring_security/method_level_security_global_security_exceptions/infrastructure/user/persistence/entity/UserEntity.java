@@ -2,6 +2,7 @@ package lk.spring_security.method_level_security_global_security_exceptions.infr
 
 import jakarta.persistence.*;
 import lk.spring_security.method_level_security_global_security_exceptions.domain.models.Role;
+import lk.spring_security.method_level_security_global_security_exceptions.infrastructure.task.persistence.entity.TaskEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,4 +30,6 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TaskEntity> tasks;
 }
