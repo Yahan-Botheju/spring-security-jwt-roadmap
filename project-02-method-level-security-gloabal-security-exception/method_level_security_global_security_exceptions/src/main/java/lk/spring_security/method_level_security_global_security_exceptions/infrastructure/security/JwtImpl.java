@@ -1,12 +1,15 @@
 package lk.spring_security.method_level_security_global_security_exceptions.infrastructure.security;
 
+import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lk.spring_security.method_level_security_global_security_exceptions.domain.services.JwtService;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.crypto.SecretKey;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 public class JwtImpl implements JwtService {
 
@@ -29,5 +32,20 @@ public class JwtImpl implements JwtService {
     @Override
     public String generateToken(UserDetails userDetails) {
         return generateToken(new HashMap<>(), userDetails);
+    }
+
+    //generate token with extra details
+    @Override
+    public String generateToken(
+            Map<String, Object> extraClaims,
+            UserDetails userDetails
+    ){
+        return Jwts.builder()
+                .claims(extraClaims)
+                .subject(userDetails.getUsername())
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))
+                .signWith(createJavaSecretObject())
+                .compact();
     }
 }
