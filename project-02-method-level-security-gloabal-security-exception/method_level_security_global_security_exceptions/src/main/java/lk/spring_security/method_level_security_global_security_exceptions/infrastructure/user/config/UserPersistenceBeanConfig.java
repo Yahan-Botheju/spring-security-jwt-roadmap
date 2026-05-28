@@ -3,6 +3,7 @@ package lk.spring_security.method_level_security_global_security_exceptions.infr
 import lk.spring_security.method_level_security_global_security_exceptions.domain.repositories.UserRepository;
 import lk.spring_security.method_level_security_global_security_exceptions.infrastructure.task.persistence.jpa.JpaTaskRepository;
 import lk.spring_security.method_level_security_global_security_exceptions.infrastructure.user.UserPersistenceImpl;
+import lk.spring_security.method_level_security_global_security_exceptions.infrastructure.user.persistence.jpa.JpaUserRepository;
 import lk.spring_security.method_level_security_global_security_exceptions.infrastructure.user.persistence.userPersistenceMapper.UserPersistenceMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,9 +12,9 @@ import org.springframework.context.annotation.Configuration;
 public class UserPersistenceBeanConfig {
     @Bean
     public UserRepository userRepository(
-            JpaTaskRepository taskRepository,
+            JpaUserRepository jpaUserRepository,
             UserPersistenceMapper userPersistenceMapper
     ) {
-        return new UserPersistenceImpl(taskRepository, userPersistenceMapper);
+        return new UserPersistenceImpl(jpaUserRepository, userPersistenceMapper);
     }
 }
