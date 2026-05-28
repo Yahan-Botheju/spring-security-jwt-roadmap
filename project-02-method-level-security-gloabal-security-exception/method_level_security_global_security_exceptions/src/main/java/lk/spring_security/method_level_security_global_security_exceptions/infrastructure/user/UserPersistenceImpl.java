@@ -5,6 +5,7 @@ import lk.spring_security.method_level_security_global_security_exceptions.domai
 import lk.spring_security.method_level_security_global_security_exceptions.infrastructure.task.persistence.jpa.JpaTaskRepository;
 import lk.spring_security.method_level_security_global_security_exceptions.infrastructure.user.persistence.jpa.JpaUserRepository;
 import lk.spring_security.method_level_security_global_security_exceptions.infrastructure.user.persistence.userPersistenceMapper.UserPersistenceMapper;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.Optional;
 
@@ -29,7 +30,7 @@ public class UserPersistenceImpl implements UserRepository {
 
     @Override
     public Optional<User> userFindByEmail(String email) {
-        return jpa.
+        return jpaUserRepository.userFindByEmail(email).map(userPersistenceMapper::toDomainModel);
     }
 
 }
