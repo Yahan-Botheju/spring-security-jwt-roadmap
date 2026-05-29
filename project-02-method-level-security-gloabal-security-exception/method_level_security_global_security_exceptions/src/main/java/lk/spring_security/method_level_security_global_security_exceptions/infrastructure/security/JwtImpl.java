@@ -67,4 +67,12 @@ public class JwtImpl implements JwtService {
         final Claims claims = extractTokenData(token);
         return claimsResolver.apply(claims);
     }
+
+    /* validate using token data  */
+
+    //get username from toekn
+    @Override
+    public String extractUsername(String token) {
+        return extractClaim(token, Claims::getSubject);
+    }
 }
