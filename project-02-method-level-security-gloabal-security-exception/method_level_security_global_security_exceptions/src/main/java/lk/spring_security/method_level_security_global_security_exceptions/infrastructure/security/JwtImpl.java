@@ -1,5 +1,6 @@
 package lk.spring_security.method_level_security_global_security_exceptions.infrastructure.security;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -47,5 +48,16 @@ public class JwtImpl implements JwtService {
                 .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))
                 .signWith(createJavaSecretObject())
                 .compact();
+    }
+
+    /* ----- VALIDATION ----- */
+
+    //extract token data
+    private Claims extractTokenData(String token){
+        return Jwts.parser()
+                .verifyWith(createJavaSecretObject())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
     }
 }
