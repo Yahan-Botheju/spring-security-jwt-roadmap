@@ -33,4 +33,9 @@ public class UserPersistenceImpl implements UserRepository {
         return jpaUserRepository.userFindByEmail(email).map(userPersistenceMapper::toDomainModel);
     }
 
+    //save user
+    @Override
+    public User saveUser(User user) {
+        return userPersistenceMapper.toDomainModel(jpaUserRepository.save(userPersistenceMapper.toEntity(user)));
+    }
 }
