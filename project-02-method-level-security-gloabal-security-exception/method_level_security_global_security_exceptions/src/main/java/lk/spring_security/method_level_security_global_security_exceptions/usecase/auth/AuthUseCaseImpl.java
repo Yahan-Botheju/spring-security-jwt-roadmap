@@ -67,5 +67,13 @@ public class AuthUseCaseImpl implements AuthUseCase {
                         authRequestDTO.getPassword()
                 )
         );
+
+        //check and find user in db
+        User user = userRepository.userFindByEmail(authRequestDTO.getEmail())
+                .orElseThrow(() -> new UsernameNotFoundException("Ivalid email or password"));
+
+        //generate token
+        String jwtToken = jwtImpl.generateToken(new CustomUserDetails(user));
+        return new AuthResponseDTO(jwtToken);
     }
 }
