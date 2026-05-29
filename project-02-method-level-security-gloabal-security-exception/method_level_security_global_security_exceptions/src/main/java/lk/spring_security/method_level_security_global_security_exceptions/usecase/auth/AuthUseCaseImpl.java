@@ -9,6 +9,7 @@ import lk.spring_security.method_level_security_global_security_exceptions.infra
 import lk.spring_security.method_level_security_global_security_exceptions.web.auth.DTOs.AuthRequestDTO;
 import lk.spring_security.method_level_security_global_security_exceptions.web.auth.DTOs.AuthResponseDTO;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -52,5 +53,19 @@ public class AuthUseCaseImpl implements AuthUseCase {
         String jwtToken = jwtImpl.generateToken(new CustomUserDetails(user));
 
         return new AuthResponseDTO(jwtToken);
+    }
+
+    //login user
+    @Override
+    public AuthResponseDTO loginUser(
+            AuthRequestDTO authRequestDTO
+    ){
+        //check username and password using spring security
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        authRequestDTO.getEmail(),
+                        authRequestDTO.getPassword()
+                )
+        );
     }
 }
