@@ -8,4 +8,7 @@ public interface UserRepository {
 
     //user find by email/username
     Optional<User> userFindByEmail(String email);
+
+    //save user
+    User saveUser(User user);
 }
