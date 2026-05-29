@@ -70,9 +70,13 @@ public class JwtImpl implements JwtService {
 
     /* validate using token data  */
 
-    //get username from toekn
+    //get username from token
     @Override
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
+    }
+    //get token expire data
+    private Date extractExpiration(String token) {
+        return extractClaim(token, Claims::getExpiration);
     }
 }
