@@ -1,5 +1,6 @@
 package lk.spring_security.method_level_security_global_security_exceptions.infrastructure.security;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -10,6 +11,7 @@ import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 public class JwtImpl implements JwtService {
 
@@ -47,5 +49,45 @@ public class JwtImpl implements JwtService {
                 .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))
                 .signWith(createJavaSecretObject())
                 .compact();
+    }
+
+    /* ----- VALIDATION ----- */
+
+    //extract token data
+    private Claims extractTokenData(String token){
+        return Jwts.parser()
+                .verifyWith(createJavaSecretObject())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+    }
+
+    //generic type that return related data of token
+    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver){
+        final Claims claims = extractTokenData(token);
+        return claimsResolver.apply(claims);
+    }
+
+    /* validate using token data  */
+
+    //get username from token
+    @Override
+    public String extractUsername(String token) {
+        return extractClaim(token, Claims::getSubject);
+    }
+    //get token expire data
+    private Date extractExpiration(String token) {
+        return extractClaim(token, Claims::getExpiration);
+    }
+    //check token is expired
+    private boolean isTokenExpired(String token) {
+        return extractExpiration(token).before(new Date());
+    }
+
+    //check username and token is expired
+    @Override
+    public boolean isTokenValid(String token, UserDetails userDetails) {
+        final String username = extractUsername(token);
+        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 }
