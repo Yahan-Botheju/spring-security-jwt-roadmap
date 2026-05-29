@@ -11,6 +11,7 @@ import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 public class JwtImpl implements JwtService {
 
@@ -59,5 +60,11 @@ public class JwtImpl implements JwtService {
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
+    }
+
+    //generic type that return related data of token
+    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver){
+        final Claims claims = extractTokenData(token);
+        return claimsResolver.apply(claims);
     }
 }
