@@ -5,6 +5,7 @@ import lk.spring_security.method_level_security_global_security_exceptions.domai
 import lk.spring_security.method_level_security_global_security_exceptions.domain.models.User;
 import lk.spring_security.method_level_security_global_security_exceptions.domain.repositories.UserRepository;
 import lk.spring_security.method_level_security_global_security_exceptions.infrastructure.security.JwtImpl;
+import lk.spring_security.method_level_security_global_security_exceptions.infrastructure.security.user.CustomUserDetails;
 import lk.spring_security.method_level_security_global_security_exceptions.web.auth.DTOs.AuthRequestDTO;
 import lk.spring_security.method_level_security_global_security_exceptions.web.auth.DTOs.AuthResponseDTO;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -47,6 +48,9 @@ public class AuthUseCaseImpl implements AuthUseCase {
         //save user in db
         userRepository.saveUser(user);
 
+        //generate toke
+        String jwtToken = jwtImpl.generateToken(new CustomUserDetails(user));
 
+        return new AuthResponseDTO(jwtToken);
     }
 }
