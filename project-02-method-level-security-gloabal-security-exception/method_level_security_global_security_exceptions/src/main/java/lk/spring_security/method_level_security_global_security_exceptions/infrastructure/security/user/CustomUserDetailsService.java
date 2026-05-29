@@ -19,7 +19,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     //check user through custom method and then set to custom user details
     @Override
-    public UserDetails loadUserByUsername(
+    public @NotNull UserDetails loadUserByUsername(
             @NotNull String username
     )throws UsernameNotFoundException {
         User user = userRepository.userFindByEmail(username)
