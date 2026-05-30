@@ -39,6 +39,12 @@ public class SecurityConfiguration {
                 //disable csrf because of stateless token
                 .csrf(AbstractHttpConfigurer::disable)
 
+                //define permission enable routes
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/v2/auth/**").permitAll()
+                        .requestMatchers("/api/v2/admin/**").hasAuthority("ROLE_ADMIN")
+                        .anyRequest().authenticated())
+
 
     }
 }
