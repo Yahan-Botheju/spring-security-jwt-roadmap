@@ -45,6 +45,9 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/v2/admin/**").hasAuthority("ROLE_ADMIN")
                         .anyRequest().authenticated())
 
+                //make full system stateless
+                .sessionManagement(sessionManagement -> sessionManagement
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
     }
 }
