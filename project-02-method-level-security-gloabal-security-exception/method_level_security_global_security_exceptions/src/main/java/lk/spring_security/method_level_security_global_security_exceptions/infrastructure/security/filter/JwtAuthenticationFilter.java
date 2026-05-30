@@ -1,4 +1,8 @@
 package lk.spring_security.method_level_security_global_security_exceptions.infrastructure.security.filter;
 
-public class JwtAuthenticationFilter {
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
+
+@Component
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
 }
