@@ -1,13 +1,17 @@
 package lk.spring_security.method_level_security_global_security_exceptions.infrastructure.security.config;
 
 import lk.spring_security.method_level_security_global_security_exceptions.infrastructure.security.filter.JwtAuthenticationFilter;
+import org.hibernate.boot.internal.Abstract;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -31,6 +35,10 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(
             HttpSecurity http
     ) {
+        http
+                //disable csrf because of stateless token
+                .csrf(AbstractHttpConfigurer::disable)
+
 
     }
 }
