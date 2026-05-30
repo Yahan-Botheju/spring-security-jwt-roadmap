@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lk.spring_security.method_level_security_global_security_exceptions.infrastructure.security.JwtImpl;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -54,6 +55,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             //get user details via spring
             UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
+
+            //check token is valid
+            if(jwtImpl.isTokenValid(jwtToken, userDetails)) {
+
+                //create new authentication object
+                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+                        userDetails,null, userDetails.getAuthorities()
+                );
+
+            }
         }
     }
 }
