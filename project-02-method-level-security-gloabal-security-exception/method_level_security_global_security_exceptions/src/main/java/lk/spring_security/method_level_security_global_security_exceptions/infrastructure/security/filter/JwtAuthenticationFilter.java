@@ -40,5 +40,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if(authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")){
             filterChain.doFilter(request, response);
         }
+
+        //separate token from auth header
+        jwtToken = authorizationHeader.substring(7);
+
+        //separate username from token
+        userEmail = jwtImpl.extractUsername(jwtToken);
     }
 }
