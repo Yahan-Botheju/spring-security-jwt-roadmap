@@ -49,5 +49,12 @@ public class SecurityConfiguration {
                 .sessionManagement(sessionManagement -> sessionManagement
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
+                //set custom auth provider
+                .authenticationProvider(authenticationProvider)
+
+                //run jwt filter before login to filter
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
+                return http.build();
     }
 }
