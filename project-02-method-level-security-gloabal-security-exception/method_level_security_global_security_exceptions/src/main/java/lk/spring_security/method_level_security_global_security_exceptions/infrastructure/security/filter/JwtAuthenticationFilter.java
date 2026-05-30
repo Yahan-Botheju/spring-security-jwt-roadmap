@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lk.spring_security.method_level_security_global_security_exceptions.infrastructure.security.JwtImpl;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -51,7 +52,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         //check email availability and user does noe authenticated
         if(userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-
+            //get user details via spring
+            UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
         }
     }
 }
