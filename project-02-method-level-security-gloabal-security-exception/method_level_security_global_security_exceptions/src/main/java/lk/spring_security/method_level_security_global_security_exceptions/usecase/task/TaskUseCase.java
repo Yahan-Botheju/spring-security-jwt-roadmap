@@ -10,4 +10,7 @@ public interface TaskUseCase {
 
     //create task
     Task createTask(Task task);
+
+    //update task
+    Task updateTask(Long taskId, Task task);
 }
