@@ -26,6 +26,6 @@ public class TaskPersistenceImpl implements TaskRepository {
     //get all task
     public List<Task> getAllTasks(){
         List<TaskEntity> entityList = jpaTaskRepository.findAll();
-        return entityList.stream().map()
+        return entityList.stream().map(taskPersistenceMapper::toDomainModel).toList();
     }
 }
