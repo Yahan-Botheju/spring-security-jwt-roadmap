@@ -23,4 +23,9 @@ public class TaskUseCaseImpl implements TaskUseCase{
     public Task createTask(Task task){
         return taskRepository.createTask(task);
     }
+
+    //update task
+    public Task updateTask(Long taskId, Task task){
+        return taskRepository.updateTask(taskId, task);
+    }
 }
