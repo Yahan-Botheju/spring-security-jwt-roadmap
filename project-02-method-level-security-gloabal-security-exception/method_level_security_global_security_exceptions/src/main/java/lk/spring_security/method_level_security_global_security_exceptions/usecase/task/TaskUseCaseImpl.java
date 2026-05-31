@@ -18,4 +18,9 @@ public class TaskUseCaseImpl implements TaskUseCase{
     public List<Task> getAllTasks(){
         return taskRepository.getAllTasks();
     }
+
+    //create task
+    public Task createTask(Task task){
+        return taskRepository.createTask(task);
+    }
 }
