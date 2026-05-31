@@ -6,6 +6,7 @@ import lk.spring_security.method_level_security_global_security_exceptions.useca
 import lk.spring_security.method_level_security_global_security_exceptions.web.task.DTOs.TaskRequestDTO;
 import lk.spring_security.method_level_security_global_security_exceptions.web.task.DTOs.TaskResponseDTO;
 import lk.spring_security.method_level_security_global_security_exceptions.web.task.webMappers.TaskWebMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -61,5 +62,14 @@ public class TaskController {
                 taskUseCase.updateTask(taskId, toDomainModel));
 
         return ResponseEntity.ok(responseDTO);
+    }
+
+    //delete task
+    @DeleteMapping("/{taskId}")
+    public ResponseEntity<String> deleteTask(
+            @PathVariable Long taskId
+    ){
+        taskUseCase.deleteTask(taskId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Task deleted successfully");
     }
 }
