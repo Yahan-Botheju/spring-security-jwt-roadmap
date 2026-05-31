@@ -28,4 +28,9 @@ public class TaskUseCaseImpl implements TaskUseCase{
     public Task updateTask(Long taskId, Task task){
         return taskRepository.updateTask(taskId, task);
     }
+
+    //delete task
+    public void  deleteTask(Long taskId){
+        taskRepository.deleteTask(taskId);
+    }
 }
