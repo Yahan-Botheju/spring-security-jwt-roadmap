@@ -7,4 +7,7 @@ import java.util.List;
 public interface TaskUseCase {
     //get all task
     List<Task> getAllTasks();
+
+    //create task
+    Task createTask(Task task);
 }
