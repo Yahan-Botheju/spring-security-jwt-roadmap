@@ -7,4 +7,7 @@ import java.util.List;
 public interface TaskRepository {
     //get all task
     List<Task> getAllTasks();
+
+    //create task
+    Task createTask(Task task);
 }
