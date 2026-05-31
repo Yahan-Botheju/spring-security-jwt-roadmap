@@ -1,5 +1,6 @@
 package lk.spring_security.method_level_security_global_security_exceptions.infrastructure.task;
 
+import jakarta.persistence.EntityNotFoundException;
 import lk.spring_security.method_level_security_global_security_exceptions.domain.models.Task;
 import lk.spring_security.method_level_security_global_security_exceptions.domain.repositories.TaskRepository;
 import lk.spring_security.method_level_security_global_security_exceptions.infrastructure.task.persistence.entity.TaskEntity;
@@ -34,5 +35,14 @@ public class TaskPersistenceImpl implements TaskRepository {
         TaskEntity taskEntity = taskPersistenceMapper.toEntity(task);
         TaskEntity savedEntity = jpaTaskRepository.save(taskEntity);
         return taskPersistenceMapper.toDomainModel(savedEntity);
+    }
+
+    //update task
+    public Task updateTask(Long taskId, Task task){
+        TaskEntity existingEntity = jpaTaskRepository.findById(taskId)
+                .orElseThrow(() -> new EntityNotFoundException("Task not found"));
+
+        TaskEntity updatedTaskEntity = taskPersistenceMapper.updateTaskEntity(task, existingEntity);
+        return taskPersistenceMapper.toDomainModel(updatedTaskEntity);
     }
 }
