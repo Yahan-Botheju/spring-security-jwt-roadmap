@@ -24,7 +24,7 @@ public class UserUseCaseImpl implements UserUseCase {
         User exsitingUser = userRepository.userFindByEmail(userEmail)
                 .orElseThrow(() -> new UsernameNotFoundException("user not found" + " , " +  userEmail));
 
-        if(user.getEmail() != null || !user.getEmail().isEmpty()){
+        if(user.getEmail() != null && !user.getEmail().isEmpty()){
             exsitingUser.setEmail(user.getEmail());
         }
         return userRepository.updateUser(exsitingUser);
