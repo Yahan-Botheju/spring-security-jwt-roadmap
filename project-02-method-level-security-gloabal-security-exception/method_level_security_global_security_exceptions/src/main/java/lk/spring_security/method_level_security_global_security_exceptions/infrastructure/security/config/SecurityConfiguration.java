@@ -1,7 +1,6 @@
 package lk.spring_security.method_level_security_global_security_exceptions.infrastructure.security.config;
 
 import lk.spring_security.method_level_security_global_security_exceptions.infrastructure.security.filter.JwtAuthenticationFilter;
-import org.hibernate.boot.internal.Abstract;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;

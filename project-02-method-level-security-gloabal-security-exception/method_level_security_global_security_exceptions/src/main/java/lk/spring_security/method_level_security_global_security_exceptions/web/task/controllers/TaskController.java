@@ -1,7 +1,6 @@
 package lk.spring_security.method_level_security_global_security_exceptions.web.task.controllers;
 
 import lk.spring_security.method_level_security_global_security_exceptions.domain.models.Task;
-import lk.spring_security.method_level_security_global_security_exceptions.infrastructure.task.persistence.entity.TaskEntity;
 import lk.spring_security.method_level_security_global_security_exceptions.usecase.task.TaskUseCase;
 import lk.spring_security.method_level_security_global_security_exceptions.web.task.DTOs.TaskRequestDTO;
 import lk.spring_security.method_level_security_global_security_exceptions.web.task.DTOs.TaskResponseDTO;
