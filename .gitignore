@@ -3,6 +3,7 @@ project-04-refresh-token
 project-05-stateful-jwt-refresh-token-rotation
 
 out
+lib
 
 .idea
 **/target/
