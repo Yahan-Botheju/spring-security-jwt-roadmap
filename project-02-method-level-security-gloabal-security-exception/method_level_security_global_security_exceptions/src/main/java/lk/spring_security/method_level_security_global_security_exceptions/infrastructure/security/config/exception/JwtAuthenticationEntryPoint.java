@@ -10,6 +10,8 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
@@ -25,6 +27,13 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         //401 unauthorized
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+
+        //create error body
+        final Map<String, Object> errorBody = new HashMap<>();
+        errorBody.put("status", HttpServletResponse.SC_UNAUTHORIZED);
+        errorBody.put("error", "Unauthorized");
+        errorBody.put("message", "Invalid or missing token, Access Denied");
+        errorBody.put("path", request.getServletPath());
 
     }
 }
