@@ -6,4 +6,7 @@ public interface UserUseCase {
 
     //update user
     User updateUser(String userEmail, User user);
+
+    //delete user
+    void deleteUser(String userEmail);
 }
