@@ -48,6 +48,11 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/v2/admin/**").hasAuthority("ROLE_ADMIN")
                         .anyRequest().authenticated())
 
+                //initiate jwt error handler
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                )
+
                 //make full system stateless
                 .sessionManagement(sessionManagement -> sessionManagement
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
