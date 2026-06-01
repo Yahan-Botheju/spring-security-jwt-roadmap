@@ -9,6 +9,12 @@ public interface UserRepository {
     //user find by email/username
     Optional<User> userFindByEmail(String email);
 
-    //save user
+    //save user (REGISTER USER)
     User saveUser(User user);
+
+    //update user
+    User updateUser(User user);
+
+    //delete user
+    void deleteUser(User user);
 }
