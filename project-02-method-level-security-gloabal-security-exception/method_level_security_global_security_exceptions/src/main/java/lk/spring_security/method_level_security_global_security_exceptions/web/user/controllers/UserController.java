@@ -38,4 +38,15 @@ public class UserController {
                         userEmail,userWebMapper.toDomainModel(userRequestDTO))  );
         return ResponseEntity.ok(responseDTO);
     }
+
+    //delete user profile
+    @DeleteMapping("/profile")
+    public ResponseEntity<String> deleteUser(
+            @AuthenticationPrincipal UserDetails userDetails
+    ){
+        String userEmail = userDetails.getUsername();
+        userUseCase.deleteUser(userEmail);
+
+        return ResponseEntity.ok("User delete successfully" + " , " +  userEmail);
+    }
 }
