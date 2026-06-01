@@ -3,7 +3,6 @@ package lk.spring_security.method_level_security_global_security_exceptions.usec
 import jakarta.transaction.Transactional;
 import lk.spring_security.method_level_security_global_security_exceptions.domain.models.User;
 import lk.spring_security.method_level_security_global_security_exceptions.domain.repositories.UserRepository;
-import lk.spring_security.method_level_security_global_security_exceptions.infrastructure.user.persistence.userPersistenceMapper.UserPersistenceMapper;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 public class UserUseCaseImpl implements UserUseCase {
@@ -11,16 +10,11 @@ public class UserUseCaseImpl implements UserUseCase {
     //inject user repo
     private final UserRepository userRepository;
 
-    //inject user persistence mapper
-    private final UserPersistenceMapper userPersistenceMapper;
-
     //create constructor
     public UserUseCaseImpl(
-            UserRepository userRepository,
-            UserPersistenceMapper userPersistenceMapper
+            UserRepository userRepository
     ) {
         this.userRepository = userRepository;
-        this.userPersistenceMapper = userPersistenceMapper;
     }
 
     //update user

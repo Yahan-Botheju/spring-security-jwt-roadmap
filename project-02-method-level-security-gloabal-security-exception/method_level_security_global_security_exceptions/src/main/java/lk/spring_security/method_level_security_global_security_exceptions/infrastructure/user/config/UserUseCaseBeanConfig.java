@@ -11,9 +11,8 @@ import org.springframework.context.annotation.Configuration;
 public class UserUseCaseBeanConfig {
     @Bean
     public UserUseCase userUseCase(
-            UserRepository userRepository,
-            UserPersistenceMapper userPersistenceMapper
+            UserRepository userRepository
     ) {
-        return new UserUseCaseImpl(userRepository, userPersistenceMapper);
+        return new UserUseCaseImpl(userRepository);
     }
 }
