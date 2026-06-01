@@ -2,7 +2,7 @@ package lk.spring_security.method_level_security_global_security_exceptions.infr
 
 import lk.spring_security.method_level_security_global_security_exceptions.domain.models.User;
 import lk.spring_security.method_level_security_global_security_exceptions.domain.repositories.UserRepository;
-import lk.spring_security.method_level_security_global_security_exceptions.infrastructure.task.persistence.jpa.JpaTaskRepository;
+import lk.spring_security.method_level_security_global_security_exceptions.infrastructure.user.persistence.entity.UserEntity;
 import lk.spring_security.method_level_security_global_security_exceptions.infrastructure.user.persistence.jpa.JpaUserRepository;
 import lk.spring_security.method_level_security_global_security_exceptions.infrastructure.user.persistence.userPersistenceMapper.UserPersistenceMapper;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -33,9 +33,18 @@ public class UserPersistenceImpl implements UserRepository {
         return jpaUserRepository.userFindByEmail(email).map(userPersistenceMapper::toDomainModel);
     }
 
-    //save user
+    //save user (REGISTER USER)
     @Override
     public User saveUser(User user) {
         return userPersistenceMapper.toDomainModel(jpaUserRepository.save(userPersistenceMapper.toEntity(user)));
+    }
+
+    //update user profile
+    @Override
+    public User updateUser(User user) {
+        UserEntity existingUser = jpaUserRepository.findById(user.getUserId())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with id " + user.getUserId()));
+        UserEntity updatedUser = jpaUserRepository.save(userPersistenceMapper.updateUser(user, existingUser));
+        return userPersistenceMapper.toDomainModel(updatedUser);
     }
 }
