@@ -35,4 +35,12 @@ public class UserUseCaseImpl implements UserUseCase {
         }
         return userRepository.updateUser(exsitingUser);
     }
+
+    //delete user
+    @Override
+    public void deleteUser(String userEmail) {
+        User existingUser = userRepository.userFindByEmail(userEmail)
+                .orElseThrow(() -> new UsernameNotFoundException("user not found" + " , " +  userEmail));
+        userRepository.deleteUser(existingUser);
+    }
 }
