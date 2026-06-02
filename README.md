@@ -1,5 +1,5 @@
 
-# Spring Security With JWT Roadmap
+<h1 align="center"> Spring Security With JWT Roadmap </h1>
 
 ---
 
@@ -18,7 +18,7 @@ For more details, refer to the README & projects repos.
 
 ---
 
-## Project 01 - Stateless JWT Authentication API
+<h2 align="center"> Project 01 - Stateless JWT Authentication API</h2>
 
 ---
 ### 📌 Overview
@@ -589,7 +589,8 @@ After completing this project, the following concepts were practiced:
 
 ---
 
-## Project 02 - Method-Level Security & Global Security Exceptions
+
+<h2 align="center"> Project 02 - Method-Level Security & Global Security Exceptions </h2>
 
 ---
 
@@ -602,9 +603,9 @@ responses for unauthorized requests and improve the overall security experience.
 
 ---
 
-### 🚀 Project V2 Enhancements
+## 🚀 Project V2 Enhancements
 
-## 🔥 What's New in Version 2
+### 🔥 What's New in Version 2
 
 Version 2 introduces custom JWT authentication error handling and improved security exception responses.
 
@@ -752,3 +753,13 @@ Version 2 introduces the following Spring Security concepts:
 In real-world REST APIs, clients expect predictable JSON responses. Without a custom AuthenticationEntryPoint, Spring Security may return default authentication responses that are harder for frontend applications to process.
 
 By introducing a centralized JWT authentication error handler, the API now provides clean, consistent, and client-friendly responses whenever authentication fails.
+
+---
+
+<h2 align="center">Project-03 Cookie Based JWT Auth</h2>
+
+---
+
+### Ongoing project...
+
+---
