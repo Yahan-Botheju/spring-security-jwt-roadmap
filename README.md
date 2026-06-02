@@ -3,6 +3,21 @@
 
 ---
 
+This roadmap represents my learning journey with JWT authentication & Spring Security. 
+I had already explored JWT, refresh token, token rotation & security concepts in Express.js. 
+However, implementing the same concepts in Java Spring Boot using Clean Architecture gave me 
+a depper understanding of how authentication & authorization work in enterprise applications.
+
+Through these projects, I focused on understanding the complete security flows rather than 
+just making it work. My goal is to keep learning & refining these concepts until I can confidently
+design & implement secure applications from scratch. 
+
+The Projects listed below showcases the step I followed while learning JWT & Spring Security,
+For more details, refer to the README & projects repos.
+
+
+---
+
 ## Project 01 - Stateless JWT Authentication API
 
 ---
