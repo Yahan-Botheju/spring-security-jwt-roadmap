@@ -35,7 +35,7 @@ public class AuthUseCaseImpl implements AuthUseCase {
             AuthRequestDTO authRequestDTO
     ){
         //check email availability
-        if(userRepository.userFindByEmail(authRequestDTO.getEmail()).isPresent()){
+        if(userRepository.findByEmail(authRequestDTO.getEmail()).isPresent()){
             throw new IllegalArgumentException("email already exists");
         }
 
@@ -69,7 +69,7 @@ public class AuthUseCaseImpl implements AuthUseCase {
         );
 
         //check and find user in db
-        User user = userRepository.userFindByEmail(authRequestDTO.getEmail())
+        User user = userRepository.findByEmail(authRequestDTO.getEmail())
                 .orElseThrow(() -> new UsernameNotFoundException("Ivalid email or password"));
 
         //generate token
