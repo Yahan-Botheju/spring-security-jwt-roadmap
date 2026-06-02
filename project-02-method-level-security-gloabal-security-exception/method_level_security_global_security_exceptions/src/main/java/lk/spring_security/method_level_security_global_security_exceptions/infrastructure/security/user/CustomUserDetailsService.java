@@ -1,8 +1,8 @@
 package lk.spring_security.method_level_security_global_security_exceptions.infrastructure.security.user;
 
+import jakarta.validation.constraints.NotNull;
 import lk.spring_security.method_level_security_global_security_exceptions.domain.models.User;
 import lk.spring_security.method_level_security_global_security_exceptions.domain.repositories.UserRepository;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -22,7 +22,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public @NotNull UserDetails loadUserByUsername(
             @NotNull String username
     )throws UsernameNotFoundException {
-        User user = userRepository.userFindByEmail(username)
+        User user = userRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("user not found " + " , " +username));
 
         return new CustomUserDetails(user);

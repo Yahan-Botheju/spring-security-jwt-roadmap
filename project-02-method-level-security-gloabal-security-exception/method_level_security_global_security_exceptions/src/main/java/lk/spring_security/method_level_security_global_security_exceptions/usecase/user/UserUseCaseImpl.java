@@ -21,7 +21,7 @@ public class UserUseCaseImpl implements UserUseCase {
     @Override
     @Transactional
     public User updateUser(String userEmail,  User user) {
-        User exsitingUser = userRepository.userFindByEmail(userEmail)
+        User exsitingUser = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new UsernameNotFoundException("user not found" + " , " +  userEmail));
 
         if(user.getEmail() != null && !user.getEmail().isEmpty()){
@@ -33,7 +33,7 @@ public class UserUseCaseImpl implements UserUseCase {
     //delete user
     @Override
     public void deleteUser(String userEmail) {
-        User existingUser = userRepository.userFindByEmail(userEmail)
+        User existingUser = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new UsernameNotFoundException("user not found" + " , " +  userEmail));
         userRepository.deleteUser(existingUser);
     }
