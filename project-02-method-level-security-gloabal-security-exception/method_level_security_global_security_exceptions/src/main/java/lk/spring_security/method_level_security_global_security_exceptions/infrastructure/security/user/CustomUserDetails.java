@@ -1,9 +1,9 @@
 package lk.spring_security.method_level_security_global_security_exceptions.infrastructure.security.user;
 
+import jakarta.validation.constraints.NotNull;
 import lk.spring_security.method_level_security_global_security_exceptions.domain.models.User;
 import lombok.RequiredArgsConstructor;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.springframework.lang.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
