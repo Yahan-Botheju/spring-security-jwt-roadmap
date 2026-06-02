@@ -7,6 +7,7 @@ import lk.spring_security.method_level_security_global_security_exceptions.web.t
 import lk.spring_security.method_level_security_global_security_exceptions.web.task.webMappers.TaskWebMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -30,6 +31,7 @@ public class TaskController {
 
     //get all tasks
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<TaskResponseDTO>> getAllTasks(){
         List<Task> tasks = taskUseCase.getAllTasks();
         List<TaskResponseDTO> responseDTO =tasks.stream().map(taskWebMapper::toResponseDTO).toList();
