@@ -40,7 +40,7 @@ public class TaskController {
 
     //create task
     @PostMapping
-    public ResponseEntity<String> createTask(
+    public ResponseEntity<TaskResponseDTO> createTask(
             @RequestBody TaskRequestDTO taskRequestDTO
     ){
         TaskResponseDTO responseDTO = taskWebMapper.toResponseDTO(
@@ -49,7 +49,7 @@ public class TaskController {
                                 taskRequestDTO
                         )));
 
-        return ResponseEntity.created(URI.create("/api/v2/tasks")).body(responseDTO.toString());
+        return ResponseEntity.created(URI.create("/api/v2/tasks")).body(responseDTO);
     }
 
     //update task
