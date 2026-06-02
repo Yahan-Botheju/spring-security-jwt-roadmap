@@ -22,7 +22,7 @@ public class TaskEntity {
     private Long taskId;
 
     @NotBlank(message = "Task Title cannot be empty")
-    private String tasKTitle;
+    private String taskTitle;
 
     @NotBlank(message = "Task Description cannot be empty")
     private String taskDescription;
