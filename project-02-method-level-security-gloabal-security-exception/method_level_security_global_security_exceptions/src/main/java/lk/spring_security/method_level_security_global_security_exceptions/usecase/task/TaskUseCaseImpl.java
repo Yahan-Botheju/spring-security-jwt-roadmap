@@ -1,6 +1,7 @@
 package lk.spring_security.method_level_security_global_security_exceptions.usecase.task;
 
 import lk.spring_security.method_level_security_global_security_exceptions.domain.models.Task;
+import lk.spring_security.method_level_security_global_security_exceptions.domain.models.User;
 import lk.spring_security.method_level_security_global_security_exceptions.domain.repositories.TaskRepository;
 import lk.spring_security.method_level_security_global_security_exceptions.domain.repositories.UserRepository;
 
@@ -27,7 +28,9 @@ public class TaskUseCaseImpl implements TaskUseCase{
     //create task
     @Override
     public Task createTask(Long userId,Task task){
-
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("user not found"));
+        task.setUser(user);
         return taskRepository.createTask(task);
     }
 
