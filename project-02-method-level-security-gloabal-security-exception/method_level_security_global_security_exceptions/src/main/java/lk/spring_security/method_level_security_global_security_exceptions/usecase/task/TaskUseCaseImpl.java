@@ -2,16 +2,20 @@ package lk.spring_security.method_level_security_global_security_exceptions.usec
 
 import lk.spring_security.method_level_security_global_security_exceptions.domain.models.Task;
 import lk.spring_security.method_level_security_global_security_exceptions.domain.repositories.TaskRepository;
+import lk.spring_security.method_level_security_global_security_exceptions.domain.repositories.UserRepository;
 
 import java.util.List;
 
 public class TaskUseCaseImpl implements TaskUseCase{
 
-    //inject task repo
+    //inject required classes
     private final TaskRepository taskRepository;
+    private final UserRepository userRepository;
 
-    public TaskUseCaseImpl(TaskRepository taskRepository) {
+
+    public TaskUseCaseImpl(TaskRepository taskRepository, UserRepository userRepository) {
         this.taskRepository = taskRepository;
+        this.userRepository = userRepository;
     }
 
     //get all task
@@ -22,7 +26,8 @@ public class TaskUseCaseImpl implements TaskUseCase{
 
     //create task
     @Override
-    public Task createTask(Task task){
+    public Task createTask(Long userId,Task task){
+
         return taskRepository.createTask(task);
     }
 
