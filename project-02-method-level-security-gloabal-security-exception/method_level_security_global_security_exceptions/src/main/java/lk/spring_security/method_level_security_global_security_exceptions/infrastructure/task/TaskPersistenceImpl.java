@@ -37,11 +37,11 @@ public class TaskPersistenceImpl implements TaskRepository {
 
     //create task
     public Task createTask(Long userId, Task task){
-        UserEntity managedUserEntity = .findById(userId)
+        UserEntity availableUserEntity = jpaUserRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + userId));
 
-
         TaskEntity taskEntity = taskPersistenceMapper.toEntity(task);
+        taskEntity.setUser(availableUserEntity);
         TaskEntity savedEntity = jpaTaskRepository.save(taskEntity);
         return taskPersistenceMapper.toDomainModel(savedEntity);
     }
