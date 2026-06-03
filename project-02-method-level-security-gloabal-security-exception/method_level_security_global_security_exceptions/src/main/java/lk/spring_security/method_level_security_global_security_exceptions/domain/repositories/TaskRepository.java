@@ -9,7 +9,7 @@ public interface TaskRepository {
     List<Task> getAllTasks();
 
     //create task
-    Task createTask(Task task);
+    Task createTask(Long userId,Task task);
 
     //update task
     Task updateTask(Long taskId, Task task);
