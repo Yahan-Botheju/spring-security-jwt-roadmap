@@ -125,9 +125,9 @@ stateless_jwt
 │   │   ├── Role.java                                # User Role Domain Model
 │   │   ├── Task.java                                # Task Domain Model
 │   │   └── User.java                                # User Domain Model
-│   └── 📁 repositories                              @Domain Repository Interfaces (Outbound Ports)
-│       ├── TaskRepository.java
-│       └── UserRepository.java
+│   ├── 📁 repositories                              @Domain Repository Interfaces (Outbound Ports)
+│   │   ├── TaskRepository.java
+│   │   └── UserRepository.java
 │   └── 📁 services                                  @Domain Services (Pure Business Contracts)
 │       └── JwtService.java                          # Core Token Operations Interface
 │
@@ -694,7 +694,21 @@ Custom JSON Error Response
       ↓
 HTTP 401 Unauthorized
 ```
+---
 
+### 📂 Project Structure - Newly Added Folders only
+
+```text
+infrastructure
+└── security
+     ├── 📁 config
+     │    ├── SecurityConfiguration.java            @EntryPoint 
+     │    └── ...
+     ├── 📁 exception                         
+     │    └── JwtAuthenticationEntryPoint.java      @Connect error handler
+     └── ...
+
+```
 ---
 
 ## 🎯 Security Improvements
