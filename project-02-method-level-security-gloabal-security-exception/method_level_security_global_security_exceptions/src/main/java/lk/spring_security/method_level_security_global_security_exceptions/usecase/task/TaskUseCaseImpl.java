@@ -31,7 +31,7 @@ public class TaskUseCaseImpl implements TaskUseCase{
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("user not found"));
         task.setUser(user);
-        return taskRepository.createTask(task);
+        return taskRepository.createTask(userId, task);
     }
 
     //update task
