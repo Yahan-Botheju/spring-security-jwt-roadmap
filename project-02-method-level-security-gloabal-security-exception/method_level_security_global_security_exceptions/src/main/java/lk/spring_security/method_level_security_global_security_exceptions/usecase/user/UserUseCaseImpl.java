@@ -20,9 +20,9 @@ public class UserUseCaseImpl implements UserUseCase {
     //update user
     @Override
     @Transactional
-    public User updateUser(String userEmail,  User user) {
-        User exsitingUser = userRepository.findByEmail(userEmail)
-                .orElseThrow(() -> new UsernameNotFoundException("user not found" + " , " +  userEmail));
+    public User updateUser(Long userId,  User user) {
+        User exsitingUser = userRepository.findById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("user not found" + " , " +  userId));
 
         if(user.getEmail() != null && !user.getEmail().isEmpty()){
             exsitingUser.setEmail(user.getEmail());
