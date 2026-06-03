@@ -9,6 +9,9 @@ public interface UserRepository {
     //user find by email/username
     Optional<User> findByEmail(String email);
 
+    //user find by ID
+    Optional<User> findById(Long userId);
+
     //save user (REGISTER USER)
     User saveUser(User user);
 
