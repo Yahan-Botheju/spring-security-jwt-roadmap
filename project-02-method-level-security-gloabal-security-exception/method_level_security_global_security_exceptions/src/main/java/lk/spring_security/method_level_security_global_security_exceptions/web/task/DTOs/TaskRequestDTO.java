@@ -20,6 +20,4 @@ public class TaskRequestDTO {
     @NotNull(message = "Status cannot be empty")
     private Boolean completed;
 
-    @NotNull(message = "User ID cannot be empty")
-    private Long userId;
 }

@@ -14,4 +14,6 @@ public class Task {
     private boolean completed;
 
     private Long userId;
+
+    private User user;
 }

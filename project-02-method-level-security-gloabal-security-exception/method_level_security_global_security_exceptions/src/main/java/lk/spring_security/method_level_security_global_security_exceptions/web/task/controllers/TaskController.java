@@ -1,6 +1,7 @@
 package lk.spring_security.method_level_security_global_security_exceptions.web.task.controllers;
 
 import lk.spring_security.method_level_security_global_security_exceptions.domain.models.Task;
+import lk.spring_security.method_level_security_global_security_exceptions.infrastructure.security.user.CustomUserDetails;
 import lk.spring_security.method_level_security_global_security_exceptions.usecase.task.TaskUseCase;
 import lk.spring_security.method_level_security_global_security_exceptions.web.task.DTOs.TaskRequestDTO;
 import lk.spring_security.method_level_security_global_security_exceptions.web.task.DTOs.TaskResponseDTO;
@@ -8,6 +9,7 @@ import lk.spring_security.method_level_security_global_security_exceptions.web.t
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -41,14 +43,12 @@ public class TaskController {
     //create task
     @PostMapping
     public ResponseEntity<TaskResponseDTO> createTask(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @RequestBody TaskRequestDTO taskRequestDTO
     ){
+        Long userId = customUserDetails.getUserId();
         TaskResponseDTO responseDTO = taskWebMapper.toResponseDTO(
-                taskUseCase.createTask(
-                        taskWebMapper.toDomainModel(
-                                taskRequestDTO
-                        )));
-
+                taskUseCase.createTask(userId,taskWebMapper.toDomainModel(taskRequestDTO )));
         return ResponseEntity.created(URI.create("/api/v2/tasks")).body(responseDTO);
     }
 

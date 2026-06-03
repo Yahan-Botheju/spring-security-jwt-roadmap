@@ -3,9 +3,12 @@ package lk.spring_security.method_level_security_global_security_exceptions.infr
 import jakarta.persistence.EntityNotFoundException;
 import lk.spring_security.method_level_security_global_security_exceptions.domain.models.Task;
 import lk.spring_security.method_level_security_global_security_exceptions.domain.repositories.TaskRepository;
+import lk.spring_security.method_level_security_global_security_exceptions.domain.repositories.UserRepository;
 import lk.spring_security.method_level_security_global_security_exceptions.infrastructure.task.persistence.entity.TaskEntity;
 import lk.spring_security.method_level_security_global_security_exceptions.infrastructure.task.persistence.jpa.JpaTaskRepository;
 import lk.spring_security.method_level_security_global_security_exceptions.infrastructure.task.persistence.taskPersistenceMapper.TaskPersistenceMapper;
+import lk.spring_security.method_level_security_global_security_exceptions.infrastructure.user.persistence.entity.UserEntity;
+import lk.spring_security.method_level_security_global_security_exceptions.infrastructure.user.persistence.jpa.JpaUserRepository;import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.List;
 
@@ -14,14 +17,16 @@ public class TaskPersistenceImpl implements TaskRepository {
     //inject required classes
     private final JpaTaskRepository jpaTaskRepository;
     private final TaskPersistenceMapper taskPersistenceMapper;
-
+    private final JpaUserRepository jpaUserRepository;
 
     public TaskPersistenceImpl(
             JpaTaskRepository taskRepository,
-            TaskPersistenceMapper taskPersistenceMapper
+            TaskPersistenceMapper taskPersistenceMapper,
+            JpaUserRepository jpaUserRepository
     ) {
         this.jpaTaskRepository = taskRepository;
         this.taskPersistenceMapper = taskPersistenceMapper;
+        this.jpaUserRepository = jpaUserRepository;
     }
 
     //get all task
@@ -31,8 +36,12 @@ public class TaskPersistenceImpl implements TaskRepository {
     }
 
     //create task
-    public Task createTask(Task task){
+    public Task createTask(Long userId, Task task){
+        UserEntity availableUserEntity = jpaUserRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + userId));
+
         TaskEntity taskEntity = taskPersistenceMapper.toEntity(task);
+        taskEntity.setUser(availableUserEntity);
         TaskEntity savedEntity = jpaTaskRepository.save(taskEntity);
         return taskPersistenceMapper.toDomainModel(savedEntity);
     }
