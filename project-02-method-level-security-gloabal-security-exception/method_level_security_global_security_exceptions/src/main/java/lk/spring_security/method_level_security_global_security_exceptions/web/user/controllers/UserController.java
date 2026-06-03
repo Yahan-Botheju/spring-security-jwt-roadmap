@@ -1,5 +1,6 @@
 package lk.spring_security.method_level_security_global_security_exceptions.web.user.controllers;
 
+import lk.spring_security.method_level_security_global_security_exceptions.infrastructure.security.user.CustomUserDetails;
 import lk.spring_security.method_level_security_global_security_exceptions.usecase.user.UserUseCase;
 import lk.spring_security.method_level_security_global_security_exceptions.web.user.DTOs.UserRequestDTO;
 import lk.spring_security.method_level_security_global_security_exceptions.web.user.DTOs.UserResponseDTO;
@@ -26,15 +27,16 @@ public class UserController {
     }
 
     //update user profile
-    @PostMapping("/profile")
+    @PutMapping("/profile")
     public ResponseEntity<UserResponseDTO> updateUser(
             @RequestBody UserRequestDTO userRequestDTO,
-            @AuthenticationPrincipal UserDetails userDetails
+            @AuthenticationPrincipal CustomUserDetails customUserDetails
     ){
-        String userEmail = userDetails.getUsername();
+        Long userId = customUserDetails.getUserId();
         UserResponseDTO responseDTO = userWebMapper.toResponseDTO(
                 userUseCase.updateUser(
-                        userEmail,userWebMapper.toDomainModel(userRequestDTO))  );
+                        userId,userWebMapper.toDomainModel(userRequestDTO))  );
+
         return ResponseEntity.ok(responseDTO);
     }
 
