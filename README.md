@@ -14,7 +14,35 @@ design & implement secure applications from scratch.
 
 The Projects listed below showcases the step I followed while learning JWT & Spring Security,
 For more details, refer to the README & projects repos.
+---
 
+### Projects Roadmap 
+
+---
+ ### ✅ Project 01 - Stateless JWT Authentication
+  - Spring Security
+  - Authentication & Authorization Flow
+  - UserDetails & UserDetailsService
+  - Security Filter Chain
+  - Custom JWT Authentication Filter
+  - JWT Generation & Validation
+  - Role Based Authorisation
+  - Clean Architecture Implementation
+---
+
+ ### ✅ Project 02 - Method Level Security & Global Security Exception Handling
+ - @PreAuthorize & Method Security
+ - Custom AuthenticationEntryPoint
+ - Unauthorized Access Handling (401)
+ - Centralized Security Exception Handling
+ - Standardized Security Exception Handling
+
+---
+### ✅ Project 03 - Cookie Based JWT Authentication
+ - Ongoing Project....
+
+---
+### ✅ Project 04 - Stateful JWT Authentication with Refresh Token Rotation
 
 ---
 
