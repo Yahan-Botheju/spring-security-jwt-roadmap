@@ -32,9 +32,9 @@ public class UserUseCaseImpl implements UserUseCase {
 
     //delete user
     @Override
-    public void deleteUser(String userEmail) {
-        User existingUser = userRepository.findByEmail(userEmail)
-                .orElseThrow(() -> new UsernameNotFoundException("user not found" + " , " +  userEmail));
+    public void deleteUser(Long userId) {
+        User existingUser = userRepository.findById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("user not found" + " , " +  userId));
         userRepository.deleteUser(existingUser);
     }
 }

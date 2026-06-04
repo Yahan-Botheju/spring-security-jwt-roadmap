@@ -43,11 +43,11 @@ public class UserController {
     //delete user profile
     @DeleteMapping("/profile")
     public ResponseEntity<String> deleteUser(
-            @AuthenticationPrincipal UserDetails userDetails
+            @AuthenticationPrincipal CustomUserDetails customUserDetails
     ){
-        String userEmail = userDetails.getUsername();
-        userUseCase.deleteUser(userEmail);
+        Long userId = customUserDetails.getUserId();
+        userUseCase.deleteUser(userId);
 
-        return ResponseEntity.ok("User delete successfully" + " , " +  userEmail);
+        return ResponseEntity.ok("User delete successfully" + " , " +  userId);
     }
 }
