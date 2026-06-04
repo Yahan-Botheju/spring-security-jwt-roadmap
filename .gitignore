@@ -15,3 +15,5 @@ project-01-stateless-jwt-role-based-auth/production/
 project-02-method-level-security-gloabal-security-exception/method_level_security_global_security_exceptions/.gradle
 project-02-method-level-security-gloabal-security-exception/method_level_security_global_security_exceptions/.idea
 project-02-method-level-security-gloabal-security-exception/method_level_security_global_security_exceptions/src/main/resources/application.properties
+
+project-03-cookie-based-jwt-auth/cookie_based_jwt_auth/src/main/resources/application.properties
