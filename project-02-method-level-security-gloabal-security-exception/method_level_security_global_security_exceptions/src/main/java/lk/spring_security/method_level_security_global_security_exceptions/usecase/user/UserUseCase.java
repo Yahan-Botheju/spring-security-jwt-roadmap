@@ -8,5 +8,5 @@ public interface UserUseCase {
     User updateUser(Long userId, User user);
 
     //delete user
-    void deleteUser(String userEmail);
+    void deleteUser(Long userId);
 }
