@@ -45,6 +45,12 @@ public class AuthController {
     public ResponseEntity<AuthResponseDTO> login(
             @RequestBody AuthRequestDTO authRequestDTO
     ){
-        return ResponseEntity.ok(authUseCase.loginUser(authRequestDTO));
+        //get token by using email and paw
+        String getToken = authUseCase.loginUser(authRequestDTO.getEmail(), authRequestDTO.getPassword());
+
+        //turn to response
+        AuthResponseDTO authResponseDTO = authWebMapper.authResponse(getToken);
+
+        return ResponseEntity.ok(authResponseDTO);
     }
 }
