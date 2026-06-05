@@ -46,7 +46,7 @@ public class AuthUseCaseImpl implements AuthUseCase {
         userRepository.saveUser(user);
 
         //generate toke
-        String jwtToken = jwtImpl.generateToken(new CustomUserDetails(createDomainModel));
+        String jwtToken = jwtService.generateToken(createDomainModel);
 
         return jwtToken;
     }
@@ -62,7 +62,7 @@ public class AuthUseCaseImpl implements AuthUseCase {
                 .orElseThrow(() -> new UsernameNotFoundException("Invalid email or password"));
 
         //generate token
-        String jwtToken = jwtImpl.generateToken(new CustomUserDetails(user));
+        String jwtToken = jwtService.generateToken(user);
 
         return jwtToken;
     }
