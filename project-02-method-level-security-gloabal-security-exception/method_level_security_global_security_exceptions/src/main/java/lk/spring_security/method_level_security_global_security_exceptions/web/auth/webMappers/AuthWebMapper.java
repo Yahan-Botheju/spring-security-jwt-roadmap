@@ -1,0 +1,12 @@
+package lk.spring_security.method_level_security_global_security_exceptions.web.auth.webMappers;
+
+import lk.spring_security.method_level_security_global_security_exceptions.domain.models.User;
+import lk.spring_security.method_level_security_global_security_exceptions.web.auth.DTOs.AuthRequestDTO;
+import org.mapstruct.Mapper;
+
+@Mapper(componentModel = "spring")
+public interface AuthWebMapper {
+    //requestDTO to domain model
+    User authToDomainModel(AuthRequestDTO authRequestDTO);
+
+}
