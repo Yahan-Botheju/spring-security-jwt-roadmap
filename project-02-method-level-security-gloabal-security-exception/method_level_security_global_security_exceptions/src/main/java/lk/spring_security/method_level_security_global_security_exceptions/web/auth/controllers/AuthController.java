@@ -1,5 +1,6 @@
 package lk.spring_security.method_level_security_global_security_exceptions.web.auth.controllers;
 
+import lk.spring_security.method_level_security_global_security_exceptions.domain.models.User;
 import lk.spring_security.method_level_security_global_security_exceptions.usecase.auth.AuthUseCase;
 import lk.spring_security.method_level_security_global_security_exceptions.web.auth.DTOs.AuthRequestDTO;
 import lk.spring_security.method_level_security_global_security_exceptions.web.auth.DTOs.AuthResponseDTO;
@@ -28,8 +29,15 @@ public class AuthController {
     public ResponseEntity<AuthResponseDTO> register(
             @RequestBody AuthRequestDTO authRequestDTO
     ){
+        //turn to domain model
+        User toDomainModel = authWebMapper.authToDomainModel(authRequestDTO);
+        //get token
+        String getToken = authUseCase.registerUser(toDomainModel);
 
-        return ResponseEntity.ok(authUseCase.registerUser(authRequestDTO));
+        //create response using token
+        AuthResponseDTO authResponseDTO = authWebMapper.authResponse(getToken);
+
+        return ResponseEntity.ok(authResponseDTO);
     }
 
     //user login
