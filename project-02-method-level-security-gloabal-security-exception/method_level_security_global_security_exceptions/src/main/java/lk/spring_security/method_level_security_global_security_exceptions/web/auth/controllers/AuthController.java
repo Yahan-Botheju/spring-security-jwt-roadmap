@@ -3,6 +3,7 @@ package lk.spring_security.method_level_security_global_security_exceptions.web.
 import lk.spring_security.method_level_security_global_security_exceptions.usecase.auth.AuthUseCase;
 import lk.spring_security.method_level_security_global_security_exceptions.web.auth.DTOs.AuthRequestDTO;
 import lk.spring_security.method_level_security_global_security_exceptions.web.auth.DTOs.AuthResponseDTO;
+import lk.spring_security.method_level_security_global_security_exceptions.web.auth.webMappers.AuthWebMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,11 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v2/auth")
 public class AuthController {
 
-    //inject auth usecase
+    //inject required classes
     private final AuthUseCase authUseCase;
+    private final AuthWebMapper authWebMapper;
 
-    public AuthController(AuthUseCase authUseCase) {
+    public AuthController(AuthUseCase authUseCase,  AuthWebMapper authWebMapper) {
         this.authUseCase = authUseCase;
+        this.authWebMapper = authWebMapper;
     }
 
     //register new user
@@ -25,6 +28,7 @@ public class AuthController {
     public ResponseEntity<AuthResponseDTO> register(
             @RequestBody AuthRequestDTO authRequestDTO
     ){
+
         return ResponseEntity.ok(authUseCase.registerUser(authRequestDTO));
     }
 
