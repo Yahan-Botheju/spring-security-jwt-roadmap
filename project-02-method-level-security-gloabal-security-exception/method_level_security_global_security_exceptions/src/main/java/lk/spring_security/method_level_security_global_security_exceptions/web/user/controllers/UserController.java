@@ -7,7 +7,6 @@ import lk.spring_security.method_level_security_global_security_exceptions.web.u
 import lk.spring_security.method_level_security_global_security_exceptions.web.user.webMappers.UserWebMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

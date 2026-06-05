@@ -7,7 +7,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotNull;
 import lk.spring_security.method_level_security_global_security_exceptions.domain.models.User;
 import lk.spring_security.method_level_security_global_security_exceptions.domain.services.JwtService;
-import lk.spring_security.method_level_security_global_security_exceptions.infrastructure.security.JwtImpl;
 import lk.spring_security.method_level_security_global_security_exceptions.infrastructure.security.user.CustomUserDetails;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
