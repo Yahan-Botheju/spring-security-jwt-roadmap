@@ -11,5 +11,5 @@ public interface AuthWebMapper {
     User authToDomainModel(AuthRequestDTO authRequestDTO);
 
     //domain model to responseDTO
-    AuthResponseDTO toAuthResponseDTO(User user);
+    AuthResponseDTO authResponse(String token);
 }
