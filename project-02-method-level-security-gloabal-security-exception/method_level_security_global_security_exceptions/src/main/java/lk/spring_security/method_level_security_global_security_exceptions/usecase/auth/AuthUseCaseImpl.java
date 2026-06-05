@@ -5,7 +5,6 @@ import lk.spring_security.method_level_security_global_security_exceptions.domai
 import lk.spring_security.method_level_security_global_security_exceptions.domain.models.User;
 import lk.spring_security.method_level_security_global_security_exceptions.domain.repositories.UserRepository;
 import lk.spring_security.method_level_security_global_security_exceptions.domain.services.JwtService;
-import lk.spring_security.method_level_security_global_security_exceptions.infrastructure.security.user.CustomUserDetails;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,7 +18,12 @@ public class AuthUseCaseImpl implements AuthUseCase {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public AuthUseCaseImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService, AuthenticationManager authenticationManager) {
+    public AuthUseCaseImpl(
+            UserRepository userRepository,
+            PasswordEncoder passwordEncoder,
+            JwtService jwtService,
+            AuthenticationManager authenticationManager
+    ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
@@ -45,10 +49,8 @@ public class AuthUseCaseImpl implements AuthUseCase {
         //save user in db
         userRepository.saveUser(user);
 
-        //generate toke
-        String jwtToken = jwtService.generateToken(createDomainModel);
-
-        return jwtToken;
+        //generate token then return
+        return  jwtService.generateToken(createDomainModel);
     }
 
     //login user
@@ -61,9 +63,7 @@ public class AuthUseCaseImpl implements AuthUseCase {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Invalid email or password"));
 
-        //generate token
-        String jwtToken = jwtService.generateToken(user);
-
-        return jwtToken;
+        //generate token, then return
+        return jwtService.generateToken(user);
     }
 }
