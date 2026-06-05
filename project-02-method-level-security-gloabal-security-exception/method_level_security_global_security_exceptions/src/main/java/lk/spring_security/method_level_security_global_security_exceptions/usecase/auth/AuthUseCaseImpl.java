@@ -6,8 +6,6 @@ import lk.spring_security.method_level_security_global_security_exceptions.domai
 import lk.spring_security.method_level_security_global_security_exceptions.domain.repositories.UserRepository;
 import lk.spring_security.method_level_security_global_security_exceptions.infrastructure.security.JwtImpl;
 import lk.spring_security.method_level_security_global_security_exceptions.infrastructure.security.user.CustomUserDetails;
-import lk.spring_security.method_level_security_global_security_exceptions.web.auth.DTOs.AuthRequestDTO;
-import lk.spring_security.method_level_security_global_security_exceptions.web.auth.DTOs.AuthResponseDTO;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -55,23 +53,17 @@ public class AuthUseCaseImpl implements AuthUseCase {
 
     //login user
     @Override
-    public AuthResponseDTO loginUser(
-            AuthRequestDTO authRequestDTO
-    ){
+    public String loginUser(String  email, String password){
         //check username and password using spring security
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        authRequestDTO.getEmail(),
-                        authRequestDTO.getPassword()
-                )
-        );
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
 
         //check and find user in db
-        User user = userRepository.findByEmail(authRequestDTO.getEmail())
-                .orElseThrow(() -> new UsernameNotFoundException("Ivalid email or password"));
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("Invalid email or password"));
 
         //generate token
         String jwtToken = jwtImpl.generateToken(new CustomUserDetails(user));
-        return new AuthResponseDTO(jwtToken);
+
+        return jwtToken;
     }
 }
