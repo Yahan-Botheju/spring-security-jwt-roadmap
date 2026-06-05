@@ -5,7 +5,10 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotNull;
+import lk.spring_security.method_level_security_global_security_exceptions.domain.models.User;
+import lk.spring_security.method_level_security_global_security_exceptions.domain.services.JwtService;
 import lk.spring_security.method_level_security_global_security_exceptions.infrastructure.security.JwtImpl;
+import lk.spring_security.method_level_security_global_security_exceptions.infrastructure.security.user.CustomUserDetails;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,11 +22,11 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     //inject required classes as constructor injection
-    private final JwtImpl jwtImpl;
+    private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
 
-    public JwtAuthenticationFilter(JwtImpl jwtImpl, UserDetailsService userDetailsService) {
-        this.jwtImpl = jwtImpl;
+    public JwtAuthenticationFilter(JwtService jwtService, UserDetailsService userDetailsService) {
+        this.jwtService = jwtService;
         this.userDetailsService = userDetailsService;
     }
 
@@ -51,7 +54,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         System.out.println("jwtToken:"+jwtToken);
 
         //separate username from token
-        userEmail = jwtImpl.extractUsername(jwtToken);
+        userEmail = jwtService.extractUsername(jwtToken);
 
         //check email availability and user does noe authenticated
         if(userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -59,17 +62,23 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             //get user details via spring
             UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
 
-            //check token is valid
-            if(jwtImpl.isTokenValid(jwtToken, userDetails)) {
+            //cast userdetails to customUserDetails and get domain model
+             if(userDetails instanceof CustomUserDetails customUserDetails){
+                 User domainUser = customUserDetails.getUser();
+                 //check token is valid
+                 if(jwtService.isTokenValid(jwtToken, domainUser)) {
 
-                //create new authentication object
-                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-                        userDetails,null, userDetails.getAuthorities()
-                );
+                     //create new authentication object
+                     UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+                             userDetails,null, userDetails.getAuthorities()
+                     );
 
-                //allow authenticated user to access
-                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-            }
+                     //allow authenticated user to access
+                     SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+                 }
+             }
+
+
         }
         //set request to next route
         filterChain.doFilter(request, response);

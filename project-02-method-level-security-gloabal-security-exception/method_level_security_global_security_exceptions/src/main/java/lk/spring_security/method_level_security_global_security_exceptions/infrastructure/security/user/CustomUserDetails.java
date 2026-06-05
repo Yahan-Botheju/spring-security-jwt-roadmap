@@ -25,6 +25,11 @@ public class CustomUserDetails implements UserDetails {
         return user.getUserId();
     }
 
+    public User getUser() {
+        return this.user;
+    }
+
+
     @Override
     public @Nullable String getPassword() {
         return user.getPassword();
@@ -54,4 +59,6 @@ public class CustomUserDetails implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+
 }

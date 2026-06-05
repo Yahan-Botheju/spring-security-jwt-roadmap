@@ -4,7 +4,7 @@ import jakarta.transaction.Transactional;
 import lk.spring_security.method_level_security_global_security_exceptions.domain.models.Role;
 import lk.spring_security.method_level_security_global_security_exceptions.domain.models.User;
 import lk.spring_security.method_level_security_global_security_exceptions.domain.repositories.UserRepository;
-import lk.spring_security.method_level_security_global_security_exceptions.infrastructure.security.JwtImpl;
+import lk.spring_security.method_level_security_global_security_exceptions.domain.services.JwtService;
 import lk.spring_security.method_level_security_global_security_exceptions.infrastructure.security.user.CustomUserDetails;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,13 +16,13 @@ public class AuthUseCaseImpl implements AuthUseCase {
     //inject required classes and spring classes via constructor injection
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtImpl jwtImpl;
+    private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public AuthUseCaseImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtImpl jwtImpl, AuthenticationManager authenticationManager) {
+    public AuthUseCaseImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService, AuthenticationManager authenticationManager) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.jwtImpl = jwtImpl;
+        this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
     }
 
@@ -46,7 +46,7 @@ public class AuthUseCaseImpl implements AuthUseCase {
         userRepository.saveUser(user);
 
         //generate toke
-        String jwtToken = jwtImpl.generateToken(new CustomUserDetails(createDomainModel));
+        String jwtToken = jwtService.generateToken(createDomainModel);
 
         return jwtToken;
     }
@@ -62,7 +62,7 @@ public class AuthUseCaseImpl implements AuthUseCase {
                 .orElseThrow(() -> new UsernameNotFoundException("Invalid email or password"));
 
         //generate token
-        String jwtToken = jwtImpl.generateToken(new CustomUserDetails(user));
+        String jwtToken = jwtService.generateToken(user);
 
         return jwtToken;
     }
