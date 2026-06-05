@@ -31,18 +31,16 @@ public class AuthUseCaseImpl implements AuthUseCase {
     //register user
     @Override
     @Transactional
-    public AuthResponseDTO registerUser(
-            AuthRequestDTO authRequestDTO
-    ){
+    public String registerUser(User user ){
         //check email availability
-        if(userRepository.findByEmail(authRequestDTO.getEmail()).isPresent()){
+        if(userRepository.findByEmail(user.getEmail()).isPresent()){
             throw new IllegalArgumentException("email already exists");
         }
 
         //create domain model
-        User user = User.builder()
-                .email(authRequestDTO.getEmail())
-                .password(passwordEncoder.encode(authRequestDTO.getPassword()))
+        User createDomainModel = User.builder()
+                .email(user.getEmail())
+                .password(passwordEncoder.encode(user.getPassword()))
                 .role(Role.USER)
                 .build();
 
@@ -50,9 +48,9 @@ public class AuthUseCaseImpl implements AuthUseCase {
         userRepository.saveUser(user);
 
         //generate toke
-        String jwtToken = jwtImpl.generateToken(new CustomUserDetails(user));
+        String jwtToken = jwtImpl.generateToken(new CustomUserDetails(createDomainModel));
 
-        return new AuthResponseDTO(jwtToken);
+        return jwtToken;
     }
 
     //login user
