@@ -26,4 +26,7 @@ public class NoteEntity {
     @Column(columnDefinition = "Text", nullable = false)
     private String content;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserEntity user;
 }
