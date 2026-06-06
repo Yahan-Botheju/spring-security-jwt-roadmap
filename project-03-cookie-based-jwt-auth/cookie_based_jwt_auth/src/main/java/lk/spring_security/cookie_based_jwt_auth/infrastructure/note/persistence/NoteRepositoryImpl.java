@@ -1,4 +1,4 @@
 package lk.spring_security.cookie_based_jwt_auth.infrastructure.note.persistence;
 
-public class NotePersistenceImpl {
+public class NoteRepositoryImpl {
 }

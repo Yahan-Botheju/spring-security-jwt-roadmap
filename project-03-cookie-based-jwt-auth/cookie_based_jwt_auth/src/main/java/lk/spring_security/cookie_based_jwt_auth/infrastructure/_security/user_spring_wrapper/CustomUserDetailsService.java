@@ -1,4 +1,4 @@
-package lk.spring_security.cookie_based_jwt_auth.infrastructure.security.user_spring_wrapper;
+package lk.spring_security.cookie_based_jwt_auth.infrastructure._security.user_spring_wrapper;
 
 public class CustomUserDetailsService {
 }
