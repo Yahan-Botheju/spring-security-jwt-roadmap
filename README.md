@@ -49,7 +49,7 @@ For more details, refer to the README & projects repos.
 ---
 
 ---
-### ✅ Project 04 - Stateful JWT Authentication with Refresh Token Rotation
+### ✅ Project 05 - Stateful JWT Authentication with Refresh Token Rotation
 
 ---
 
