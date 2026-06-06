@@ -44,6 +44,11 @@ For more details, refer to the README & projects repos.
  - Ongoing Project....
 
 ---
+### ✅ Project 04 -  Refresh Token
+
+---
+
+---
 ### ✅ Project 04 - Stateful JWT Authentication with Refresh Token Rotation
 
 ---
