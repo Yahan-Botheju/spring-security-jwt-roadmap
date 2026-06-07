@@ -1,6 +1,7 @@
 package lk.spring_security.method_level_security_global_security_exceptions.infrastructure.auth.config;
 
 import lk.spring_security.method_level_security_global_security_exceptions.domain.repositories.UserRepository;
+import lk.spring_security.method_level_security_global_security_exceptions.domain.services.JwtService;
 import lk.spring_security.method_level_security_global_security_exceptions.infrastructure.security.JwtImpl;
 import lk.spring_security.method_level_security_global_security_exceptions.usecase.auth.AuthUseCase;
 import lk.spring_security.method_level_security_global_security_exceptions.usecase.auth.AuthUseCaseImpl;
@@ -15,9 +16,9 @@ public class AuthBeanConfig {
     public AuthUseCase authUseCase(
             UserRepository userRepository,
             PasswordEncoder passwordEncoder,
-            JwtImpl jwtImpl,
+            JwtService jwtService,
             AuthenticationManager authenticationManager
     ){
-        return new AuthUseCaseImpl(userRepository,passwordEncoder,jwtImpl,authenticationManager);
+        return new AuthUseCaseImpl(userRepository,passwordEncoder,jwtService,authenticationManager);
     }
 }
