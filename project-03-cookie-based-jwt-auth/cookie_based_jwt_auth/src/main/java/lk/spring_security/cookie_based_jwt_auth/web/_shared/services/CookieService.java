@@ -51,4 +51,19 @@ public class CookieService {
                 .map(Cookie::getValue)
                 .findFirst();
     }
+
+
+    /* ----- REMOVE COOKIE ----- */
+
+    public void  clearAuthCookie(HttpServletResponse response) {
+        ResponseCookie cookie = ResponseCookie.from(cookieName, null)
+                .httpOnly(true)
+                .secure(false)
+                .path("/")
+                .maxAge(0)
+                .sameSite("Strict")
+                .build();
+
+        response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+    }
 }
