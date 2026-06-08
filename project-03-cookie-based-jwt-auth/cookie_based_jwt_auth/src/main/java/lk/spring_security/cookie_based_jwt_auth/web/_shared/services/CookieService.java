@@ -3,6 +3,7 @@ package lk.spring_security.cookie_based_jwt_auth.web._shared.services;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lk.spring_security.cookie_based_jwt_auth.infrastructure._security.token_extraction.TokenExtractor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
@@ -12,7 +13,7 @@ import java.util.Arrays;
 import java.util.Optional;
 
 @Component
-public class CookieService {
+public class CookieService implements TokenExtractor {
 
 
     /* ----- CREATE COOKIE ----- */
