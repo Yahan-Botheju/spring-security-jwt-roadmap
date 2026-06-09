@@ -66,16 +66,23 @@ public class JwtImpl implements JwtService {
         return claims.getSubject();
     }
 
+    //get expired data from token
     private Date extractExpiration(String token){
         Claims claims = Jwts.parser()
-                .verifyWith(c)
+                .verifyWith(createJavaSecretKeyObject())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+        //return only expiration data
+        return claims.getExpiration();
     }
 
 
-
-
     /* ----- __VALIDATION_METHODS__ ----- */
-
+    //check token is expired or not
+    private boolean isTokenExpired(String token){
+        return extractExpiration(token).before(new Date());
+    }
 
 
 }
