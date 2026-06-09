@@ -1,12 +1,17 @@
 package lk.spring_security.cookie_based_jwt_auth.infrastructure._security;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lk.spring_security.cookie_based_jwt_auth.domain.models.User;
 import lk.spring_security.cookie_based_jwt_auth.domain.services.JwtService;
+import lk.spring_security.cookie_based_jwt_auth.infrastructure._security.user_spring_wrapper.CustomUserDetails;
 
 import javax.crypto.SecretKey;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 public class JwtImpl implements JwtService {
 
@@ -23,11 +28,40 @@ public class JwtImpl implements JwtService {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    /* ----- __GENERATE TOKEN__ ----- */
+    /* ----- __GENERATE_TOKEN__ ----- */
 
-    //create general token without extra details
+    //create general token without extra details (spring security user details included)
     @Override
     public String generateToken(User user){
-        return generateToken(new HashMap<>(),user);
+        return generateToken(new HashMap<>(), user);
+    }
+
+    //create token with extra details included
+    @Override
+    public String generateToken(Map<String,Object> extractClaims, User user){
+        //wrap user from custom user details
+        CustomUserDetails userDetails = new CustomUserDetails(user);
+
+        //create token with extra details included of user
+        return Jwts.builder()
+                .claims(extractClaims) //allow to add extra details related to user
+                .subject(userDetails.getUsername()) // add username to token
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))
+                .signWith(createJavaSecretKey())
+                .compact();
+    }
+
+    /* -----  __TOKEN_EXTRACTION_METHODS__ ----- */
+
+    @Override
+    public String extractUserName(String token){
+        //read token data JWT claim object
+        Claims claims = Jwts.parser()
+                .verifyWith(createJavaSecretKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+        return claims.getSubject();
     }
 }
