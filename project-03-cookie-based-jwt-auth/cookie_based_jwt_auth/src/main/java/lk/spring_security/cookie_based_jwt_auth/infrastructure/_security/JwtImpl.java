@@ -1,5 +1,6 @@
 package lk.spring_security.cookie_based_jwt_auth.infrastructure._security;
 
+import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lk.spring_security.cookie_based_jwt_auth.domain.models.User;
@@ -7,6 +8,7 @@ import lk.spring_security.cookie_based_jwt_auth.domain.services.JwtService;
 import lk.spring_security.cookie_based_jwt_auth.infrastructure._security.user_spring_wrapper.CustomUserDetails;
 
 import javax.crypto.SecretKey;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,5 +40,14 @@ public class JwtImpl implements JwtService {
     public String generateToken(Map<String,Object> extractClaims, User user){
         //wrap user from custom user details
         CustomUserDetails userDetails = new CustomUserDetails(user);
+
+        //create token with extra details included of user
+        return Jwts.builder()
+                .claims(extractClaims) //allow to add extra details related to user
+                .subject(userDetails.getUsername()) // add username to token
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))
+                .signWith(createJavaSecretKey())
+                .compact();
     }
 }
