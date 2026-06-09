@@ -4,9 +4,11 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lk.spring_security.cookie_based_jwt_auth.domain.models.User;
 import lk.spring_security.cookie_based_jwt_auth.domain.services.JwtService;
+import lk.spring_security.cookie_based_jwt_auth.infrastructure._security.user_spring_wrapper.CustomUserDetails;
 
 import javax.crypto.SecretKey;
 import java.util.HashMap;
+import java.util.Map;
 
 public class JwtImpl implements JwtService {
 
@@ -25,9 +27,16 @@ public class JwtImpl implements JwtService {
 
     /* ----- __GENERATE TOKEN__ ----- */
 
-    //create general token without extra details
+    //create general token without extra details (spring security user details included)
     @Override
     public String generateToken(User user){
-        return generateToken(new HashMap<>(),user);
+        return generateToken(new HashMap<>(), user);
+    }
+
+    //create token with extra details included
+    @Override
+    public String generateToken(Map<String,Object> extractClaims, User user){
+        //wrap user from custom user details
+        CustomUserDetails userDetails = new CustomUserDetails(user);
     }
 }
