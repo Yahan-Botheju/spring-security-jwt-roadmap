@@ -2,9 +2,11 @@ package lk.spring_security.cookie_based_jwt_auth.infrastructure._security;
 
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lk.spring_security.cookie_based_jwt_auth.domain.models.User;
 import lk.spring_security.cookie_based_jwt_auth.domain.services.JwtService;
 
 import javax.crypto.SecretKey;
+import java.util.HashMap;
 
 public class JwtImpl implements JwtService {
 
@@ -19,5 +21,13 @@ public class JwtImpl implements JwtService {
     private SecretKey createJavaSecretKey(){
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    /* ----- __GENERATE TOKEN__ ----- */
+
+    //create general token without extra details
+    @Override
+    public String generateToken(User user){
+        return generateToken(new HashMap<>(),user);
     }
 }
