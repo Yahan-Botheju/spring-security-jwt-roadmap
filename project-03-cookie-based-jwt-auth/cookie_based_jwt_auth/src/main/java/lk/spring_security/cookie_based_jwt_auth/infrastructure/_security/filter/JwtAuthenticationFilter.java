@@ -41,6 +41,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         //get token from cookie
         String jwt = tokenExtractor.extractTokenFromCookie(request).orElse(null);
+        String userEmail = null;
+
+
 
     }
 }
