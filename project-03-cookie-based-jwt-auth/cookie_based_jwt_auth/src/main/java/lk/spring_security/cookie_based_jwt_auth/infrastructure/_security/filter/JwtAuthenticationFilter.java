@@ -7,6 +7,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import lk.spring_security.cookie_based_jwt_auth.domain.services.JwtService;
 import lk.spring_security.cookie_based_jwt_auth.infrastructure._security.token_extraction.TokenExtractor;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -48,6 +50,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             userEmail = jwtService.extractUserName(jwt);
         }
 
+        //check user email is not empty and spring security context is empty to store user
+        if(userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            //get user details from userDetails service then wrap using UserDetails
+            UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
+
+        }
 
     }
 }
