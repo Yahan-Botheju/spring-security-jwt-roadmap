@@ -1,5 +1,6 @@
 package lk.spring_security.cookie_based_jwt_auth.infrastructure._security;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -27,7 +28,7 @@ public class JwtImpl implements JwtService {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    /* ----- __GENERATE TOKEN__ ----- */
+    /* ----- __GENERATE_TOKEN__ ----- */
 
     //create general token without extra details (spring security user details included)
     @Override
@@ -49,5 +50,18 @@ public class JwtImpl implements JwtService {
                 .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))
                 .signWith(createJavaSecretKey())
                 .compact();
+    }
+
+    /* -----  __TOKEN_EXTRACTION_METHODS__ ----- */
+
+    @Override
+    public String extractUserName(String token){
+        //read token data JWT claim object
+        Claims claims = Jwts.parser()
+                .verifyWith(createJavaSecretKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+        return claims.getSubject();
     }
 }
