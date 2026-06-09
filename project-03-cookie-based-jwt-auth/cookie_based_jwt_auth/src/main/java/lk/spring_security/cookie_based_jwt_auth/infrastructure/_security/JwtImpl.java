@@ -23,7 +23,7 @@ public class JwtImpl implements JwtService {
     }
 
     //create java secret key object
-    private SecretKey createJavaSecretKey(){
+    private SecretKey createJavaSecretKeyObject(){
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
     }
@@ -48,7 +48,7 @@ public class JwtImpl implements JwtService {
                 .subject(userDetails.getUsername()) // add username to token
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))
-                .signWith(createJavaSecretKey())
+                .signWith(createJavaSecretKeyObject())
                 .compact();
     }
 
@@ -58,10 +58,24 @@ public class JwtImpl implements JwtService {
     public String extractUserName(String token){
         //read token data JWT claim object
         Claims claims = Jwts.parser()
-                .verifyWith(createJavaSecretKey())
+                .verifyWith(createJavaSecretKeyObject())
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
+        //return only username
         return claims.getSubject();
     }
+
+    private Date extractExpiration(String token){
+        Claims claims = Jwts.parser()
+                .verifyWith(c)
+    }
+
+
+
+
+    /* ----- __VALIDATION_METHODS__ ----- */
+
+
+
 }
