@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lk.spring_security.cookie_based_jwt_auth.domain.services.JwtService;
 import lk.spring_security.cookie_based_jwt_auth.infrastructure._security.token_extraction.TokenExtractor;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -57,7 +58,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             //validate token username and db username
             if(jwtService.validateToken(jwt, userDetails)){
-
+                //create authorized user object
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                        userDetails,
+                        null,
+                        userDetails.getAuthorities()
+                );
             }
 
         }
