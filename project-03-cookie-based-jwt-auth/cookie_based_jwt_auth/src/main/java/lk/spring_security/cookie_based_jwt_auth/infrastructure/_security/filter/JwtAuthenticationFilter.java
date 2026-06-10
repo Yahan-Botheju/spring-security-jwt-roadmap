@@ -7,9 +7,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import lk.spring_security.cookie_based_jwt_auth.domain.services.JwtService;
 import lk.spring_security.cookie_based_jwt_auth.infrastructure._security.token_extraction.TokenExtractor;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -55,7 +57,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             //get user details from userDetails service then wrap using UserDetails
             UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
 
-        }
+            //validate token username and db username
+            if(jwtService.validateToken(jwt, userDetails)){
+                //create authorized user object
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                        userDetails,
+                        null,
+                        userDetails.getAuthorities()
+                );
+                //auditing login
+                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                //put authorized user in spring security context
+                SecurityContextHolder.getContext().setAuthentication(authToken);
+            }
 
+        }
+        filterChain.doFilter(request, response);
     }
 }

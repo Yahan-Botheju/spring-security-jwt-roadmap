@@ -7,6 +7,7 @@ import io.jsonwebtoken.security.Keys;
 import lk.spring_security.cookie_based_jwt_auth.domain.models.User;
 import lk.spring_security.cookie_based_jwt_auth.domain.services.JwtService;
 import lk.spring_security.cookie_based_jwt_auth.infrastructure._security.user_spring_wrapper.CustomUserDetails;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
@@ -54,6 +55,7 @@ public class JwtImpl implements JwtService {
 
     /* -----  __TOKEN_EXTRACTION_METHODS__ ----- */
 
+    //get username from token
     @Override
     public String extractUserName(String token){
         //read token data JWT claim object
@@ -79,10 +81,20 @@ public class JwtImpl implements JwtService {
 
 
     /* ----- __VALIDATION_METHODS__ ----- */
+
+
     //check token is expired or not
     private boolean isTokenExpired(String token){
         return extractExpiration(token).before(new Date());
     }
 
+    //create token validation method
+    @Override
+    public boolean validateToken(String token, UserDetails userDetails){
+        //extract username from token
+        final String username = extractUserName(token);
+        //check username is equal to db username and token is not expired
+        return (username.equals(userDetails.getUsername() ) && isTokenExpired(token));
+    }
 
 }
