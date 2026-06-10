@@ -55,6 +55,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             //get user details from userDetails service then wrap using UserDetails
             UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
 
+            //validate token username and db username
+            if(jwtService.validateToken(jwt, userDetails)){
+
+            }
+
         }
 
     }
