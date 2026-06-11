@@ -5,7 +5,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Map;
 
-public interface JwtService {
+public interface CookieService {
     String generateToken(User user);
     String generateToken(Map<String,Object> extractClaims, User user);
     String extractUserName(String token);
