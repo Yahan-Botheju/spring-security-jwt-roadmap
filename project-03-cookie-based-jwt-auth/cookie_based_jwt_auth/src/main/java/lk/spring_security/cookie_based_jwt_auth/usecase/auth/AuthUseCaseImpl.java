@@ -43,5 +43,8 @@ public class AuthUseCaseImpl implements AuthUseCase{
 
         //save user through domain user repo
         userRepository.registerUser(createDomainModel);
+
+        //generate token
+        return cookieService.generateToken(createDomainModel);
     }
 }
