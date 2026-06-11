@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -34,7 +35,10 @@ public class SecurityConfig {
     public SecurityFilterChain springSecurityFilterChain(
             HttpSecurity http
     ) {
+        http
 
+                //CSRF attack preventing (DISABLE due to learning project)
+                .csrf(AbstractHttpConfigurer::disable)
     }
 
 
