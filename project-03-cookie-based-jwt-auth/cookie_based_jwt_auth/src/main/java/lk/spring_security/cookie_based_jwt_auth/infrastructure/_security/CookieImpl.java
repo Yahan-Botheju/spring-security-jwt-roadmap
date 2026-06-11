@@ -5,7 +5,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lk.spring_security.cookie_based_jwt_auth.domain.models.User;
-import lk.spring_security.cookie_based_jwt_auth.domain.services.JwtService;
+import lk.spring_security.cookie_based_jwt_auth.domain.services.CookieService;
 import lk.spring_security.cookie_based_jwt_auth.infrastructure._security.user_spring_wrapper.CustomUserDetails;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -14,12 +14,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class JwtImpl implements JwtService {
+public class CookieImpl implements CookieService {
 
     //inject secret key
     private final String SECRET_KEY;
 
-    public JwtImpl(String secretKey) {
+    public CookieImpl(String secretKey) {
         this. SECRET_KEY = secretKey;
     }
 

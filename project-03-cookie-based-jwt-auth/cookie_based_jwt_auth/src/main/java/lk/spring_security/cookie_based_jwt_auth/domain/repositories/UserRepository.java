@@ -8,4 +8,7 @@ public interface UserRepository {
 
     //user find by email
     Optional<User> userFindByEmail(String email);
+
+    //register user
+    User registerUser(User user);
 }
