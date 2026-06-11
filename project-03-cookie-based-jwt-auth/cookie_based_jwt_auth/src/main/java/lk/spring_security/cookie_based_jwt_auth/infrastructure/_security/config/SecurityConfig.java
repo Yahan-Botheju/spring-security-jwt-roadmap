@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -44,6 +45,11 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/auth/**").permitAll() //allow register, login, logout as public
                         .requestMatchers("/api/v1/admin/**").hasAuthority("ROLE_ADMIN") //initiate admin routes
                         .anyRequest().authenticated()
+                )
+
+                //set session as stateless
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
     }
 
