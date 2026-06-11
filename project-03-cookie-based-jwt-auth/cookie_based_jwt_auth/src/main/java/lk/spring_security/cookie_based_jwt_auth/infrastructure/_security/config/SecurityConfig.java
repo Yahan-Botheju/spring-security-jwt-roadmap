@@ -39,6 +39,12 @@ public class SecurityConfig {
 
                 //CSRF attack preventing (DISABLE due to learning project)
                 .csrf(AbstractHttpConfigurer::disable)
+
+                .authorizeHttpRequests(authorizeRequests -> authorizeRequests
+                        .requestMatchers("/api/v1/auth/**").permitAll() //allow register, login, logout as public
+                        .requestMatchers("/api/v1/admin/**").hasAuthority("ROLE_ADMIN") //initiate admin routes
+                        .anyRequest().authenticated()
+                )
     }
 
 
