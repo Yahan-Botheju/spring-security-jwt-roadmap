@@ -2,7 +2,7 @@ package lk.spring_security.cookie_based_jwt_auth.infrastructure._configs._usecas
 
 import lk.spring_security.cookie_based_jwt_auth.domain.repositories.UserRepository;
 
-import lk.spring_security.cookie_based_jwt_auth.domain.services.JwtService;
+import lk.spring_security.cookie_based_jwt_auth.domain.services.CookieService;
 import lk.spring_security.cookie_based_jwt_auth.usecase.auth.AuthUseCase;
 import lk.spring_security.cookie_based_jwt_auth.usecase.auth.AuthUseCaseImpl;
 import org.springframework.context.annotation.Bean;
@@ -15,8 +15,8 @@ public class AuthUseCaseBeanConfig {
     public AuthUseCase authUseCase(
             UserRepository userRepository,
             PasswordEncoder passwordEncoder,
-            JwtService jwtService
+            CookieService cookieService
     ) {
-        return new AuthUseCaseImpl(userRepository,passwordEncoder,jwtService);
+        return new AuthUseCaseImpl(userRepository,passwordEncoder, cookieService);
     }
 }
