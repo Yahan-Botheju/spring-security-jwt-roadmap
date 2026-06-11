@@ -47,4 +47,10 @@ public class AuthUseCaseImpl implements AuthUseCase{
         //generate token
         return cookieService.generateToken(createDomainModel);
     }
+
+    //login user
+    @Override
+    public String loginUser(String email, String password){
+
+    }
 }
