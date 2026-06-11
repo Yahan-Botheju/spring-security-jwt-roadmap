@@ -5,6 +5,7 @@ import lk.spring_security.cookie_based_jwt_auth.domain.models.Role;
 import lk.spring_security.cookie_based_jwt_auth.domain.models.User;
 import lk.spring_security.cookie_based_jwt_auth.domain.repositories.UserRepository;
 import lk.spring_security.cookie_based_jwt_auth.domain.services.CookieService;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class AuthUseCaseImpl implements AuthUseCase{
@@ -13,16 +14,19 @@ public class AuthUseCaseImpl implements AuthUseCase{
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final CookieService cookieService;
+    private final AuthenticationManager authenticationManager;
 
 
     public AuthUseCaseImpl(
             UserRepository userRepository,
             PasswordEncoder passwordEncoder,
-            CookieService cookieService
+            CookieService cookieService,
+            AuthenticationManager authenticationManager
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.cookieService = cookieService;
+        this.authenticationManager = authenticationManager;
     }
 
     //register user
@@ -51,6 +55,7 @@ public class AuthUseCaseImpl implements AuthUseCase{
     //login user
     @Override
     public String loginUser(String email, String password){
+
 
     }
 }
