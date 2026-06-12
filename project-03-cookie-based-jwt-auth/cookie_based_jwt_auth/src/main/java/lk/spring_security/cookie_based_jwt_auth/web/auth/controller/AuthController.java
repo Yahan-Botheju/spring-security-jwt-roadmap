@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import lk.spring_security.cookie_based_jwt_auth.domain.models.User;
 import lk.spring_security.cookie_based_jwt_auth.domain.services.CookieService;
 import lk.spring_security.cookie_based_jwt_auth.usecase.auth.AuthUseCase;
+import lk.spring_security.cookie_based_jwt_auth.web._shared.services.HttpCookieProvider;
 import lk.spring_security.cookie_based_jwt_auth.web.auth.DTOs.AuthRequestDTO;
 import lk.spring_security.cookie_based_jwt_auth.web.auth.DTOs.AuthResponseDTO;
 import lk.spring_security.cookie_based_jwt_auth.web.auth.webMapper.AuthWebMapper;
@@ -20,16 +21,16 @@ public class AuthController {
 
     //inject required classes
     private final AuthUseCase authUseCase;
-    private final CookieService cookieService;
+    private final HttpCookieProvider httpCookieProvider;
     private final AuthWebMapper authWebMapper;
 
     public AuthController(
             AuthUseCase authUseCase,
-            CookieService cookieService,
+            HttpCookieProvider httpCookieProvider,
             AuthWebMapper authWebMapper
     ) {
         this.authUseCase = authUseCase;
-        this.cookieService = cookieService;
+        this.httpCookieProvider = httpCookieProvider;
         this.authWebMapper = authWebMapper;
     }
 
@@ -42,6 +43,8 @@ public class AuthController {
         User toDomainModel = authWebMapper.toDomainModel(authRequestDTO);
         //generate token
         String token = authUseCase.registerUser(toDomainModel);
+
+
 
     }
 
