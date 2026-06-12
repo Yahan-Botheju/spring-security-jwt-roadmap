@@ -94,7 +94,7 @@ public class CookieImpl implements CookieService {
         //extract username from token
         final String username = extractUserName(token);
         //check username is equal to db username and token is not expired
-        return (username.equals(userDetails.getUsername() ) && isTokenExpired(token));
+        return (username.equals(userDetails.getUsername() ) && !isTokenExpired(token));
     }
 
 }
