@@ -19,7 +19,7 @@ public class HttpCookieProvider implements TokenExtractor {
     /* ----- CREATE COOKIE ----- */
 
     //create cookie name
-    @Value("${app.security.cookie-name}")
+    @Value("${application.security.cookie-name}")
     private String cookieName;
 
     //initiate expire time
