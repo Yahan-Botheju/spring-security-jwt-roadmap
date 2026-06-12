@@ -6,6 +6,8 @@ import lk.spring_security.cookie_based_jwt_auth.domain.models.User;
 import lk.spring_security.cookie_based_jwt_auth.domain.repositories.UserRepository;
 import lk.spring_security.cookie_based_jwt_auth.domain.services.CookieService;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class AuthUseCaseImpl implements AuthUseCase{
@@ -55,7 +57,13 @@ public class AuthUseCaseImpl implements AuthUseCase{
     //login user
     @Override
     public String loginUser(String email, String password){
+        //check given username via CustomUserDetailsService and password check via Auth Provider
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
 
+        User user = userRepository.userFindByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
+        //generate token then return
+        return cookieService.generateToken(user);
     }
 }

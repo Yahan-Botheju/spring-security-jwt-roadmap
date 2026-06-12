@@ -7,6 +7,7 @@ import lk.spring_security.cookie_based_jwt_auth.usecase.auth.AuthUseCase;
 import lk.spring_security.cookie_based_jwt_auth.usecase.auth.AuthUseCaseImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
@@ -15,8 +16,9 @@ public class AuthUseCaseBeanConfig {
     public AuthUseCase authUseCase(
             UserRepository userRepository,
             PasswordEncoder passwordEncoder,
-            CookieService cookieService
+            CookieService cookieService,
+            AuthenticationManager authenticationManager
     ) {
-        return new AuthUseCaseImpl(userRepository,passwordEncoder, cookieService);
+        return new AuthUseCaseImpl(userRepository,passwordEncoder, cookieService, authenticationManager);
     }
 }
