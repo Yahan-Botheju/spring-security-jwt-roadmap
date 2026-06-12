@@ -62,5 +62,8 @@ public class AuthUseCaseImpl implements AuthUseCase{
 
         User user = userRepository.userFindByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        //generate token then return
+        return cookieService.generateToken(user);
     }
 }
