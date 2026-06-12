@@ -35,7 +35,7 @@ public class SecurityConfig {
 
     //initiate spring security config method
     @Bean
-    public SecurityFilterChain springSecurityFilterChain(
+    public SecurityFilterChain securityFilterChain(
             HttpSecurity http
     ) {
         http
