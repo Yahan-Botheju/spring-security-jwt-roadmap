@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.Optional;
 
 @Component
-public class CookieService implements TokenExtractor {
+public class HttpCookieProvider implements TokenExtractor {
 
 
     /* ----- CREATE COOKIE ----- */
