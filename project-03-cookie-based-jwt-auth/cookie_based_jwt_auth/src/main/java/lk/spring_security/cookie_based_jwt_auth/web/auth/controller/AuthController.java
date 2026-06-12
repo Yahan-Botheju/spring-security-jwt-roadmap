@@ -45,8 +45,8 @@ public class AuthController {
         //generate token
         String token = authUseCase.registerUser(toDomainModel);
 
-
-        httpCookieProvider.setAuthCookie(res,token);
+        //token set as http only cookie
+        httpCookieProvider.setAuthCookie(response,token);
 
 
     }
