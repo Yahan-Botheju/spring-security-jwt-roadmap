@@ -2,6 +2,7 @@ package lk.spring_security.cookie_based_jwt_auth.web.auth.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import lk.spring_security.cookie_based_jwt_auth.domain.models.User;
 import lk.spring_security.cookie_based_jwt_auth.domain.services.CookieService;
 import lk.spring_security.cookie_based_jwt_auth.usecase.auth.AuthUseCase;
 import lk.spring_security.cookie_based_jwt_auth.web.auth.DTOs.AuthRequestDTO;
@@ -37,6 +38,11 @@ public class AuthController {
     public ResponseEntity<AuthResponseDTO> registerUser(
             @Valid @RequestBody AuthRequestDTO authRequestDTO,
             HttpServletRequest request //set cookie to get response
-            ){}
+            ){
+        User toDomainModel = authWebMapper.toDomainModel(authRequestDTO);
+        //generate token
+        String token = authUseCase.registerUser(toDomainModel);
+
+    }
 
 }
