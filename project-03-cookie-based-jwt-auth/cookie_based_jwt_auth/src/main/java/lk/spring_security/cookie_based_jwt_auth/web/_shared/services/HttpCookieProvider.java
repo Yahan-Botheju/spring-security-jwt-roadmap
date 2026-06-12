@@ -13,13 +13,13 @@ import java.util.Arrays;
 import java.util.Optional;
 
 @Component
-public class CookieService implements TokenExtractor {
+public class HttpCookieProvider implements TokenExtractor {
 
 
     /* ----- CREATE COOKIE ----- */
 
     //create cookie name
-    @Value("${app.security.cookie-name}")
+    @Value("${application.security.cookie-name}")
     private String cookieName;
 
     //initiate expire time
