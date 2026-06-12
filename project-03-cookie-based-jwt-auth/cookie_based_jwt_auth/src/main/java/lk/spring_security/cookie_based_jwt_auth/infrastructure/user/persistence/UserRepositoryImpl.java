@@ -12,8 +12,8 @@ import java.util.Optional;
 public class UserRepositoryImpl implements UserRepository {
 
     //inject required classes
-    private UserPersistenceMapper userPersistenceMapper;
-    private JpaUserRepository jpaUserRepository;
+    private final UserPersistenceMapper userPersistenceMapper;
+    private final JpaUserRepository jpaUserRepository;
 
 
     public UserRepositoryImpl(
