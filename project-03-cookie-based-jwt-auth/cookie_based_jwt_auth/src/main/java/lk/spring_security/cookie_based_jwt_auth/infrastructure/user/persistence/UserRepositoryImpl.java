@@ -35,8 +35,9 @@ public class UserRepositoryImpl implements UserRepository {
     //register user
     @Override
     public User registerUser(User user){
-        jpaUserRepository.findById(user.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("User already exists!"));
+        if(userFindByEmail(user.getEmail()).isPresent()){
+            throw  new IllegalArgumentException("User already exists");
+        }
         return userPersistenceMapper.toDomainModel(jpaUserRepository.save(userPersistenceMapper.toEntity(user)));
     }
 
