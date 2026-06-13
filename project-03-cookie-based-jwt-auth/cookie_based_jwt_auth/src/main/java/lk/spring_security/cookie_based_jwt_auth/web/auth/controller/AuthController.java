@@ -65,6 +65,8 @@ public class AuthController {
         //check credentials and get token
         String token = authUseCase.loginUser(authRequestDTO.getEmail(),  authRequestDTO.getPassword());
 
+        //set token as HttpOnly Cookie to browser
+        httpCookieProvider.setAuthCookie(response,token);
     }
 
 }
