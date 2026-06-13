@@ -56,4 +56,11 @@ public class AuthController {
         );
     }
 
+    //login user
+    @PostMapping("/login")
+    public ResponseEntity<AuthResponseDTO> loginUser(
+            @Valid @RequestBody AuthRequestDTO authRequestDTO,
+            HttpServletResponse response //get response object to set cookie
+    ){}
+
 }
