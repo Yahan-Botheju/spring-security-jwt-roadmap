@@ -61,6 +61,10 @@ public class AuthController {
     public ResponseEntity<AuthResponseDTO> loginUser(
             @Valid @RequestBody AuthRequestDTO authRequestDTO,
             HttpServletResponse response //get response object to set cookie
-    ){}
+    ){
+        //check credentials and get token
+        String token = authUseCase.loginUser(authRequestDTO.getEmail(),  authRequestDTO.getPassword());
+
+    }
 
 }
