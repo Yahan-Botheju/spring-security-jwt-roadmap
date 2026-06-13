@@ -48,7 +48,12 @@ public class AuthController {
         //token set as http only cookie
         httpCookieProvider.setAuthCookie(response,token);
 
-
+        return ResponseEntity.ok(
+                new AuthResponseDTO(
+                        "SUCCESS",
+                        "User registered successfully"
+                )
+        );
     }
 
 }
