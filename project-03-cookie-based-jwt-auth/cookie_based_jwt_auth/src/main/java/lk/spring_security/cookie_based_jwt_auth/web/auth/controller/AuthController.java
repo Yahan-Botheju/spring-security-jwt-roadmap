@@ -83,5 +83,12 @@ public class AuthController {
     ){
         //clear cookie
         httpCookieProvider.clearAuthCookie(response);
+
+        return ResponseEntity.ok(
+                new AuthResponseDTO(
+                        "SUCCESS",
+                        "User logged out"
+                )
+        );
     }
 }
