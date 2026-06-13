@@ -48,7 +48,47 @@ public class AuthController {
         //token set as http only cookie
         httpCookieProvider.setAuthCookie(response,token);
 
-
+        return ResponseEntity.ok(
+                new AuthResponseDTO(
+                        "SUCCESS",
+                        "User registered successfully"
+                )
+        );
     }
 
+    //login user
+    @PostMapping("/login")
+    public ResponseEntity<AuthResponseDTO> loginUser(
+            @Valid @RequestBody AuthRequestDTO authRequestDTO,
+            HttpServletResponse response //get response object to set cookie
+    ){
+        //check credentials and get token
+        String token = authUseCase.loginUser(authRequestDTO.getEmail(),  authRequestDTO.getPassword());
+
+        //set token as HttpOnly Cookie to browser
+        httpCookieProvider.setAuthCookie(response,token);
+
+        return ResponseEntity.ok(
+                new AuthResponseDTO(
+                        "SUCCESS",
+                        "User logged in successfully"
+                )
+        );
+    }
+
+    //logout user
+    @PostMapping("/logout")
+    public ResponseEntity<AuthResponseDTO> logoutUser(
+            HttpServletResponse response //get response object to set cookie
+    ){
+        //clear cookie
+        httpCookieProvider.clearAuthCookie(response);
+
+        return ResponseEntity.ok(
+                new AuthResponseDTO(
+                        "SUCCESS",
+                        "User logged out"
+                )
+        );
+    }
 }
