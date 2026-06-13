@@ -76,4 +76,11 @@ public class AuthController {
         );
     }
 
+    //logout user
+    @PostMapping("/logout")
+    public ResponseEntity<AuthResponseDTO> logoutUser(
+            HttpServletResponse response //get response object to set cookie
+    ){
+
+    }
 }
