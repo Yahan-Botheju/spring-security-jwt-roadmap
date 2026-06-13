@@ -81,6 +81,7 @@ public class AuthController {
     public ResponseEntity<AuthResponseDTO> logoutUser(
             HttpServletResponse response //get response object to set cookie
     ){
-
+        //clear cookie
+        httpCookieProvider.clearAuthCookie(response);
     }
 }
