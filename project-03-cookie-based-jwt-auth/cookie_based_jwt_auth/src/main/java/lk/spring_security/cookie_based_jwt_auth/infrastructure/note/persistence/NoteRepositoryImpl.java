@@ -1,9 +1,11 @@
 package lk.spring_security.cookie_based_jwt_auth.infrastructure.note.persistence;
 
+import lk.spring_security.cookie_based_jwt_auth.domain.models.Note;
 import lk.spring_security.cookie_based_jwt_auth.domain.repositories.NoteRepository;
 import lk.spring_security.cookie_based_jwt_auth.infrastructure.note.persistence.jpa.JpaNoteRepository;
 import lk.spring_security.cookie_based_jwt_auth.infrastructure.note.persistence.persistenceMapper.NotePersistenceMapper;
-import lk.spring_security.method_level_security_global_security_exceptions.domain.repositories.TaskRepository;
+
+import java.util.List;
 
 public class NoteRepositoryImpl implements NoteRepository {
 
@@ -18,5 +20,11 @@ public class NoteRepositoryImpl implements NoteRepository {
     ) {
         this.jpaNoteRepository = jpaNoteRepository;
         this.notePersistenceMapper = notePersistenceMapper;
+    }
+
+    //get user all notes
+    @Override
+    public List<Note> getAllNotesByUserId(Long userId){
+        return   jpaNoteRepository.findByUser_UserId(userId).stream().map(notePersistenceMapper::toDomainModel).toList();
     }
 }
