@@ -18,7 +18,7 @@ public class NoteEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long nodeId;
+    private Long noteId;
 
     @Column(nullable = false)
     private String title;
