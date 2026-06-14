@@ -48,7 +48,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String userEmail = null;
 
         //extract username using jwt service username extract method
-        if(jwt != null) {
+        if(jwt != null && !jwt.isBlank()) {
             userEmail = cookieService.extractUserName(jwt);
         }
 
