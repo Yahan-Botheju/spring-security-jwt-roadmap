@@ -3,6 +3,8 @@ package lk.spring_security.cookie_based_jwt_auth.infrastructure.note.persistence
 import lk.spring_security.cookie_based_jwt_auth.domain.models.Note;
 import lk.spring_security.cookie_based_jwt_auth.infrastructure.note.persistence.entities.NoteEntity;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface NotePersistenceMapper {
@@ -11,4 +13,9 @@ public interface NotePersistenceMapper {
 
     //entity to domain model
     Note toDomainModel(NoteEntity noteEntity);
+
+    //update note
+    @Mapping(target = "noteId", ignore = true)
+    @Mapping(target = "user", ignore = true)
+    NoteEntity updateNoteEntity(Note note, @MappingTarget NoteEntity noteEntity);
 }
