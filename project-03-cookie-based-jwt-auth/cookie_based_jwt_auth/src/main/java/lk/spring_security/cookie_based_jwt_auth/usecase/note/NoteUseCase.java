@@ -11,4 +11,7 @@ public interface NoteUseCase {
 
     //create note
     Note createNote(Long userId ,Note note);
+
+    //update note
+    Note updateNote(Long userId ,Long noteId, Note note);
 }

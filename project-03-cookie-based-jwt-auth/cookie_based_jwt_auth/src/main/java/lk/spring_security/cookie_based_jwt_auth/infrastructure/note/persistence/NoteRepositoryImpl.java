@@ -1,5 +1,6 @@
 package lk.spring_security.cookie_based_jwt_auth.infrastructure.note.persistence;
 
+import jakarta.persistence.EntityNotFoundException;
 import lk.spring_security.cookie_based_jwt_auth.domain.models.Note;
 import lk.spring_security.cookie_based_jwt_auth.domain.repositories.NoteRepository;
 import lk.spring_security.cookie_based_jwt_auth.infrastructure.note.persistence.entities.NoteEntity;
@@ -7,6 +8,7 @@ import lk.spring_security.cookie_based_jwt_auth.infrastructure.note.persistence.
 import lk.spring_security.cookie_based_jwt_auth.infrastructure.note.persistence.persistenceMapper.NotePersistenceMapper;
 
 import java.util.List;
+import java.util.Optional;
 
 public class NoteRepositoryImpl implements NoteRepository {
 
@@ -23,12 +25,18 @@ public class NoteRepositoryImpl implements NoteRepository {
         this.notePersistenceMapper = notePersistenceMapper;
     }
 
+    //get note by noteId
+    @Override
+    public Optional<Note> findById(Long noteId){
+        return jpaNoteRepository.findById(noteId)
+                .map(notePersistenceMapper::toDomainModel);
+    }
+
     //get user all notes
     @Override
     public List<Note> getAllNotesByUserId(Long userId){
         return   jpaNoteRepository.findByUser_UserId(userId).stream().map(notePersistenceMapper::toDomainModel).toList();
     }
-
 
     //create note
     @Override
@@ -37,5 +45,19 @@ public class NoteRepositoryImpl implements NoteRepository {
         NoteEntity savedNote = jpaNoteRepository.save(toEntity);
 
         return notePersistenceMapper.toDomainModel(savedNote);
+    }
+
+    //update note
+    @Override
+    public Note updateNote(Long noteId, Note note){
+        //check existing note availability
+        NoteEntity existingNoteEntity = jpaNoteRepository.findById(noteId)
+                .orElseThrow(() -> new RuntimeException("Note not found"));
+        //update note
+        NoteEntity updatedNoteEntity = notePersistenceMapper.updateNoteEntity(note, existingNoteEntity);
+        //save note
+        NoteEntity savedNoteEntity = jpaNoteRepository.save(updatedNoteEntity);
+
+        return notePersistenceMapper.toDomainModel(savedNoteEntity);
     }
 }
