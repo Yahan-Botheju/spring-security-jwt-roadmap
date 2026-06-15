@@ -8,4 +8,7 @@ public interface NoteUseCase {
 
     //get user all notes
     List<Note> getAllNotesByUserId(Long userId);
+
+    //create note
+    Note createNote(Long userId ,Note note);
 }
