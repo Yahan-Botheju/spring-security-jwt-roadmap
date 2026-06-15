@@ -9,4 +9,7 @@ public interface NoteRepository {
     //get user all notes
     List<Note> getAllNotesByUserId(Long userId);
 
+    //create note
+    Note createNote(Note note);
+
 }
