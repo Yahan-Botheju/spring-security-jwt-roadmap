@@ -57,4 +57,18 @@ public class NoteController {
 
         return ResponseEntity.created(URI.create("/api/v1/notes")).body(responseDTO);
     }
+
+    //update note
+    @PutMapping("/{noteId}")
+    public ResponseEntity<NoteResponseDTO> updateNote(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            @Valid @PathVariable Long noteId,
+            @Valid @RequestBody NoteRequestDTO noteRequestDTO
+    ){
+         Long  getUserId = customUserDetails.getUserId();
+         Note toDomainModel = noteWebMapper.toDomainModel(noteRequestDTO);
+         NoteResponseDTO responseDTO = noteWebMapper.toResponseDTO(noteUseCase.updateNote(getUserId,noteId, toDomainModel));
+
+         return ResponseEntity.ok(responseDTO);
+    }
 }
