@@ -23,11 +23,11 @@ public class UserUseCaseImpl implements UserUseCase {
     public User updateUser(Long userId,  User user) {
         User exsitingUser = userRepository.findById(userId)
                 .orElseThrow(() -> new UsernameNotFoundException("user not found" + " , " +  userId));
-
         if(user.getEmail() != null && !user.getEmail().isEmpty()){
             exsitingUser.setEmail(user.getEmail());
         }
-        return userRepository.updateUser(exsitingUser);
+        user.setUserId(userId);
+        return userRepository.updateUser(user);
     }
 
     //delete user
