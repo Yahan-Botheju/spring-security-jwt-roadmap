@@ -1,5 +1,6 @@
 package lk.spring_security.method_level_security_global_security_exceptions.web.auth.controllers;
 
+import jakarta.validation.Valid;
 import lk.spring_security.method_level_security_global_security_exceptions.domain.models.User;
 import lk.spring_security.method_level_security_global_security_exceptions.usecase.auth.AuthUseCase;
 import lk.spring_security.method_level_security_global_security_exceptions.web.auth.DTOs.AuthRequestDTO;
@@ -27,7 +28,7 @@ public class AuthController {
     //register new user
     @PostMapping("/register")
     public ResponseEntity<AuthResponseDTO> register(
-            @RequestBody AuthRequestDTO authRequestDTO
+            @Valid @RequestBody AuthRequestDTO authRequestDTO
     ){
         //turn to domain model
         User toDomainModel = authWebMapper.authToDomainModel(authRequestDTO);
@@ -43,7 +44,7 @@ public class AuthController {
     //user login
     @PostMapping("/login")
     public ResponseEntity<AuthResponseDTO> login(
-            @RequestBody AuthRequestDTO authRequestDTO
+            @Valid @RequestBody AuthRequestDTO authRequestDTO
     ){
         //get token by using email and paw
         String getToken = authUseCase.loginUser(authRequestDTO.getEmail(), authRequestDTO.getPassword());

@@ -1,5 +1,6 @@
 package lk.spring_security.method_level_security_global_security_exceptions.web.task.controllers;
 
+import jakarta.validation.Valid;
 import lk.spring_security.method_level_security_global_security_exceptions.domain.models.Task;
 import lk.spring_security.method_level_security_global_security_exceptions.infrastructure.security.user.CustomUserDetails;
 import lk.spring_security.method_level_security_global_security_exceptions.usecase.task.TaskUseCase;
@@ -44,7 +45,7 @@ public class TaskController {
     @PostMapping
     public ResponseEntity<TaskResponseDTO> createTask(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
-            @RequestBody TaskRequestDTO taskRequestDTO
+            @Valid @RequestBody TaskRequestDTO taskRequestDTO
     ){
         Long userId = customUserDetails.getUserId();
         TaskResponseDTO responseDTO = taskWebMapper.toResponseDTO(
@@ -55,8 +56,8 @@ public class TaskController {
     //update task
     @PutMapping("/{taskId}")
     public ResponseEntity<TaskResponseDTO> updateTask(
-            @PathVariable Long taskId,
-            @RequestBody TaskRequestDTO taskRequestDTO
+            @Valid @PathVariable Long taskId,
+            @Valid @RequestBody TaskRequestDTO taskRequestDTO
     ){
         Task toDomainModel = taskWebMapper.toDomainModel(taskRequestDTO);
         TaskResponseDTO responseDTO = taskWebMapper.toResponseDTO(
@@ -68,7 +69,7 @@ public class TaskController {
     //delete task
     @DeleteMapping("/{taskId}")
     public ResponseEntity<String> deleteTask(
-            @PathVariable Long taskId
+            @Valid @PathVariable Long taskId
     ){
         taskUseCase.deleteTask(taskId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Task deleted successfully");
