@@ -47,7 +47,7 @@ public class AuthUseCaseImpl implements AuthUseCase {
                 .build();
 
         //save user in db
-        userRepository.saveUser(user);
+        userRepository.saveUser(createDomainModel);
 
         //generate token then return
         return  jwtService.generateToken(createDomainModel);
