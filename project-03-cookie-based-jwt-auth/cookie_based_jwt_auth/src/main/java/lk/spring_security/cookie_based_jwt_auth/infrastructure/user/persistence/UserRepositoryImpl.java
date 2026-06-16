@@ -2,6 +2,7 @@ package lk.spring_security.cookie_based_jwt_auth.infrastructure.user.persistence
 
 import lk.spring_security.cookie_based_jwt_auth.domain.models.User;
 import lk.spring_security.cookie_based_jwt_auth.domain.repositories.UserRepository;
+import lk.spring_security.cookie_based_jwt_auth.infrastructure.user.persistence.entities.UserEntity;
 import lk.spring_security.cookie_based_jwt_auth.infrastructure.user.persistence.jpa.JpaUserRepository;
 import lk.spring_security.cookie_based_jwt_auth.infrastructure.user.persistence.persistenceMapper.UserPersistenceMapper;
 
@@ -47,4 +48,21 @@ public class UserRepositoryImpl implements UserRepository {
         return userPersistenceMapper.toDomainModel(jpaUserRepository.save(userPersistenceMapper.toEntity(user)));
     }
 
+    //update user
+    @Override
+    public User updateUser(User user){
+        UserEntity userExistence = jpaUserRepository.findByEmail(user.getEmail())
+                .orElseThrow(() -> new IllegalArgumentException("User already exists"));
+        UserEntity updatedUserEntity = userPersistenceMapper.updateEntity(user, userExistence);
+        UserEntity savedUserEntity = jpaUserRepository.save(updatedUserEntity);
+        return userPersistenceMapper.toDomainModel(savedUserEntity);
+    }
+
+    //delete user
+    @Override
+    public void deleteUser(Long userId){
+        UserEntity existingUserEntity = jpaUserRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        jpaUserRepository.delete(existingUserEntity);
+    }
 }

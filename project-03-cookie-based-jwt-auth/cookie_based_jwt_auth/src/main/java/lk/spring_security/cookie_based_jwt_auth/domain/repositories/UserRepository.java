@@ -12,7 +12,12 @@ public interface UserRepository {
     //user find by ID
     Optional<User> userFindById(Long userId);
 
-
     //register user
     User registerUser(User user);
+
+    //update user
+    User updateUser(User user);
+
+    //delete user
+    void deleteUser(Long userId);
 }

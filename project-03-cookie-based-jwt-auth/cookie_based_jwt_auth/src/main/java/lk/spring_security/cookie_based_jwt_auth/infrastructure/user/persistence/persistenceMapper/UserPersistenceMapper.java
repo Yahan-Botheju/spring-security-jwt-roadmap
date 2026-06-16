@@ -3,6 +3,7 @@ package lk.spring_security.cookie_based_jwt_auth.infrastructure.user.persistence
 import lk.spring_security.cookie_based_jwt_auth.domain.models.User;
 import lk.spring_security.cookie_based_jwt_auth.infrastructure.user.persistence.entities.UserEntity;
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface UserPersistenceMapper {
@@ -11,4 +12,7 @@ public interface UserPersistenceMapper {
 
     //entity to domain model
     User toDomainModel(UserEntity userEntity);
+
+    //update mapper
+    UserEntity updateEntity(User user, @MappingTarget UserEntity userEntity);
 }
