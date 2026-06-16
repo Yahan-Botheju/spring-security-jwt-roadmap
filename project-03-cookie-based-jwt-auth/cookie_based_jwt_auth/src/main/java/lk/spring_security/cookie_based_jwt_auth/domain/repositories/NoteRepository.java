@@ -19,4 +19,10 @@ public interface NoteRepository {
     //update note
     Note updateNote(Long noteId, Note note);
 
+    //delete note
+    void deleteNote(Long noteId);
+
+    //testing update note
+    Note testUpdateNote(Note existingNote, Note note);
+
 }

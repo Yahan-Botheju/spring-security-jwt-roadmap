@@ -26,7 +26,7 @@ public class UserController {
     }
 
     //update user profile
-    @PostMapping("/profile")
+    @PutMapping("/profile")
     public ResponseEntity<UserResponseDTO> updateUser(
             @RequestBody UserRequestDTO userRequestDTO,
             @AuthenticationPrincipal CustomUserDetails customUserDetails

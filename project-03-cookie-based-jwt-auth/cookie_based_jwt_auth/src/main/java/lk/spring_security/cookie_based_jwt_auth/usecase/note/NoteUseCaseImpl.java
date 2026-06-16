@@ -42,10 +42,43 @@ public class NoteUseCaseImpl implements  NoteUseCase {
     @Override
     public Note updateNote(Long userId, Long noteId, Note note){
         //check user availability
-        if(!userRepository.userFindById(userId).isPresent() && !noteRepository.findById(noteId).isPresent()){
-            throw  new RuntimeException("User and Note not found" +  " , " +  userId +  " , " +   noteId);
+        if (!userRepository.userFindById(userId).isPresent()) {
+            throw new RuntimeException("User not found" +  " , " +  userId);
         }
+        //check note availability
+        Note existingNote = noteRepository.findById(noteId)
+                .orElseThrow(() -> new RuntimeException("Note not found" +  " , " +  noteId));
+
+        //check note belongs to user
+        if (!existingNote.getUser().getUserId().equals(userId)) {
+            throw new RuntimeException("User not found" +  " , " +  userId);
+        }
+
         return noteRepository.updateNote(noteId, note);
     }
 
+    //delete note
+    @Override
+    public void deleteNote(Long userId, Long noteId){
+        if(!userRepository.userFindById(userId).isPresent()){
+            throw  new RuntimeException("User not found" +  " , " +  userId);
+        }
+        noteRepository.deleteNote(noteId);
+    }
+
+
+    //testing update note
+    @Override
+    public Note testingUpdateNote(Long userId, Long noteId, Note note){
+        if(!userRepository.userFindById(userId).isPresent()){
+            throw  new RuntimeException("User not found" +  " , " +  userId);
+        }
+        Note existingNote = noteRepository.findById(noteId)
+                .orElseThrow(() -> new RuntimeException("Note not found" +  " , " +  noteId));
+        if(!existingNote.getUser().getUserId().equals(userId)){
+            throw  new RuntimeException("user does not belongs to this note" +  " , " +  userId);
+        }
+
+        return noteRepository.testUpdateNote(note, existingNote);
+    }
 }
