@@ -7,6 +7,7 @@ import lk.spring_security.cookie_based_jwt_auth.usecase.note.NoteUseCase;
 import lk.spring_security.cookie_based_jwt_auth.web.note.DTOs.NoteRequestDTO;
 import lk.spring_security.cookie_based_jwt_auth.web.note.DTOs.NoteResponseDTO;
 import lk.spring_security.cookie_based_jwt_auth.web.note.webMapper.NoteWebMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -70,5 +71,17 @@ public class NoteController {
          NoteResponseDTO responseDTO = noteWebMapper.toResponseDTO(noteUseCase.updateNote(getUserId,noteId, toDomainModel));
 
          return ResponseEntity.ok(responseDTO);
+    }
+
+    //delete note
+    @DeleteMapping("/{noteId}")
+    public ResponseEntity<Void> deleteNote(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            @Valid @PathVariable Long noteId
+    ){
+        Long  getUserId = customUserDetails.getUserId();
+        noteUseCase.deleteNote(getUserId,noteId);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
