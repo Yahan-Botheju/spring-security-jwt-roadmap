@@ -60,4 +60,13 @@ public class NoteRepositoryImpl implements NoteRepository {
 
         return notePersistenceMapper.toDomainModel(savedNoteEntity);
     }
+
+    //delete note
+    @Override
+    public void deleteNote(Long noteId){
+        NoteEntity existingNote = jpaNoteRepository.findById(noteId)
+                .orElseThrow(() -> new RuntimeException("Note not found" +  " , " + noteId));
+
+        jpaNoteRepository.delete(existingNote);
+    }
 }
