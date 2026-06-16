@@ -57,4 +57,19 @@ public class NoteUseCaseImpl implements  NoteUseCase {
         noteRepository.deleteNote(noteId);
     }
 
+
+    //testing update note
+    @Override
+    public Note testingUpdateNote(Long userId, Long noteId, Note note){
+        if(!userRepository.userFindById(userId).isPresent()){
+            throw  new RuntimeException("User not found" +  " , " +  userId);
+        }
+        Note existingNote = noteRepository.findById(noteId)
+                .orElseThrow(() -> new RuntimeException("Note not found" +  " , " +  noteId));
+        if(!existingNote.getUser().getUserId().equals(userId)){
+            throw  new RuntimeException("user does not belongs to this note" +  " , " +  userId);
+        }
+
+        return noteRepository.testUpdateNote(note, existingNote);
+    }
 }

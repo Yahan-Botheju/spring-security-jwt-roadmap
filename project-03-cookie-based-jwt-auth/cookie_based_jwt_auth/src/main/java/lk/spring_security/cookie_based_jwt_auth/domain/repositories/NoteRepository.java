@@ -22,4 +22,7 @@ public interface NoteRepository {
     //delete note
     void deleteNote(Long noteId);
 
+    //testing update note
+    Note testUpdateNote(Note existingNote, Note note);
+
 }

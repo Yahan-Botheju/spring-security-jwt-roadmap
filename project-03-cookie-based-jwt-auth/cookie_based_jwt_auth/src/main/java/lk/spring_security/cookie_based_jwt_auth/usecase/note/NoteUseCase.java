@@ -17,4 +17,7 @@ public interface NoteUseCase {
 
     //delete note
     void deleteNote(Long noteId, Long userId);
+
+    //testing update note
+    Note testingUpdateNote(Long userId ,Long noteId, Note note);
 }
