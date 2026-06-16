@@ -22,5 +22,11 @@ public class UserUseCaseImpl implements UserUseCase{
         return userRepository.updateUser(user);
     }
 
-
+    //delete user
+    @Override
+    public void deleteUser(Long userId) {
+        User existingUser = userRepository.userFindById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        userRepository.deleteUser(existingUser.getUserId());
+    }
 }
