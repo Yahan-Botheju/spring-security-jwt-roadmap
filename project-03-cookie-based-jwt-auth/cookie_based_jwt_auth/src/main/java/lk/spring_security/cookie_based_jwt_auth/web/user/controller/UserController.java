@@ -42,4 +42,15 @@ public class UserController {
 
         return ResponseEntity.ok(responseDTO);
     }
+
+    //delete user
+    @DeleteMapping("/profile")
+    public ResponseEntity<Void> deleteUser(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails
+    ){
+        Long userId = customUserDetails.getUserId();
+        userUseCase.deleteUser(userId);
+
+        return ResponseEntity.ok().build();
+    }
 }
