@@ -1,5 +1,6 @@
 package lk.spring_security.method_level_security_global_security_exceptions.web.user.controllers;
 
+import jakarta.validation.Valid;
 import lk.spring_security.method_level_security_global_security_exceptions.infrastructure.security.user.CustomUserDetails;
 import lk.spring_security.method_level_security_global_security_exceptions.usecase.user.UserUseCase;
 import lk.spring_security.method_level_security_global_security_exceptions.web.user.DTOs.UserRequestDTO;
@@ -28,7 +29,7 @@ public class UserController {
     //update user profile
     @PutMapping("/profile")
     public ResponseEntity<UserResponseDTO> updateUser(
-            @RequestBody UserRequestDTO userRequestDTO,
+            @Valid @RequestBody UserRequestDTO userRequestDTO,
             @AuthenticationPrincipal CustomUserDetails customUserDetails
     ){
         Long userId = customUserDetails.getUserId();
@@ -42,7 +43,7 @@ public class UserController {
     //delete user profile
     @DeleteMapping("/profile")
     public ResponseEntity<String> deleteUser(
-            @AuthenticationPrincipal CustomUserDetails customUserDetails
+            @Valid @AuthenticationPrincipal CustomUserDetails customUserDetails
     ){
         Long userId = customUserDetails.getUserId();
         userUseCase.deleteUser(userId);
