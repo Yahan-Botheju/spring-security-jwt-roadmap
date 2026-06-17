@@ -21,16 +21,13 @@ public class SecurityConfig {
     //inject required classes as constructor injection
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final AuthenticationProvider authenticationProvider;
-    private  final AuthenticationEntryPoint unauthorizedEntryPoint;
 
     public SecurityConfig(
             JwtAuthenticationFilter jwtAuthenticationFilter,
-            AuthenticationProvider authenticationProvider,
-            AuthenticationEntryPoint unauthorizedEntryPoint
+            AuthenticationProvider authenticationProvider
     ) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
         this.authenticationProvider = authenticationProvider;
-        this.unauthorizedEntryPoint = unauthorizedEntryPoint;
     }
 
     //initiate spring security config method
