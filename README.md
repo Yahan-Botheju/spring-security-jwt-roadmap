@@ -41,10 +41,19 @@ For more details, refer to the README & projects repos.
 
 ---
 ### ✅ Project 03 - Cookie Based JWT Authentication
- - Ongoing Project....
+ - HttpOnly Cookie Architecture
+ - SameSite Cookie Protection (Strict)
+ - Custom Token Extraction Interface (TokenExtractor)
+ - Cookie Management Service (CookieService & HttpCookieProvider)
+ - Automatic Browser token Transmission
+ - XSS & CSRF Hardening
+ - Custom JWT Authentication Filter from Cookies
+ - Cookie Clearing on Logout Workflow
 
 ---
 ### ✅ Project 04 -  Refresh Token
+
+ - Ongoing Project...
 
 ---
 ### ✅ Project 05 - Stateful JWT Authentication with Refresh Token Rotation
@@ -1215,5 +1224,12 @@ After completing this project, the following concepts were practiced:
 * Note Management APIs
 * Clean Architecture Enhancements
 
+---
+
+<h2 align="center">Project 04 - Refresh Token</h2>
+
+---
+
+### Ongoing Project....
 
 ---
