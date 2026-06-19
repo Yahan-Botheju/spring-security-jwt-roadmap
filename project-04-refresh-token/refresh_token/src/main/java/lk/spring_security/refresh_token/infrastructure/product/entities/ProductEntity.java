@@ -4,9 +4,11 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SoftDelete;
 
 @Entity
 @Table(name = "products")
+@SoftDelete(columnName = "is_deleted")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
