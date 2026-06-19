@@ -5,9 +5,11 @@ import lk.spring_security.refresh_token.domain.models.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SoftDelete;
 
 @Entity
 @Table(name = "users")
+@SoftDelete(columnName = "is_deleted")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
