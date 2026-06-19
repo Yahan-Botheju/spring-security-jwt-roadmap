@@ -22,9 +22,18 @@ public class UserRepositoryImpl implements UserRepository {
         this.userPersistenceMapper = userPersistenceMapper;
     }
 
+    /* ----- __HELPER_METHOD__ ----- */
+
+
     //user find by email
     @Override
     public Optional<User> findByEmail(String email){
         return jpaUserRepository.findByEmail(email).map(userPersistenceMapper::toDomainMode);
+    }
+
+    //user find by ID
+    @Override
+    public Optional<User> findById(Long userId){
+        return jpaUserRepository.findById(userId).map(userPersistenceMapper::toDomainMode);
     }
 }
