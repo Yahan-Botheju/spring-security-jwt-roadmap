@@ -2,6 +2,7 @@ package lk.spring_security.refresh_token.infrastructure.user;
 
 import lk.spring_security.refresh_token.domain.models.User;
 import lk.spring_security.refresh_token.domain.repositories.UserRepository;
+import lk.spring_security.refresh_token.infrastructure.user.entities.UserEntity;
 import lk.spring_security.refresh_token.infrastructure.user.jpa.JpaUserRepository;
 import lk.spring_security.refresh_token.infrastructure.user.mappers.UserPersistenceMapper;
 
@@ -22,9 +23,31 @@ public class UserRepositoryImpl implements UserRepository {
         this.userPersistenceMapper = userPersistenceMapper;
     }
 
+    /* ----- __HELPER_METHOD__ ----- */
+
+
     //user find by email
     @Override
     public Optional<User> findByEmail(String email){
         return jpaUserRepository.findByEmail(email).map(userPersistenceMapper::toDomainMode);
+    }
+
+    //user find by ID
+    @Override
+    public Optional<User> findById(Long userId){
+        return jpaUserRepository.findById(userId).map(userPersistenceMapper::toDomainMode);
+    }
+
+    //register user
+    @Override
+    public User registerUser(User user){
+        if(jpaUserRepository.findByEmail(user.getEmail()).isPresent()){
+            throw new IllegalArgumentException("Email already exists");
+        }
+
+        UserEntity toEntity = userPersistenceMapper.toEntity(user);
+        UserEntity savedUserEntity = jpaUserRepository.save(toEntity);
+
+        return userPersistenceMapper.toDomainMode(savedUserEntity);
     }
 }
