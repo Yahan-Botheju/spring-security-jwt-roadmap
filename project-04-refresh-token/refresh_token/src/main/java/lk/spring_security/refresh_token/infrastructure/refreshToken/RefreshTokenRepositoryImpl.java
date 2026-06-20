@@ -1,12 +1,13 @@
 package lk.spring_security.refresh_token.infrastructure.refreshToken;
 
 import lk.spring_security.refresh_token.domain.models.RefreshToken;
+import lk.spring_security.refresh_token.domain.models.User;
 import lk.spring_security.refresh_token.domain.repositories.RefreshTokenRepository;
 import lk.spring_security.refresh_token.domain.repositories.UserRepository;
 import lk.spring_security.refresh_token.infrastructure.refreshToken.entities.RefreshTokenEntity;
 import lk.spring_security.refresh_token.infrastructure.refreshToken.jpa.JpaRefreshTokenRepository;
 import lk.spring_security.refresh_token.infrastructure.refreshToken.mapper.RefreshTokenPersistenceMapper;
-import lk.spring_security.refresh_token.infrastructure.user.entities.UserEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.Optional;
 
@@ -49,7 +50,9 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
     //remove token from db when user log out
     @Override
     public void deleteByUserEmail(String email){
-        UserEntity checkUserAvailability = userRepository.findByEmail(email)
-                .orElseThrow()
+        if (!userRepository.findByEmail(email).isPresent()){
+            throw new IllegalArgumentException("Email already exists");
+        }
+        jpaRefreshTokenRepository.deleteByUserEmail(email);
     }
 }
