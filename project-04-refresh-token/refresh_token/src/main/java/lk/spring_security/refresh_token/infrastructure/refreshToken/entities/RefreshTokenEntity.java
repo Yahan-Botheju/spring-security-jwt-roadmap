@@ -1,6 +1,7 @@
-package lk.spring_security.refresh_token.infrastructure.user.entities;
+package lk.spring_security.refresh_token.infrastructure.refreshToken.entities;
 
 import jakarta.persistence.*;
+import lk.spring_security.refresh_token.infrastructure.user.entities.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -1,6 +1,6 @@
-package lk.spring_security.refresh_token.infrastructure.user.jpa;
+package lk.spring_security.refresh_token.infrastructure.refreshToken.jpa;
 
-import lk.spring_security.refresh_token.infrastructure.user.entities.RefreshTokenEntity;
+import lk.spring_security.refresh_token.infrastructure.refreshToken.entities.RefreshTokenEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
