@@ -8,4 +8,7 @@ public interface RefreshTokenRepository {
 
     //check token availability of db
     Optional<RefreshToken> findByToken(String token);
+
+    //save token in db
+    RefreshToken saveToken(RefreshToken refreshToken);
 }
