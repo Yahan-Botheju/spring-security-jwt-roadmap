@@ -11,4 +11,7 @@ public interface RefreshTokenRepository {
 
     //save token in db
     RefreshToken saveToken(RefreshToken refreshToken);
+
+    //remove token from db in user log out
+    void deleteByUserEmail(String email);
 }
