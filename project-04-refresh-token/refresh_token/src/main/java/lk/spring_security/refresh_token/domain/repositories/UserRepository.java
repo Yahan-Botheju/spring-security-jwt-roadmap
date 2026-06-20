@@ -11,4 +11,7 @@ public interface UserRepository {
 
     //user find by ID
     Optional<User> findById(Long userId);
+
+    //register user
+    User registerUser(User user);
 }
