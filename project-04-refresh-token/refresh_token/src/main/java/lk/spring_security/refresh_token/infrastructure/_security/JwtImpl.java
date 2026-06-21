@@ -56,17 +56,11 @@ public class JwtImpl implements TokenService {
         return extractClaim(token, Claims::getSubject);
     }
 
-
     //initiate generic to get data
     private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
-
-
-
-
-
 
     //create token extractor
     private Claims extractAllClaims(String token) {
@@ -77,4 +71,11 @@ public class JwtImpl implements TokenService {
                 .getPayload();
     }
 
+    /* ----- __VALIDATION_METHODS__ ----- */
+
+
+    //create token expiration
+    private Date extractExpiration(String token) {
+        return extractClaim(token, Claims::getExpiration);
+    }
 }
