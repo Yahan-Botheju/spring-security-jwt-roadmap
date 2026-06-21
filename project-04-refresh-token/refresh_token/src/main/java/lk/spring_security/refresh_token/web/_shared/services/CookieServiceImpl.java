@@ -26,11 +26,17 @@ public class CookieServiceImpl implements CookieService {
         createCookie(response, "access_token", accessToken, accessTokenExpiry);
     }
 
+    //create refresh token cookie
+    @Override
+    public void setRefreshTokenCookie(
+            HttpServletResponse response,
+            String refreshToken
+    ) {
+        createCookie(response, "refresh_token", refreshToken, refreshTokenExpiry);
+    }
 
 
-
-
-   //create cookie
+    //create cookie
     private void createCookie(
             HttpServletResponse response,
             String name,
