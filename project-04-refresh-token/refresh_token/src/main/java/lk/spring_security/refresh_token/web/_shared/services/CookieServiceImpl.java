@@ -15,6 +15,21 @@ public class CookieServiceImpl implements CookieService {
    @Value("${application.security.cookie.refresh-token-expiry-seconds}")
     private int refreshTokenExpiry;
 
+   /* ----- __CREATE TOKENS__ ----- */
+
+    //create access token cookie
+    @Override
+    public void setAccessTokenCookie(
+            HttpServletResponse response,
+            String accessToken
+    ) {
+        createCookie(response, "access_token", accessToken, accessTokenExpiry);
+    }
+
+
+
+
+
    //create cookie
     private void createCookie(
             HttpServletResponse response,
@@ -29,4 +44,6 @@ public class CookieServiceImpl implements CookieService {
         cookie.setMaxAge(maxAge);
         response.addCookie(cookie);
     }
+
+
 }
