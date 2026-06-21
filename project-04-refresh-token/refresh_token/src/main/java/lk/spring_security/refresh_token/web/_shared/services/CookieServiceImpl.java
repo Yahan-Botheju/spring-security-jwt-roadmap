@@ -1,6 +1,7 @@
 package lk.spring_security.refresh_token.web._shared.services;
 
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -40,6 +41,22 @@ public class CookieServiceImpl implements CookieService {
     public void clearCookies(HttpServletResponse response) {
         createCookie(response, "access_token", null,0);
         createCookie(response, "refresh_token", null,0);
+    }
+
+    //read cookie by request
+    @Override
+    public String clearAuthCookies(
+            HttpServletRequest request,
+            String cookieName
+    ) {
+        if (request.getCookies() != null) {
+            for (Cookie cookie : request.getCookies()) {
+                if (cookie.getName().equals(cookieName)) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
     }
 
 
