@@ -1,6 +1,7 @@
 package lk.spring_security.refresh_token.web._shared.services;
 
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,51 @@ public class CookieServiceImpl implements CookieService {
    @Value("${application.security.cookie.refresh-token-expiry-seconds}")
     private int refreshTokenExpiry;
 
-   //create cookie
+   /* ----- __CREATE TOKENS__ ----- */
+
+    //create access token cookie
+    @Override
+    public void setAccessTokenCookie(
+            HttpServletResponse response,
+            String accessToken
+    ) {
+        createCookie(response, "access_token", accessToken, accessTokenExpiry);
+    }
+
+    //create refresh token cookie
+    @Override
+    public void setRefreshTokenCookie(
+            HttpServletResponse response,
+            String refreshToken
+    ) {
+        createCookie(response, "refresh_token", refreshToken, refreshTokenExpiry);
+    }
+
+    //clear token
+    @Override
+    public void clearCookies(HttpServletResponse response) {
+        createCookie(response, "access_token", null,0);
+        createCookie(response, "refresh_token", null,0);
+    }
+
+    //read cookie by request
+    @Override
+    public String clearAuthCookies(
+            HttpServletRequest request,
+            String cookieName
+    ) {
+        if (request.getCookies() != null) {
+            for (Cookie cookie : request.getCookies()) {
+                if (cookie.getName().equals(cookieName)) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
+    }
+
+
+    //create cookie
     private void createCookie(
             HttpServletResponse response,
             String name,
@@ -29,4 +74,6 @@ public class CookieServiceImpl implements CookieService {
         cookie.setMaxAge(maxAge);
         response.addCookie(cookie);
     }
+
+
 }
