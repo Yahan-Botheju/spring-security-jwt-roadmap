@@ -1,9 +1,15 @@
 package lk.spring_security.refresh_token.infrastructure._security;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 import lk.spring_security.refresh_token.domain.repositories.TokenService;
+import org.springframework.cglib.core.internal.Function;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 
 public class JwtImpl implements TokenService {
 
@@ -15,8 +21,21 @@ public class JwtImpl implements TokenService {
         this.secretKey = secretKey;
     }
 
+    /* ----- __GENERATE_TOKEN__ ----- */
+
+    //create token extractor
+    private Claims extractAllClaims(String token) {
+        return Jwts.parser()
+                .verifyWith(secretKey)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+    }
+
+
+
     @Override
-    public String extractToken(String token) {
+    public String extractUsername(String token) {
         return "";
     }
 
