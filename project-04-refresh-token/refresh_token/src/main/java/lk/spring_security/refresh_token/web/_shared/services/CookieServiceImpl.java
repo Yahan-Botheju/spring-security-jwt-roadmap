@@ -35,6 +35,13 @@ public class CookieServiceImpl implements CookieService {
         createCookie(response, "refresh_token", refreshToken, refreshTokenExpiry);
     }
 
+    //clear token
+    @Override
+    public void clearCookies(HttpServletResponse response) {
+        createCookie(response, "access_token", null,0);
+        createCookie(response, "refresh_token", null,0);
+    }
+
 
     //create cookie
     private void createCookie(
