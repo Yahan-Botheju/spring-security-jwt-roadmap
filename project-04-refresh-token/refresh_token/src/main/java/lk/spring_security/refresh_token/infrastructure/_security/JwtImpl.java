@@ -17,6 +17,8 @@ public class JwtImpl implements TokenService {
 
     //inject required dependencies
     private final SecretKey secretKey;
+
+    //limit token to 15m
     private static final long ACCESS_TOKEN_EXPIRATION = 15 * 60 * 1000;
 
     public JwtImpl(SecretKey secretKey) {
@@ -46,13 +48,13 @@ public class JwtImpl implements TokenService {
                 .compact();
     }
 
+    /* ----- __TOKEN_EXTRACTION_METHODS__ ----- */
 
-
-
-
-
-
-
+    //get username from token
+    @Override
+    public String extractUsername(String token) {
+        return extractClaim(token, Claims::getSubject);
+    }
 
 
     //initiate generic to get data
