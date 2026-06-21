@@ -1,5 +1,6 @@
 package lk.spring_security.refresh_token.web._shared.services;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 public interface CookieService {
@@ -11,5 +12,8 @@ public interface CookieService {
 
     //clear tokens
     void clearCookies(HttpServletResponse response);
+
+    //read cookie by request
+    String clearAuthCookies(HttpServletRequest request, String cookieName);
 
 }
