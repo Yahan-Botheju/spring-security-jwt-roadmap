@@ -9,6 +9,7 @@ import org.springframework.cglib.core.internal.Function;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.crypto.SecretKey;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,7 +31,20 @@ public class JwtImpl implements TokenService {
         return generateToken(new HashMap<>(), user);
     }
 
+    //generate token with extra details included
+    @Override
+    public String generateToken(Map<String, Object> extractClaims, User user) {
+        //wrap user details related to spring security
+        CustomUserDetails customUserDetails = new CustomUserDetails(user);
 
+        return Jwts.builder()
+                .claims(extractClaims)
+                .subject(user.getEmail())
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .expiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_EXPIRATION))
+                .signWith(secretKey)
+                .compact();
+    }
 
 
 
