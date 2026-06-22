@@ -43,9 +43,9 @@ public class CookieServiceImpl implements CookieService {
         createCookie(response, "refresh_token", null,0);
     }
 
-    //read cookie by request
+    //read cookie by token name
     @Override
-    public String clearAuthCookies(
+    public String extractCookieByName(
             HttpServletRequest request,
             String cookieName
     ) {
