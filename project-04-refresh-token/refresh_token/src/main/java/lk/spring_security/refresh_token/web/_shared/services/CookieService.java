@@ -14,6 +14,6 @@ public interface CookieService {
     void clearCookies(HttpServletResponse response);
 
     //read cookie by request
-    String clearAuthCookies(HttpServletRequest request, String cookieName);
+    String extractCookieByName(HttpServletRequest request, String cookieName);
 
 }
