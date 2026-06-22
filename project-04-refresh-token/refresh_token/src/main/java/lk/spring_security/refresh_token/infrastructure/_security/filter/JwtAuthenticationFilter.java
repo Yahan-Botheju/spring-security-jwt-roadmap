@@ -38,5 +38,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
 
+        //get access token from cookie
+        final String accessToken = cookieService.extractCookieByName(request, "access_token");
+        final String userEmail;
     }
 }
