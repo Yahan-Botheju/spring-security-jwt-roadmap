@@ -7,7 +7,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import lk.spring_security.refresh_token.domain.repositories.TokenService;
 import lk.spring_security.refresh_token.web._shared.services.CookieService;
 import org.jspecify.annotations.NonNull;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -50,5 +54,28 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         //get username from token
         userEmail = tokenService.extractUsername(accessToken);
+
+        //check email is available and security context is empty
+        if(userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            //get user details on db
+            UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
+
+            //check token validation
+            if (tokenService.isTokenValid(accessToken, userDetails)) {
+
+                //create authentication object
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                        userDetails,
+                        null,
+                        userDetails.getAuthorities()
+                );
+
+                authToken.setDetails(new WebAuthenticationDetails(request));
+
+                //set object to security context
+                SecurityContextHolder.getContext().setAuthentication(authToken);
+            }
+        }
+        filterChain.doFilter(request, response);
     }
 }
