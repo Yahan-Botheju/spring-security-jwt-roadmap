@@ -1,4 +1,6 @@
 package lk.spring_security.refresh_token.infrastructure._security.user_spring_wrapper;
 
-public class CustomUserDetails {
+import org.springframework.security.core.userdetails.UserDetails;
+
+public class CustomUserDetails implements UserDetails {
 }
