@@ -1,4 +1,16 @@
 package lk.spring_security.refresh_token.infrastructure._security.config;
 
+import lk.spring_security.refresh_token.domain.repositories.UserRepository;
+import lk.spring_security.refresh_token.infrastructure._security.user_spring_wrapper.CustomUserDetailsService;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
 public class CustomUserDetailsBeanConfig {
+    @Bean
+    public CustomUserDetailsService  customUserDetailsService(
+            UserRepository userRepository
+    ){
+        return new CustomUserDetailsService(userRepository);
+    }
 }
