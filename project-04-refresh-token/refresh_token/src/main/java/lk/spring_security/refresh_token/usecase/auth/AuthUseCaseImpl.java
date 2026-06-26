@@ -1,5 +1,6 @@
 package lk.spring_security.refresh_token.usecase.auth;
 
+import lk.spring_security.refresh_token.domain.models.User;
 import lk.spring_security.refresh_token.domain.repositories.RefreshTokenRepository;
 import lk.spring_security.refresh_token.domain.repositories.TokenService;
 import lk.spring_security.refresh_token.domain.repositories.UserRepository;
@@ -18,13 +19,16 @@ public class AuthUseCaseImpl implements AuthUseCase{
     private final AuthenticationManager authenticationManager;
 
 
+    private final long refreshTokenExpirationMs;
+
     public AuthUseCaseImpl(
             RefreshTokenRepository refreshTokenRepository,
             UserRepository userRepository,
             PasswordEncoder passwordEncoder,
             CookieService cookieService,
             TokenService tokenService,
-            AuthenticationManager authenticationManager
+            AuthenticationManager authenticationManager,
+            long refreshTokenExpirationMs
     ) {
         this.refreshTokenRepository = refreshTokenRepository;
         this.userRepository = userRepository;
@@ -32,7 +36,9 @@ public class AuthUseCaseImpl implements AuthUseCase{
         this.cookieService = cookieService;
         this.tokenService = tokenService;
         this.authenticationManager = authenticationManager;
+        this.refreshTokenExpirationMs = refreshTokenExpirationMs;
     }
+
 
 
 }
