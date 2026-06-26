@@ -20,8 +20,16 @@ public class AuthUseCaseBeanConfig {
             PasswordEncoder passwordEncoder,
             CookieService cookieService,
             TokenService tokenService,
-            AuthenticationManager authenticationManager
+            AuthenticationManager authenticationManager,
+            long refreshTokenExpirationMs
     ) {
-        return new AuthUseCaseImpl(refreshTokenRepository ,userRepository,passwordEncoder, cookieService,tokenService ,authenticationManager);
+        return new AuthUseCaseImpl(
+                refreshTokenRepository ,
+                userRepository,
+                passwordEncoder,
+                cookieService,
+                tokenService ,
+                authenticationManager,
+                refreshTokenExpirationMs);
     }
 }
