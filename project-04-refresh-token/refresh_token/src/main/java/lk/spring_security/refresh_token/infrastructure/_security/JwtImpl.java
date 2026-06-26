@@ -17,12 +17,12 @@ public class JwtImpl implements TokenService {
 
     //inject required dependencies
     private final SecretKey secretKey;
+    private final Long accessTokenExpiration;
 
-    //limit token to 15m
-    private static final long ACCESS_TOKEN_EXPIRATION = 15 * 60 * 1000;
 
-    public JwtImpl(SecretKey secretKey) {
+    public JwtImpl(SecretKey secretKey, long accessTokenExpiration) {
         this.secretKey = secretKey;
+        this.accessTokenExpiration = accessTokenExpiration;
     }
 
     /* ----- __GENERATE_TOKEN__ ----- */
@@ -43,7 +43,7 @@ public class JwtImpl implements TokenService {
                 .claims(extractClaims)
                 .subject(user.getEmail())
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_EXPIRATION))
+                .expiration(new Date(System.currentTimeMillis() + accessTokenExpiration))
                 .signWith(secretKey)
                 .compact();
     }
