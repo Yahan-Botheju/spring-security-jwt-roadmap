@@ -8,10 +8,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class AuthUseCaseImpl implements AuthUseCase{
 
     //inject required dependencies
-    private UserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
-    private CookieService cookieService;
-    private AuthenticationManager authenticationManager;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final CookieService cookieService;
+    private final AuthenticationManager authenticationManager;
 
 
     public AuthUseCaseImpl(
