@@ -18,7 +18,7 @@ public class AuthUseCaseImpl implements AuthUseCase{
     private final TokenService tokenService;
     private final AuthenticationManager authenticationManager;
 
-
+    //inject token expiration time
     private final long refreshTokenExpirationMs;
 
     public AuthUseCaseImpl(
@@ -39,6 +39,11 @@ public class AuthUseCaseImpl implements AuthUseCase{
         this.refreshTokenExpirationMs = refreshTokenExpirationMs;
     }
 
-
+    //register new user
+    @Override
+    public User registerUser(User user){
+        //hash the password
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+    }
 
 }
