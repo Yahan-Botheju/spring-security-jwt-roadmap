@@ -1,5 +1,6 @@
 package lk.spring_security.refresh_token.usecase.auth;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lk.spring_security.refresh_token.domain.models.Role;
 import lk.spring_security.refresh_token.domain.models.User;
 import lk.spring_security.refresh_token.domain.repositories.RefreshTokenRepository;
@@ -7,6 +8,7 @@ import lk.spring_security.refresh_token.domain.repositories.TokenService;
 import lk.spring_security.refresh_token.domain.repositories.UserRepository;
 import lk.spring_security.refresh_token.web._shared.services.CookieService;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class AuthUseCaseImpl implements AuthUseCase{
@@ -56,4 +58,15 @@ public class AuthUseCaseImpl implements AuthUseCase{
         return userRepository.registerUser(user);
     }
 
+
+    //login user
+    @Override
+    public void loginUser(
+            String email,
+            String password,
+            HttpServletResponse httpServletResponse){
+
+        //check given username and password are correct via auth provider
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
+    }
 }
