@@ -43,10 +43,17 @@ public class AuthUseCaseImpl implements AuthUseCase{
     //register new user
     @Override
     public User registerUser(User user){
+
+        if(userRepository.findByEmail(user.getEmail()).isPresent()){
+            throw new IllegalArgumentException("User with this email already exists");
+        }
+
         //hash the password
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         //set default role as USER
         user.setRole(Role.USER);
+
+        return userRepository.registerUser(user);
     }
 
 }
