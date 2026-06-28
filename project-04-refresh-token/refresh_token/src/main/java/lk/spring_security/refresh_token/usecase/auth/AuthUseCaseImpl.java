@@ -90,5 +90,8 @@ public class AuthUseCaseImpl implements AuthUseCase{
 
         //include another 7d for expiration
         refreshToken.setExpiryData(Instant.now().plusSeconds(refreshTokenExpirationMs));
+
+        //save refresh token in db
+        refreshTokenRepository.saveToken(refreshToken);
     }
 }
