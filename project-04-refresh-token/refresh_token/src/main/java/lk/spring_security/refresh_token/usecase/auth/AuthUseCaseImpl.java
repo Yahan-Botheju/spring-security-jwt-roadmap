@@ -13,6 +13,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.UUID;
+
 public class AuthUseCaseImpl implements AuthUseCase{
 
     //inject required dependencies
@@ -75,5 +77,8 @@ public class AuthUseCaseImpl implements AuthUseCase{
 
         //create access token (15m)
         String accessToken = tokenService.generateToken(exstingUser);
+
+        //create refresh token as UUID string
+        String refreshTokenStr = UUID.randomUUID().toString();
     }
 }
