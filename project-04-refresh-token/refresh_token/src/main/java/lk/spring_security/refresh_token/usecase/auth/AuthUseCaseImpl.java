@@ -6,6 +6,7 @@ import lk.spring_security.refresh_token.domain.models.User;
 import lk.spring_security.refresh_token.domain.repositories.RefreshTokenRepository;
 import lk.spring_security.refresh_token.domain.repositories.TokenService;
 import lk.spring_security.refresh_token.domain.repositories.UserRepository;
+import lk.spring_security.refresh_token.infrastructure._security.user_spring_wrapper.CustomUserDetails;
 import lk.spring_security.refresh_token.web._shared.services.CookieService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -69,9 +70,10 @@ public class AuthUseCaseImpl implements AuthUseCase{
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
 
         //get user from db
-        User user = userRepository.findByEmail(email)
+        User exstingUser = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-
+        //create access token (15m)
+        String accessToken = tokenService.generateToken(exstingUser);
     }
 }
