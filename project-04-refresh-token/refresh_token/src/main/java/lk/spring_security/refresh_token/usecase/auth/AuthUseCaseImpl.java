@@ -14,6 +14,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.Instant;
 import java.util.UUID;
 
 public class AuthUseCaseImpl implements AuthUseCase{
@@ -86,5 +87,8 @@ public class AuthUseCaseImpl implements AuthUseCase{
         RefreshToken refreshToken = new RefreshToken();
         refreshToken.setToken(refreshTokenStr);
         refreshToken.setUser(exstingUser);
+
+        //include another 7d for expiration
+        refreshToken.setExpiryData(Instant.now().plusSeconds(refreshTokenExpirationMs));
     }
 }
