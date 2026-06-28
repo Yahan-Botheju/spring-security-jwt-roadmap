@@ -9,6 +9,7 @@ import lk.spring_security.refresh_token.domain.repositories.UserRepository;
 import lk.spring_security.refresh_token.web._shared.services.CookieService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class AuthUseCaseImpl implements AuthUseCase{
@@ -45,11 +46,9 @@ public class AuthUseCaseImpl implements AuthUseCase{
     //register new user
     @Override
     public User registerUser(User user){
-
         if(userRepository.findByEmail(user.getEmail()).isPresent()){
             throw new IllegalArgumentException("User with this email already exists");
         }
-
         //hash the password
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         //set default role as USER
@@ -68,5 +67,11 @@ public class AuthUseCaseImpl implements AuthUseCase{
 
         //check given username and password are correct via auth provider
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
+
+        //get user from db
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+
     }
 }
