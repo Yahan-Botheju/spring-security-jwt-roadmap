@@ -1,6 +1,7 @@
 package lk.spring_security.refresh_token.usecase.auth;
 
 import jakarta.servlet.http.HttpServletResponse;
+import lk.spring_security.refresh_token.domain.models.RefreshToken;
 import lk.spring_security.refresh_token.domain.models.Role;
 import lk.spring_security.refresh_token.domain.models.User;
 import lk.spring_security.refresh_token.domain.repositories.RefreshTokenRepository;
@@ -80,5 +81,10 @@ public class AuthUseCaseImpl implements AuthUseCase{
 
         //create refresh token as UUID string
         String refreshTokenStr = UUID.randomUUID().toString();
+
+        //set refresh token to user
+        RefreshToken refreshToken = new RefreshToken();
+        refreshToken.setToken(refreshTokenStr);
+        refreshToken.setUser(exstingUser);
     }
 }
