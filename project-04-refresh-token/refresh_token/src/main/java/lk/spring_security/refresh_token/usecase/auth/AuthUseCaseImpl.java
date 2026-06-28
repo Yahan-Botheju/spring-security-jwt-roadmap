@@ -93,5 +93,9 @@ public class AuthUseCaseImpl implements AuthUseCase{
 
         //save refresh token in db
         refreshTokenRepository.saveToken(refreshToken);
+
+        //attach tokens to browser
+        cookieService.setAccessTokenCookie(httpServletResponse, accessToken);
+        cookieService.setRefreshTokenCookie(httpServletResponse, refreshTokenStr);
     }
 }
