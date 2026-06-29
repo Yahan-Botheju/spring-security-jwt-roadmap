@@ -14,4 +14,7 @@ public interface AuthUseCase {
 
     //create new access token by using refresh token
     void refreshToken(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse);
+
+    //logout user
+    void logoutUser(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse);
 }
