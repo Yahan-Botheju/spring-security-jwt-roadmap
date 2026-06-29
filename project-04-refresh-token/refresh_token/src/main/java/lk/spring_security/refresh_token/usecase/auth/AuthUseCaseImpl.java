@@ -149,6 +149,9 @@ public class AuthUseCaseImpl implements AuthUseCase{
         if(getAccessToken != null){
             //get user email from token
             String getUserEmail = tokenService.extractUsername(getAccessToken);
+
+            //remove refresh token from db
+            refreshTokenRepository.deleteByUserEmail(getUserEmail);
         }
     }
 }
