@@ -107,6 +107,10 @@ public class AuthUseCaseImpl implements AuthUseCase{
             HttpServletResponse httpServletResponse
     ){
 
+        //read refresh token from request
+        String requestRefreshToken = cookieService.extractCookieByName(
+                httpServletRequest, "refresh_token"
+        );
     }
 
 }
