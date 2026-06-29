@@ -34,6 +34,9 @@ public class SecurityConfig {
     ) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable) //disable due to dev env
+                .authorizeHttpRequests(authorizeRequests -> authorizeRequests
+                        .requestMatchers("/api/v1/auth/**").permitAll() //permits auth endpoints
+
     }
 
 }
