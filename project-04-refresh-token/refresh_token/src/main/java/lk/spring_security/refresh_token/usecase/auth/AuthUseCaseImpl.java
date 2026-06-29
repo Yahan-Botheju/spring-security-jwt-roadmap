@@ -127,6 +127,13 @@ public class AuthUseCaseImpl implements AuthUseCase{
             refreshTokenRepository.deleteByUserEmail(existingRefreshToken.getUser().getEmail());
             throw new RuntimeException("Refresh token expired, please try again");
         }
+
+        //create fresh user object and attach new generated access token
+        User user = existingRefreshToken.getUser();
+        String newAccessToken = tokenService.generateToken(user);
+
+        //attach access token to browser
+        cookieService.setAccessTokenCookie(httpServletResponse, newAccessToken);
     }
 
 }
