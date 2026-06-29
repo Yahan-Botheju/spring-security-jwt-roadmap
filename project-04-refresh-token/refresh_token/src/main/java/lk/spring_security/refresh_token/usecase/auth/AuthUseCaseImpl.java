@@ -142,5 +142,10 @@ public class AuthUseCaseImpl implements AuthUseCase{
     public void logoutUser(
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse
-    ){}
+    ){
+        //get access token from cookie
+        String getAccessToken = cookieService.extractCookieByName(httpServletRequest, "refresh_token");
+
+
+    }
 }
