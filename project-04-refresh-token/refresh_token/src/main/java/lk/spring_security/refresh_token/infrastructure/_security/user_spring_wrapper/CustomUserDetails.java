@@ -18,6 +18,11 @@ public class CustomUserDetails implements UserDetails {
         this.user = user;
     }
 
+    public String getEmail() {
+        return user.getEmail();
+    }
+
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
@@ -52,4 +57,7 @@ public class CustomUserDetails implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+
+
 }
