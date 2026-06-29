@@ -121,8 +121,12 @@ public class AuthUseCaseImpl implements AuthUseCase{
         RefreshToken existingRefreshToken = refreshTokenRepository.findByToken(requestRefreshToken)
                 .orElseThrow(() -> new RuntimeException("Refresh token not found"));
 
-
-
+        //check token is expired
+        if(existingRefreshToken.getExpiryData().isBefore(Instant.now())){
+            //remove from db
+            refreshTokenRepository.deleteByUserEmail(existingRefreshToken.getUser().getEmail());
+            throw new RuntimeException("Refresh token expired, please try again");
+        }
     }
 
 }
