@@ -13,12 +13,11 @@ public class JwtImplConfig {
     @Bean
     public TokenService tokenService(
             SecretKey secretKey,
-            @Value("${application.security.cookie.access-token-expiry-seconds}") long  accessTokenExpirySeconds,
-            @Value("${application.security.jwt.refresh-token-expiration-ms}") long refreshTokenExpirationMs
+            @Value("${application.security.cookie.access-token-expiry-seconds}") long  accessTokenExpirySeconds
     ) {
         long expirationMs = accessTokenExpirySeconds * 1000L;
 
-        return new JwtImpl(secretKey, expirationMs, refreshTokenExpirationMs);
+        return new JwtImpl(secretKey, expirationMs);
     }
 
 
