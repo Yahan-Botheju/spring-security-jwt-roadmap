@@ -111,6 +111,18 @@ public class AuthUseCaseImpl implements AuthUseCase{
         String requestRefreshToken = cookieService.extractCookieByName(
                 httpServletRequest, "refresh_token"
         );
+
+        //check refresh token availability
+        if(requestRefreshToken == null){
+            throw new UsernameNotFoundException("Refresh token not found");
+        }
+
+        //get refresh token from db if not throw an error
+        RefreshToken existingRefreshToken = refreshTokenRepository.findByToken(requestRefreshToken)
+                .orElseThrow(() -> new RuntimeException("Refresh token not found"));
+
+
+
     }
 
 }
