@@ -146,6 +146,9 @@ public class AuthUseCaseImpl implements AuthUseCase{
         //get access token from cookie
         String getAccessToken = cookieService.extractCookieByName(httpServletRequest, "refresh_token");
 
-
+        if(getAccessToken != null){
+            //get user email from token
+            String getUserEmail = tokenService.extractUsername(getAccessToken);
+        }
     }
 }
