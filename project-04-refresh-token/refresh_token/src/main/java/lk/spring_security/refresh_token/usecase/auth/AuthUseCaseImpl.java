@@ -12,6 +12,7 @@ import lk.spring_security.refresh_token.infrastructure._security.user_spring_wra
 import lk.spring_security.refresh_token.web._shared.services.CookieService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -152,6 +153,10 @@ public class AuthUseCaseImpl implements AuthUseCase{
 
             //remove refresh token from db
             refreshTokenRepository.deleteByUserEmail(getUserEmail);
+
+            //clear both cookies
+            cookieService.clearCookies(httpServletResponse);
+            SecurityContextHolder.clearContext();
         }
     }
 }
