@@ -36,7 +36,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable) //disable due to dev env
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers("/api/v1/auth/**").permitAll() //permits auth endpoints
-
+                        .requestMatchers("/api/v1/admin/**").hasRole("ADMIN") //permits for admin routes
     }
 
 }
