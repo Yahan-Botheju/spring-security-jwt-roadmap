@@ -136,4 +136,11 @@ public class AuthUseCaseImpl implements AuthUseCase{
         cookieService.setAccessTokenCookie(httpServletResponse, newAccessToken);
     }
 
+
+    //logout user
+    @Override
+    public void logoutUser(
+            HttpServletRequest httpServletRequest,
+            HttpServletResponse httpServletResponse
+    ){}
 }
