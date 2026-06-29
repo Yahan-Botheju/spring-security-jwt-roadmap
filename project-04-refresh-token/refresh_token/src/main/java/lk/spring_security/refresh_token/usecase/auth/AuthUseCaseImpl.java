@@ -1,5 +1,6 @@
 package lk.spring_security.refresh_token.usecase.auth;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lk.spring_security.refresh_token.domain.models.RefreshToken;
 import lk.spring_security.refresh_token.domain.models.Role;
@@ -98,4 +99,14 @@ public class AuthUseCaseImpl implements AuthUseCase{
         cookieService.setAccessTokenCookie(httpServletResponse, accessToken);
         cookieService.setRefreshTokenCookie(httpServletResponse, refreshTokenStr);
     }
+
+    //create new access token by using refresh token
+    @Override
+    public void refreshToken(
+            HttpServletRequest httpServletRequest,
+            HttpServletResponse httpServletResponse
+    ){
+
+    }
+
 }
