@@ -1,4 +1,4 @@
-package lk.spring_security.refresh_token.web._shared.services;
+package lk.spring_security.refresh_token.domain.repositories;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
