@@ -22,16 +22,16 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     //inject required dependencies
-    private final TokenExtractor tokenExtractor;
+
     private final TokenService tokenService;
     private final UserDetailsService userDetailsService;
 
     public JwtAuthenticationFilter(
-            TokenExtractor tokenExtractor,
+
             TokenService tokenService,
             UserDetailsService userDetailsService
     ) {
-        this.tokenExtractor = tokenExtractor;
+
         this.tokenService = tokenService;
         this.userDetailsService = userDetailsService;
     }
