@@ -5,6 +5,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
 public interface TokenExtractor {
-    //initiate token extractor
-    Optional<String> extractTokenFromCookie(HttpServletRequest request);
+    //get Access Token
+    Optional<String> extractAccessTokenFromCookie(HttpServletRequest request);
+
+    //get refresh toke
+    Optional<String> extractRefreshTokenFromCookie(HttpServletRequest request);
 }
