@@ -16,5 +16,18 @@ public class TokenExtractorImpl implements  TokenExtractor {
                 }
             }
         }
+        return Optional.empty();
+    }
+
+    //get access token
+    @Override
+    public Optional<String> extractAccessTokenFromCookie(HttpServletRequest request) {
+        return extractCookieByName(request, "accessToken");
+    }
+
+    //get refresh token
+    @Override
+    public Optional<String> extractRefreshTokenFromCookie(HttpServletRequest request) {
+        return extractCookieByName(request, "refreshToken");
     }
 }
