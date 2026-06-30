@@ -1,7 +1,5 @@
 package lk.spring_security.refresh_token.infrastructure._security.config;
 
-import lk.spring_security.refresh_token.infrastructure._security.token_extraction.TokenExtractor;
-import lk.spring_security.refresh_token.infrastructure._security.token_extraction.TokenExtractorImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
