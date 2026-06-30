@@ -4,8 +4,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lk.spring_security.refresh_token.domain.repositories.TokenService;
-import lk.spring_security.refresh_token.web._shared.services.CookieService;
+import lk.spring_security.refresh_token.infrastructure._security.token_extraction.TokenExtractor;
 import org.jspecify.annotations.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,17 +20,17 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     //inject required dependencies
-    private final TokenService tokenService;
-    private final CookieService cookieService;
+    private final TokenExtractor tokenExtractor;
+
     private final UserDetailsService userDetailsService;
 
     public JwtAuthenticationFilter(
-            TokenService tokenService,
-            CookieService cookieService,
+            TokenExtractor tokenExtractor,
+
             UserDetailsService userDetailsService
     ) {
-        this.tokenService = tokenService;
-        this.cookieService = cookieService;
+        this.tokenExtractor = tokenExtractor;
+
         this.userDetailsService = userDetailsService;
     }
 
@@ -43,7 +42,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException {
 
         //get access token from cookie
-        final String accessToken = cookieService.extractCookieByName(request, "access_token");
+        final String accessToken = tokenExtractor.extractTokenFromCookie(request).orElse(null) ;
         final String userEmail;
 
         //token is null do filter
