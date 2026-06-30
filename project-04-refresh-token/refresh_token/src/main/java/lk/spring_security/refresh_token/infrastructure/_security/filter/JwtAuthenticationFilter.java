@@ -4,6 +4,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lk.spring_security.refresh_token.domain.repositories.TokenService;
 import lk.spring_security.refresh_token.infrastructure._security.token_extraction.TokenExtractor;
 import lk.spring_security.refresh_token.web._shared.services.CookieService;
 import org.jspecify.annotations.NonNull;
@@ -22,16 +23,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     //inject required dependencies
     private final TokenExtractor tokenExtractor;
-    private final CookieService cookieService;
+    private final TokenService tokenService;
     private final UserDetailsService userDetailsService;
 
     public JwtAuthenticationFilter(
-           TokenExtractor tokenExtractor,
-            CookieService cookieService,
+            TokenExtractor tokenExtractor,
+            TokenService tokenService,
             UserDetailsService userDetailsService
     ) {
         this.tokenExtractor = tokenExtractor;
-        this.cookieService = cookieService;
+        this.tokenService = tokenService;
         this.userDetailsService = userDetailsService;
     }
 
