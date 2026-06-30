@@ -40,9 +40,4 @@ public class ApplicationConfig {
         return daoAuthenticationProvider;
     }
 
-    //register tokenExtractor as Component class
-    @Bean
-    public TokenExtractor tokenExtractor() {
-        return new TokenExtractorImpl();
-    }
 }
