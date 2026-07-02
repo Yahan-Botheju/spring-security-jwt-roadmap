@@ -1,6 +1,7 @@
 package lk.spring_security.refresh_token.infrastructure.product.entities;
 
 import jakarta.persistence.*;
+import lk.spring_security.refresh_token.infrastructure.user.entities.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,4 +24,8 @@ public class ProductEntity {
 
     @Column(nullable = false)
     private Double productPrice;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
 }
