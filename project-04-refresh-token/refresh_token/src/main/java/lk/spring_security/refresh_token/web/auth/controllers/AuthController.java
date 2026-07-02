@@ -6,7 +6,6 @@ import jakarta.validation.Valid;
 import lk.spring_security.refresh_token.domain.models.User;
 import lk.spring_security.refresh_token.usecase.auth.AuthUseCase;
 import lk.spring_security.refresh_token.web.auth.DTOs.AuthRequestDTO;
-import lk.spring_security.refresh_token.web.auth.DTOs.AuthResponseDTO;
 import lk.spring_security.refresh_token.web.auth.webMappers.AuthWebMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -61,6 +60,18 @@ public class AuthController {
             HttpServletResponse httpServletResponse
     ){
         authUseCase.logoutUser(httpServletRequest, httpServletResponse);
+
         return ResponseEntity.ok("User logged out successfully..!!");
+    }
+
+    //REFRESH ENDPOINT ROUTE
+    @PostMapping("/refresh-token")
+    public ResponseEntity<String> refreshToken(
+            HttpServletRequest servletRequest,
+            HttpServletResponse servletResponse
+    ){
+        authUseCase.refreshToken(servletRequest, servletResponse);
+
+        return ResponseEntity.ok("Token refresh successfully..!!");
     }
 }
