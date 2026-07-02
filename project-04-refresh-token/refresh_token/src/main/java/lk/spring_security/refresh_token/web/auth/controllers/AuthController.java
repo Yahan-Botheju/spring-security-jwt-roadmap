@@ -51,5 +51,6 @@ public class AuthController {
         //set email, paw and token for auth user
         authUseCase.loginUser(authRequestDTO.getEmail(), authRequestDTO.getPassword(), servletResponse);
 
+        return new ResponseEntity<>("User logged successfully", HttpStatus.OK);
     }
 }
