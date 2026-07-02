@@ -39,7 +39,7 @@ public class AuthController {
         User toDomainModel = authWebMapper.toDomainModel(authRequestDTO);
         authUseCase.registerUser(toDomainModel);
 
-        return new ResponseEntity<>("User registered successfully", HttpStatus.CREATED);
+        return new ResponseEntity<>("User registered successfully..!!", HttpStatus.CREATED);
     }
 
     //login route
@@ -51,6 +51,16 @@ public class AuthController {
         //set email, paw and token for auth user
         authUseCase.loginUser(authRequestDTO.getEmail(), authRequestDTO.getPassword(), servletResponse);
 
-        return new ResponseEntity<>("User logged successfully", HttpStatus.OK);
+        return new ResponseEntity<>("User logged successfully..!!", HttpStatus.OK);
+    }
+
+    //logout route
+    @PostMapping("/logout")
+    public ResponseEntity<String> logoutUser(
+            HttpServletRequest httpServletRequest,
+            HttpServletResponse httpServletResponse
+    ){
+        authUseCase.logoutUser(httpServletRequest, httpServletResponse);
+        return ResponseEntity.ok("User logged out successfully..!!");
     }
 }
