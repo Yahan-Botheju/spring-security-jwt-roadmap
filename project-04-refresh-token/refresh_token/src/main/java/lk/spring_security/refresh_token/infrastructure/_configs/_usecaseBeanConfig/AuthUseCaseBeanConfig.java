@@ -5,7 +5,7 @@ import lk.spring_security.refresh_token.domain.repositories.TokenService;
 import lk.spring_security.refresh_token.domain.repositories.UserRepository;
 import lk.spring_security.refresh_token.usecase.auth.AuthUseCase;
 import lk.spring_security.refresh_token.usecase.auth.AuthUseCaseImpl;
-import lk.spring_security.refresh_token.web._shared.services.CookieService;
+import lk.spring_security.refresh_token.domain.repositories.CookieService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
