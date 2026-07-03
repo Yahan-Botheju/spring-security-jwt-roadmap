@@ -17,6 +17,6 @@ public class RefreshToken {
 
     //check token is expired
     public boolean isExpired() {
-        return this.expiryData.isBefore(Instant.now());
+        return this.expiryDate.isBefore(Instant.now());
     }
 }
