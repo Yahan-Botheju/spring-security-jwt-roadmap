@@ -12,11 +12,11 @@ import java.time.Instant;
 public class RefreshToken {
     private Long id;
     private String token;
-    private Instant expiryData;
+    private Instant expiryDate;
     private User user;
 
     //check token is expired
     public boolean isExpired() {
-        return this.expiryData.isBefore(Instant.now());
+        return this.expiryDate.isBefore(Instant.now());
     }
 }

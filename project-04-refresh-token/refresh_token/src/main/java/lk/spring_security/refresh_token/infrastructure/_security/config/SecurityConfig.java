@@ -3,6 +3,7 @@ package lk.spring_security.refresh_token.infrastructure._security.config;
 import lk.spring_security.refresh_token.infrastructure._security.filter.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -37,8 +38,13 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable) //disable due to dev env
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
+                        //auth routes
                         .requestMatchers("/api/v1/auth/**").permitAll() //permits auth endpoints
                         .requestMatchers("/api/v1/admin/**").hasRole("ADMIN") //permits for admin routes
+
+                        //products routes
+                        .requestMatchers(HttpMethod.POST,"/api/v1/products/**").hasRole("ADMIN") //only ADMIN can create products
+                        .requestMatchers(HttpMethod.GET,"/api/v1/products/**").hasAnyRole("ADMIN","USER") //both can view products
                         .anyRequest().authenticated())
 
                 //set session as stateless
