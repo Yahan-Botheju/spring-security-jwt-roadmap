@@ -44,6 +44,7 @@ public class SecurityConfig {
 
                         //products routes
                         .requestMatchers(HttpMethod.POST,"/api/v1/products/**").hasRole("ADMIN") //only ADMIN can create products
+                        .requestMatchers(HttpMethod.GET,"/api/v1/products/**").hasAnyRole("ADMIN","USER") //both can view products
                         .anyRequest().authenticated())
 
                 //set session as stateless
