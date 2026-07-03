@@ -1,6 +1,8 @@
 package lk.spring_security.refresh_token.infrastructure.product;
 
+import lk.spring_security.refresh_token.domain.models.Product;
 import lk.spring_security.refresh_token.domain.repositories.ProductRepository;
+import lk.spring_security.refresh_token.infrastructure.product.entities.ProductEntity;
 import lk.spring_security.refresh_token.infrastructure.product.jpa.JpaProductRepository;
 import lk.spring_security.refresh_token.infrastructure.product.mappers.ProductPersistenceMapper;
 
@@ -17,5 +19,18 @@ public class ProductRepositoryImpl implements ProductRepository {
     ) {
         this.jpaProductRepository = jpaProductRepository;
         this.productPersistenceMapper = productPersistenceMapper;
+    }
+
+    //save products
+    @Override
+    public Product saveProducts(Product product) {
+        if(product.getProductId() == null){
+            throw new RuntimeException("product cannot be empty found");
+        }
+
+        ProductEntity toEntity = productPersistenceMapper.toEntity(product);
+        ProductEntity savedEntity = jpaProductRepository.save(toEntity);
+
+        return productPersistenceMapper.toDomainModel(savedEntity);
     }
 }
