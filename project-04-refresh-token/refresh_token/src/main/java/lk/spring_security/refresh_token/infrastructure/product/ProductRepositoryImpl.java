@@ -6,6 +6,8 @@ import lk.spring_security.refresh_token.infrastructure.product.entities.ProductE
 import lk.spring_security.refresh_token.infrastructure.product.jpa.JpaProductRepository;
 import lk.spring_security.refresh_token.infrastructure.product.mappers.ProductPersistenceMapper;
 
+import java.util.Optional;
+
 public class ProductRepositoryImpl implements ProductRepository {
 
     //inject required dependencies
@@ -19,6 +21,12 @@ public class ProductRepositoryImpl implements ProductRepository {
     ) {
         this.jpaProductRepository = jpaProductRepository;
         this.productPersistenceMapper = productPersistenceMapper;
+    }
+
+    //get product by id
+    @Override
+    public Optional<Product> productFindById(Long productId) {
+        return jpaProductRepository.productFindById(productId);
     }
 
     //save products
