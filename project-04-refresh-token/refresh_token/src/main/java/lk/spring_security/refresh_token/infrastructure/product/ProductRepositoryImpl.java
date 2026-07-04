@@ -24,8 +24,8 @@ public class ProductRepositoryImpl implements ProductRepository {
     //save products
     @Override
     public Product saveProducts(Product product) {
-        if(product.getProductId() == null){
-            throw new RuntimeException("product cannot be empty found");
+        if(jpaProductRepository.existsById(product.getProductId())){
+            throw new RuntimeException("Product already exists");
         }
 
         ProductEntity toEntity = productPersistenceMapper.toEntity(product);
