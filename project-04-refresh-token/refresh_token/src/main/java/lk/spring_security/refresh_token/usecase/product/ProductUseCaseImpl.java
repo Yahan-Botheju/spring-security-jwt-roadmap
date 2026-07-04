@@ -1,5 +1,6 @@
 package lk.spring_security.refresh_token.usecase.product;
 
+import lk.spring_security.refresh_token.domain.models.Product;
 import lk.spring_security.refresh_token.domain.repositories.ProductRepository;
 
 public class ProductUseCaseImpl implements  ProductUseCase {
@@ -9,5 +10,14 @@ public class ProductUseCaseImpl implements  ProductUseCase {
 
     public ProductUseCaseImpl(ProductRepository productRepository) {
         this.productRepository = productRepository;
+    }
+
+    //create product
+    @Override
+    public Product createProduct(Product product){
+        if(productRepository.productFindById(product.getProductId()).isPresent()){
+            throw new IllegalArgumentException("Product already exists");
+        }
+        return productRepository.saveProducts(product);
     }
 }
