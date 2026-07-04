@@ -6,6 +6,8 @@ import lk.spring_security.refresh_token.infrastructure.product.entities.ProductE
 import lk.spring_security.refresh_token.infrastructure.product.jpa.JpaProductRepository;
 import lk.spring_security.refresh_token.infrastructure.product.mappers.ProductPersistenceMapper;
 
+import java.util.Optional;
+
 public class ProductRepositoryImpl implements ProductRepository {
 
     //inject required dependencies
@@ -21,11 +23,17 @@ public class ProductRepositoryImpl implements ProductRepository {
         this.productPersistenceMapper = productPersistenceMapper;
     }
 
+    //get product by id
+    @Override
+    public Optional<Product> productFindById(Long productId) {
+        return jpaProductRepository.productFindById(productId);
+    }
+
     //save products
     @Override
     public Product saveProducts(Product product) {
-        if(product.getProductId() == null){
-            throw new RuntimeException("product cannot be empty found");
+        if(jpaProductRepository.existsById(product.getProductId())){
+            throw new RuntimeException("Product already exists");
         }
 
         ProductEntity toEntity = productPersistenceMapper.toEntity(product);
