@@ -44,7 +44,7 @@ public class ProductController {
      }
 
      //update products
-    @PostMapping
+    @PutMapping
     public ResponseEntity<ProductResponseDTO> updateProduct(
             @Valid @RequestParam Long productId,
             @Valid @RequestBody ProductRequestDTO productRequestDTO
