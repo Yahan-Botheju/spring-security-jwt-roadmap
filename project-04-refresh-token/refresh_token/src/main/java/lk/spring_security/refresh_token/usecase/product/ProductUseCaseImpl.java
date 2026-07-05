@@ -20,4 +20,14 @@ public class ProductUseCaseImpl implements  ProductUseCase {
         }
         return productRepository.saveProducts(product);
     }
+
+    //update products
+    @Override
+    public Product updateProducts(Long productId, Product product){
+       if(!productRepository.productFindById(productId).isPresent()){
+           throw new IllegalArgumentException("Product doesn't exists");
+       }
+
+        return productRepository.updateProducts(productId, product);
+    }
 }
