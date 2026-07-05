@@ -32,9 +32,6 @@ public class ProductRepositoryImpl implements ProductRepository {
     //save products
     @Override
     public Product saveProducts(Product product) {
-        if(jpaProductRepository.existsById(product.getProductId())){
-            throw new RuntimeException("Product already exists");
-        }
 
         ProductEntity toEntity = productPersistenceMapper.toEntity(product);
         ProductEntity savedEntity = jpaProductRepository.save(toEntity);
