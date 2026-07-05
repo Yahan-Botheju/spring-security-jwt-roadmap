@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.net.URI;
+
 @RestController
 @RequestMapping("/api/v1/products/")
 public class ProductController {
@@ -41,6 +43,10 @@ public class ProductController {
         Product toUseCase = productUseCase.createProduct(toDomainModel);
         ProductResponseDTO toResponse =  productWebMapper.toResponseDTO(toUseCase);
 
-        return new  ResponseEntity<>(toResponse, HttpStatus.CREATED);
+        return ResponseEntity.created(URI.create("/api/v1/products")).body(toResponse);
      }
+
+     //update products
+    @PostMapping
+    public
 }
