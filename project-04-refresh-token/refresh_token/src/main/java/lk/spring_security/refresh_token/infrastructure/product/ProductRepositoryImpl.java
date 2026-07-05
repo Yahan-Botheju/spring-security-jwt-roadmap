@@ -26,7 +26,7 @@ public class ProductRepositoryImpl implements ProductRepository {
     //get product by id
     @Override
     public Optional<Product> productFindById(Long productId) {
-        return jpaProductRepository.productFindById(productId);
+        return jpaProductRepository.findById(productId).map(productPersistenceMapper::toDomainModel);
     }
 
     //save products
