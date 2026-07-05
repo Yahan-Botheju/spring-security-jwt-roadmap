@@ -13,5 +13,5 @@ public interface RefreshTokenRepository {
     RefreshToken saveToken(RefreshToken refreshToken);
 
     //remove token from db in user log out
-    void deleteByUserEmail(String email);
+    void deleteByToken(String token);
 }

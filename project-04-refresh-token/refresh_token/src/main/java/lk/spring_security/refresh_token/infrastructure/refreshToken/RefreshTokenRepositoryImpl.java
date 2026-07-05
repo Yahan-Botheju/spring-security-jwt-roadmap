@@ -48,10 +48,14 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
 
     //remove token from db when user log out
     @Override
-    public void deleteByUserEmail(String email){
-        if (!userRepository.findByEmail(email).isPresent()){
-            throw new IllegalArgumentException("Email already exists");
+    public void deleteByToken(String token) {
+        //check toke exist
+        if (!jpaRefreshTokenRepository.findByToken(token).isPresent()) {
+            throw  new IllegalArgumentException("Token doesn't exists");
         }
-        jpaRefreshTokenRepository.deleteByUserEmail(email);
+
+        //delete refresh token from token table
+        jpaRefreshTokenRepository.deleteByToken(token);
     }
+
 }

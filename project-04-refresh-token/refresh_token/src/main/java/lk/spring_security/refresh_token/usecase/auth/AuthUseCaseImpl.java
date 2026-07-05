@@ -2,6 +2,7 @@ package lk.spring_security.refresh_token.usecase.auth;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import lk.spring_security.refresh_token.domain.models.RefreshToken;
 import lk.spring_security.refresh_token.domain.models.Role;
 import lk.spring_security.refresh_token.domain.models.User;
@@ -124,7 +125,7 @@ public class AuthUseCaseImpl implements AuthUseCase{
         //check token is expired
         if(existingRefreshToken.getExpiryDate().isBefore(Instant.now())){
             //remove from db
-            refreshTokenRepository.deleteByUserEmail(existingRefreshToken.getUser().getEmail());
+            refreshTokenRepository.deleteByToken(requestRefreshToken);
             throw new RuntimeException("Refresh token expired, please try again");
         }
 
@@ -139,23 +140,35 @@ public class AuthUseCaseImpl implements AuthUseCase{
 
     //logout user
     @Override
+    @Transactional
     public void logoutUser(
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse
     ){
         //get access token from cookie
-        String getAccessToken = cookieService.extractCookieByName(httpServletRequest, "refresh_token");
+        String getRefreshToken = cookieService
+                .extractCookieByName(httpServletRequest, "refresh_token");
 
-        if(getAccessToken != null){
-            //get user email from token
-            String getUserEmail = tokenService.extractUsername(getAccessToken);
+        if(getRefreshToken != null){
 
-            //remove refresh token from db
-            refreshTokenRepository.deleteByUserEmail(getUserEmail);
+            RefreshToken existingRefreshToken = refreshTokenRepository.findByToken(getRefreshToken)
+                    .orElseThrow(() -> new RuntimeException("Refresh token not found"));
 
-            //clear both cookies
-            cookieService.clearCookies(httpServletResponse);
-            SecurityContextHolder.clearContext();
+            //get user email
+            String getEmail = existingRefreshToken.getUser().getEmail();
+
+            //check user existence
+            if(!userRepository.findByEmail(getEmail).isPresent()){
+                throw new UsernameNotFoundException("Invalid email");
+            }
+
+            //remove refresh token from db using token directly
+            refreshTokenRepository.deleteByToken(getRefreshToken);
+
         }
+
+        //clear both cookies
+        cookieService.clearCookies(httpServletResponse);
+        SecurityContextHolder.clearContext();
     }
 }
