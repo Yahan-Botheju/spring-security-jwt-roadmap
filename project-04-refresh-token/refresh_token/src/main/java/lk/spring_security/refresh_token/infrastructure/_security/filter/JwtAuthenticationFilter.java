@@ -43,7 +43,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException {
 
         //get access token from cookie
-        final String accessToken = cookieService.extractCookieByName(request, "accessToken");
+        final String accessToken = cookieService.extractCookieByName(request, "access_token");
         final String userEmail;
 
         //token is null do filter
@@ -74,10 +74,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 //set object to security context
                 SecurityContextHolder.getContext().setAuthentication(authToken);
-            }else{
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                response.getWriter().write("Token invalid");
-                return;
             }
         }
         filterChain.doFilter(request, response);
