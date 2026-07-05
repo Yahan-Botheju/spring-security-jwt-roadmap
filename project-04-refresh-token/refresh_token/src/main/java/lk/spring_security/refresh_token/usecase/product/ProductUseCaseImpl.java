@@ -15,9 +15,6 @@ public class ProductUseCaseImpl implements  ProductUseCase {
     //create product
     @Override
     public Product createProduct(Product product){
-        if(productRepository.productFindById(product.getProductId()).isPresent()){
-            throw new IllegalArgumentException("Product already exists");
-        }
         return productRepository.saveProducts(product);
     }
 

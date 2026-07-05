@@ -43,7 +43,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException {
 
         //get access token from cookie
-        final String accessToken = cookieService.extractCookieByName(request, "accessToken");
+        final String accessToken = cookieService.extractCookieByName(request, "access_token");
         final String userEmail;
 
         //token is null do filter
