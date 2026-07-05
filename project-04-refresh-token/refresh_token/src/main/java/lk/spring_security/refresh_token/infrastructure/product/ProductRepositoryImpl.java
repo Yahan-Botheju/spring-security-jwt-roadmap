@@ -41,4 +41,16 @@ public class ProductRepositoryImpl implements ProductRepository {
 
         return productPersistenceMapper.toDomainModel(savedEntity);
     }
+
+    //update products
+    @Override
+    public Product updateProducts(Long productId, Product product) {
+        ProductEntity availableProduct = jpaProductRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+
+        ProductEntity updatedProduct = productPersistenceMapper.updateEntity(product, availableProduct);
+        ProductEntity savedProduct = jpaProductRepository.save(updatedProduct);
+
+        return productPersistenceMapper.toDomainModel(savedProduct);
+    }
 }
