@@ -6,4 +6,7 @@ public interface ProductUseCase {
 
     //create product
     Product createProduct(Product product);
+
+    //update products
+    Product updateProducts(Long productId, Product product);
 }

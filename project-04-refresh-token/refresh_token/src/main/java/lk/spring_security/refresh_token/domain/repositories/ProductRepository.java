@@ -11,4 +11,7 @@ public interface ProductRepository {
 
     //save products
     Product saveProducts(Product product);
+
+    //update products
+    Product updateProducts(Long productId, Product product);
 }

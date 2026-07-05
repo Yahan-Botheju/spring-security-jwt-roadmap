@@ -10,10 +10,9 @@ import lk.spring_security.refresh_token.web.product.webMappers.ProductWebMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
 
 @RestController
 @RequestMapping("/api/v1/products/")
@@ -41,6 +40,19 @@ public class ProductController {
         Product toUseCase = productUseCase.createProduct(toDomainModel);
         ProductResponseDTO toResponse =  productWebMapper.toResponseDTO(toUseCase);
 
-        return new  ResponseEntity<>(toResponse, HttpStatus.CREATED);
+        return ResponseEntity.created(URI.create("/api/v1/products")).body(toResponse);
      }
+
+     //update products
+    @PostMapping
+    public ResponseEntity<ProductResponseDTO> updateProduct(
+            @Valid @RequestParam Long productId,
+            @Valid @RequestBody ProductRequestDTO productRequestDTO
+    ){
+        Product toDomainModel = productWebMapper.toDomainModel(productRequestDTO);
+        Product toUseCase = productUseCase.updateProducts(productId, toDomainModel);
+        ProductResponseDTO toResponse =  productWebMapper.toResponseDTO(toUseCase);
+
+        return ResponseEntity.ok(toResponse);
+    }
 }
