@@ -6,6 +6,7 @@ import lk.spring_security.refresh_token.infrastructure.product.entities.ProductE
 import lk.spring_security.refresh_token.infrastructure.product.jpa.JpaProductRepository;
 import lk.spring_security.refresh_token.infrastructure.product.mappers.ProductPersistenceMapper;
 
+import java.util.List;
 import java.util.Optional;
 
 public class ProductRepositoryImpl implements ProductRepository {
@@ -27,6 +28,13 @@ public class ProductRepositoryImpl implements ProductRepository {
     @Override
     public Optional<Product> productFindById(Long productId) {
         return jpaProductRepository.findById(productId).map(productPersistenceMapper::toDomainModel);
+    }
+
+    //get all products
+    @Override
+    public List<Product> getAllProducts(){
+        List<ProductEntity> productEntities = jpaProductRepository.findAll();
+        return productEntities.stream().map(productPersistenceMapper::toDomainModel).toList();
     }
 
     //save products
