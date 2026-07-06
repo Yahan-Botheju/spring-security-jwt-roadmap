@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/products")
@@ -25,6 +26,14 @@ public class ProductController {
     ) {
         this.productUseCase = productUseCase;
         this.productWebMapper = productWebMapper;
+    }
+
+    //get all products
+    @GetMapping
+    public List<ProductResponseDTO> getAllProducts(){
+        List<Product> productList = productUseCase.getAllProducts().stream().toList();
+
+        return productList.stream().map(productWebMapper::toResponseDTO).toList();
     }
 
     //create product
