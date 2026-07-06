@@ -3,6 +3,8 @@ package lk.spring_security.refresh_token.usecase.product;
 import lk.spring_security.refresh_token.domain.models.Product;
 import lk.spring_security.refresh_token.domain.repositories.ProductRepository;
 
+import java.util.List;
+
 public class ProductUseCaseImpl implements  ProductUseCase {
 
     //inject required dependencies
@@ -11,6 +13,13 @@ public class ProductUseCaseImpl implements  ProductUseCase {
     public ProductUseCaseImpl(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
+
+    //get all products
+    @Override
+    public List<Product> getAllProducts(){
+        return productRepository.getAllProducts().stream().toList();
+    }
+
 
     //create product
     @Override
