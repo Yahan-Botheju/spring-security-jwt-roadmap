@@ -1,6 +1,4 @@
 
-
-
 out
 lib
 
@@ -9,13 +7,21 @@ lib
 **/.idea/
 **/.vscode/
 **/*.iml
+
+#project-01
 project-01-stateless-jwt-role-based-auth/stateless_jwt/src/main/resources/application.properties
 project-01-stateless-jwt-role-based-auth/production/
 
+#project-02
 project-02-method-level-security-gloabal-security-exception/method_level_security_global_security_exceptions/.gradle
 project-02-method-level-security-gloabal-security-exception/method_level_security_global_security_exceptions/.idea
 project-02-method-level-security-gloabal-security-exception/method_level_security_global_security_exceptions/src/main/resources/application.properties
 
+#project-03
 project-03-cookie-based-jwt-auth/cookie_based_jwt_auth/src/main/resources/application.properties
 
+#project-04
 project-04-refresh-token/refresh_token/src/main/resources/application.properties
+
+#project-05
+project-05-stateful-jwt-refresh-token-rotation/stateful_jwt_and_refresh_token_rotation/src/main/resources/application.properties
