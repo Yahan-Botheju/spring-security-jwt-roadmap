@@ -1226,10 +1226,470 @@ After completing this project, the following concepts were practiced:
 
 ---
 
-<h2 align="center">Project 04 - Refresh Token</h2>
+
+<h2 align="center">Project 04 - JWT Authentication with Refresh Tokens</h2>
 
 ---
 
-### Ongoing Project....
+## 📌 Overview
+
+Project 04 extends the previous Cookie-Based JWT Authentication implementation by introducing **Refresh Token Authentication**.
+
+In Project 03, users authenticated using JWT Access Tokens stored inside HttpOnly cookies. While secure, access tokens have a limited lifetime and require users to log in again after expiration.
+
+This project solves that problem by implementing a **Refresh Token mechanism**, allowing users to obtain new Access Tokens without re-authenticating.
+
+The project continues to follow **Clean Architecture**, maintains **Stateless Authentication**, and demonstrates a production-ready JWT authentication workflow.
+
+---
+
+## 🚀 Project V4 Enhancements
+
+### 🔥 What's New in Version 4
+
+Version 4 introduces **Refresh Token Authentication**.
+
+Instead of forcing users to log in whenever an Access Token expires, the application now issues a Refresh Token that can securely generate new Access Tokens.
+
+This creates a smoother authentication experience while maintaining application security.
+
+---
+
+## 📊 Authentication Flow
+
+The authentication process now consists of both **Access Tokens** and **Refresh Tokens**.
+
+After a successful login or registration:
+
+1. User credentials are validated.
+2. An Access Token is generated.
+3. A Refresh Token is generated.
+4. Both tokens are stored inside secure HttpOnly cookies.
+5. The browser automatically sends cookies with every request.
+6. Spring Security validates the Access Token.
+7. If the Access Token expires, the Refresh Token is used to generate a new Access Token.
+8. The user continues using the application without logging in again.
+
+---
+
+## 🔄 Refresh Token Authentication Flow
+
+```text
+User Login / Register
+        ↓
+Generate Access Token
+        ↓
+Generate Refresh Token
+        ↓
+Store Tokens in HttpOnly Cookies
+        ↓
+Browser Automatically Sends Cookies
+        ↓
+Protected API Request
+        ↓
+Validate Access Token
+        ↓
+Access Granted
+
+If Access Token Expired
+        ↓
+Validate Refresh Token
+        ↓
+Generate New Access Token
+        ↓
+Update Cookie
+        ↓
+Continue Authentication
+```
+
+---
+
+## 🔐 Refresh Token Implementation
+
+A dedicated Refresh Token module has been introduced to securely manage user sessions.
+
+### Responsibilities
+
+- Generate Refresh Tokens
+- Store Refresh Tokens
+- Validate Refresh Tokens
+- Issue new Access Tokens
+- Expire invalid Refresh Tokens
+
+---
+
+## 🍪 Cookie Management
+
+Both authentication tokens are stored inside **HttpOnly Cookies**.
+
+### Cookie Security Features
+
+```text
+Access Token Cookie
+
+- HttpOnly = true
+- SameSite = Strict
+- Path = /
+- Secure = false (Development)
+- Short Expiration Time
+
+Refresh Token Cookie
+
+- HttpOnly = true
+- SameSite = Strict
+- Path = /
+- Secure = false (Development)
+- Longer Expiration Time
+```
+
+### Benefits
+
+- Prevents JavaScript access
+- Protects against XSS attacks
+- Automatic browser cookie handling
+- Improved user experience
+- Seamless token renewal
+- Stateless authentication
+
+---
+
+## 🔑 Authentication Endpoints
+
+### Register User
+
+```http
+POST /api/v1/auth/register
+```
+
+### Features
+
+- Create new user
+- Encrypt password using BCrypt
+- Generate Access Token
+- Generate Refresh Token
+- Store authentication cookies
+
+---
+
+## Login User
+
+```http
+POST /api/v1/auth/login
+```
+
+### Features
+
+- Validate user credentials
+- Generate Access Token
+- Generate Refresh Token
+- Store cookies
+
+---
+
+## Refresh Access Token
+
+```http
+POST /api/v1/auth/refresh-token
+```
+
+### Features
+
+- Validate Refresh Token
+- Generate new Access Token
+- Update authentication cookie
+- Maintain user session
+
+---
+
+## Logout User
+
+```http
+POST /api/v1/auth/logout
+```
+
+### Features
+
+- Remove Access Token cookie
+- Remove Refresh Token cookie
+- End authenticated session
+
+---
+
+## 📦 Product Management Module
+
+This project introduces a Product Management module for authenticated users.
+
+### Features
+
+- Create Product
+- View Products
+- Update Product
+- Delete Product
+
+---
+
+## Product Endpoints
+
+| Method | Endpoint | Description |
+|----------|----------|-------------|
+| GET | /api/v1/products | Retrieve all products |
+| POST | /api/v1/products | Create a product |
+| PUT | /api/v1/products/{id} | Update a product |
+| DELETE | /api/v1/products/{id} | Delete a product |
+
+---
+
+## 🛡️ Spring Security Enhancements
+
+The authentication flow has been upgraded to support **Access Tokens** and **Refresh Tokens**.
+
+### New Security Components
+
+#### RefreshTokenService
+
+Responsibilities
+
+- Generate Refresh Tokens
+- Validate Refresh Tokens
+- Store Refresh Tokens
+- Remove expired tokens
+
+---
+
+#### CookieService
+
+Responsibilities
+
+- Create authentication cookies
+- Read cookies
+- Remove cookies
+- Manage Access and Refresh Token cookies
+
+---
+
+#### JwtAuthenticationFilter
+
+Responsibilities
+
+- Extract Access Token
+- Validate JWT
+- Authenticate user
+- Set SecurityContext
+
+---
+
+## 📂 Project Structure
+
+```text
+refresh_token_auth
+├── 📁 domain                                           @Core Business Logic & Enterprise Rules (Framework Independent)
+│   ├── 📁 models                                       @Pure Domain Entities & Aggregates
+│   │   ├── Product.java                                # Product Domain Model [cite: 1]
+│   │   ├── RefreshToken.java                           # Refresh Token Domain Model [cite: 1]
+│   │   ├── Role.java                                   # User Role Domain Enum / Model [cite: 1]
+│   │   └── User.java                                   # User Domain Model [cite: 1]
+│   ├── 📁 repositories                                 @Domain Repository Interfaces (Outbound Ports)
+│   │   ├── ProductRepository.java                      # Product Outbound Contract [cite: 2]
+│   │   ├── RefreshTokenRepository.java                 # Refresh Token Outbound Contract [cite: 2]
+│   │   └── UserRepository.java                         # User Outbound Contract [cite: 2]
+│   └── 📁 services                                     @Domain Services (Pure Business Contracts)
+│       ├── CookieService.java                          # Core Cookie Operations Contract [cite: 1]
+│       └── TokenService.java                           # Token Generation & Validation Contract [cite: 2]
+│
+├── 📁 usecase                                          @Application Specific Business Rules
+│   ├── 📁 auth                                         @Inbound Port Orchestration for Auth Operations
+│   │   ├── AuthUseCase.java                            # Feature Interface [cite: 9]
+│   │   └── AuthUseCaseImpl.java                        # Registration & Log In/Out Workflow Logic [cite: 9]
+│   └── 📁 product                                      @Inbound Port Orchestration for Product Operations
+│       ├── ProductUseCase.java                         # Feature Interface [cite: 9]
+│       └── ProductUseCaseImpl.java                     # Product Business Flow Logic [cite: 9]
+│
+├── 📁 infrastructure                                   @External Frameworks, Tools, & Infrastructure Adapters
+│   ├── 📁 _configs                                     @Spring Dependency Injection Configuration Modules
+│   │   ├── 📁 _persistenceBeanConfig                   # Spring Bean Providers for Persistence Layer Adapters
+│   │   │   ├── ProductPersistenceBeanConfig.java       # Wiring for Product Persistence [cite: 2]
+│   │   │   ├── RefreshTokenPersistenceBeanConfig.java  # Wiring for Refresh Token Persistence [cite: 3]
+│   │   │   └── UserPersistenceBeanConfig.java          # Wiring for User Persistence [cite: 3]
+│   │   └── 📁 _usecaseBeanConfig                       # Spring Bean Providers for Use Case Implementations
+│   │       ├── AuthUseCaseBeanConfig.java              # Wiring for Authentication Use Case [cite: 3]
+│   │       └── ProductUseCaseBeanConfig.java           # Wiring for Product Use Case [cite: 3]
+│   ├── 📁 _security                                    @Spring Security Framework Configuration & Extensions
+│   │   ├── 📁 config                                   # Security Beans & Rule Engines
+│   │   │   ├── ApplicationConfig.java                  # Auth Manager, Provider, & Password Encoder Configs [cite: 4]
+│   │   │   ├── CustomUserDetailsBeanConfig.java        # Wiring for UserDetailsService [cite: 4]
+│   │   │   ├── JwtImplConfig.java                      # Configuration for JWT Core Bean [cite: 4]
+│   │   │   ├── JwtSecurityKeyConfig.java               # Cryptographic Configuration for Access Token Keys [cite: 4]
+│   │   │   └── SecurityConfig.java                     # SecurityFilterChain, Session Policy, & Matchers [cite: 4]
+│   │   ├── 📁 filter                                   # Servlets Interception Layer
+│   │   │   └── JwtAuthenticationFilter.java            # Authentication Interceptor checking Context state [cite: 5]
+│   │   ├── 📁 user_spring_wrapper                      # Security Identity Mappings
+│   │   │   ├── CustomUserDetails.java                  # Bridge between Domain User and Spring UserDetails [cite: 5]
+│   │   │   └── CustomUserDetailsService.java           # Spring Security User Loading database Bridge [cite: 5]
+│   │   └── JwtImpl.java                                # Infrastructure-bound token processing implementation [cite: 5]
+│   ├── 📁 product                                      @Infrastructure Implementation for Product Module
+│   │   └── 📁 persistence                              @Database Storage Adaption Layer (JPA / PostgreSQL)
+│   │       ├── 📁 entities                          
+│   │       │   └── ProductEntity.java                  # Relational Database Mapping Schema (@Entity) [cite: 6]
+│   │       ├── 📁 jpa                               
+│   │       │   └── JpaProductRepository.java           # Spring Data JPA Interface [cite: 6]
+│   │       ├── 📁 persistenceMapper                    # MapStruct / Manual Converter Interface
+│   │       │   └── ProductPersistenceMapper.java       # Translates Domain Model <-> Database Entities [cite: 6]
+│   │       └── ProductRepositoryImpl.java              # Outbound Adapter tying Domain Repo to Jpa Repo [cite: 6]
+│   ├── 📁 refreshToken                                 @Infrastructure Implementation for RefreshToken Module
+│   │   └── 📁 persistence                              @Database Storage Adaption Layer (JPA / PostgreSQL)
+│   │       ├── 📁 entities                          
+│   │       │   └── RefreshTokenEntity.java             # Relational Database Mapping Schema (@Entity) [cite: 7]
+│   │       ├── 📁 jpa                               
+│   │       │   └── JpaRefreshTokenRepository.java      # Spring Data JPA Interface [cite: 7]
+│   │       ├── 📁 persistenceMapper                    # MapStruct / Manual Converter Interface
+│   │       │   └── RefreshTokenPersistenceMapper.java  # Translates Domain Model <-> Database Entities [cite: 7]
+│   │       └── RefreshTokenRepositoryImpl.java         # Outbound Adapter tying Domain Repo to Jpa Repo [cite: 7]
+│   └── 📁 user                                         @Infrastructure Implementation for User Module
+│       └── 📁 persistence                              @Database Storage Adaption Layer (JPA / PostgreSQL)
+│           ├── 📁 entities                          
+│           │   └── UserEntity.java                     # Relational Database Mapping Schema (@Entity) [cite: 8]
+│           ├── 📁 jpa                               
+│           │   └── JpaUserRepository.java              # Spring Data JPA Interface [cite: 8]
+│           ├── 📁 persistenceMapper                    # MapStruct / Manual Converter Interface
+│           │   └── UserPersistenceMapper.java          # Translates Domain Model <-> Database Entities [cite: 8]
+│           └── UserRepositoryImpl.java                 # Outbound Adapter tying Domain Repo to Jpa Repo [cite: 8]
+│
+├── 📁 web                                              @Entry Points, Transport Delivery Layers, & Web APIs
+│   ├── 📁 _shared                                      @Cross-Cutting Delivery Utilities
+│   │   └── 📁 services                              
+│   │       └── CookieServiceImpl.java                  # Manages Response Cookie writing [cite: 10]
+│   ├── 📁 auth                                         @Authentication Controller Delivery Module
+│   │   ├── 📁 controller                            
+│   │   │   └── AuthController.java                     # REST Endpoint (@RestController) exposing Auth routes [cite: 10]
+│   │   ├── 📁 DTOs                                     @API Serialization Data Contracts
+│   │   │   ├── AuthRequestDTO.java                     # Request credentials transfer contract [cite: 10]
+│   │   │   ├── AuthResponseDTO.java                    # Response authentication payload transfer contract [cite: 11]
+│   │   │   └── RefreshTokenResponseDTO.java            # Token refresh payload contract [cite: 11]
+│   │   └── 📁 webMapper                                @MapStruct Web Mapper
+│   │       └── AuthWebMapper.java                      # Translates HTTP DTOs <-> Domain Entities/Use Cases [cite: 11]
+│   └── 📁 product                                      @Product Management API Delivery Module
+│       ├── 📁 controller                            
+│       │   └── ProductController.java                  # REST Endpoint handling CRUD for Products [cite: 11]
+│       ├── 📁 DTOs                                     @API Serialization Data Contracts
+│       │   ├── ProductRequestDTO.java                  # Product creation/update input format [cite: 12]
+│       │   └── ProductResponseDTO.java                 # Product details output format [cite: 12]
+│       └── 📁 webMapper                                @MapStruct Web Mapper
+│           └── ProductWebMapper.java                   # Translates HTTP DTOs <-> Domain Entities/Use Cases [cite: 12]
+│
+└── RefreshTokenApplication.java                     @Spring Boot Main Bootstrap Class [cite: 12]
+```
+
+---
+
+## 🎯 Security Improvements
+
+### Previous Projects
+
+- Stateless JWT Authentication
+- Cookie-Based Authentication
+- HttpOnly Cookies
+
+### Project 04
+
+- Refresh Token Authentication
+- Automatic Access Token Renewal
+- Persistent User Sessions
+- Secure Cookie Storage
+- Improved Authentication Flow
+
+---
+
+## 📚 Spring Security Concepts Added
+
+Project 04 introduces:
+
+- Refresh Token Authentication
+- Access Token Renewal
+- Persistent Login Sessions
+- Refresh Token Validation
+- Cookie-Based Token Management
+- Stateless Authentication
+- Clean Architecture
+
+---
+
+## ⭐ Project Evolution
+
+## Version 1
+
+- Stateless JWT Authentication
+- Spring Security
+- Role-Based Authorization
+- Clean Architecture
+
+---
+
+## Version 2
+
+- Custom AuthenticationEntryPoint
+- Standardized Security Error Responses
+- Centralized Authentication Handling
+
+---
+
+## Version 3
+
+- Cookie-Based JWT Authentication
+- HttpOnly Cookies
+- Secure Cookie Storage
+- User Notes Module
+
+---
+
+## Version 4
+
+- Refresh Token Authentication
+- Automatic Access Token Renewal
+- Persistent User Sessions
+- Cookie-Based Refresh Tokens
+- Product Management Module
+- Production-Oriented Authentication Flow
+
+---
+
+## 🎯 Why This Upgrade Matters
+
+Modern applications typically use **short-lived Access Tokens** to reduce security risks.
+
+However, requiring users to log in repeatedly creates a poor user experience.
+
+Refresh Tokens solve this problem by securely issuing new Access Tokens whenever necessary.
+
+This project demonstrates how Spring Security, JWT Authentication, Refresh Tokens, and HttpOnly Cookies work together to build a scalable and production-ready authentication system.
+
+---
+
+## ⭐ Learning Outcomes
+
+After completing this project, the following concepts were practiced:
+
+- JWT Authentication
+- Refresh Token Authentication
+- Access Token Renewal
+- Stateless Security
+- HttpOnly Cookies
+- Spring Security Filters
+- Cookie Management
+- Refresh Token Validation
+- Product CRUD APIs
+- Clean Architecture
+- Repository Pattern
+- Use Case Layer
+- DTO Mapping
+- Secure Authentication Design
+
+---
+
+
+<h2 align="center">Project 05 - Stateful JWT & Refresh Token Rotation</h2>
+
+---
+
+### Ongoing project...
 
 ---
