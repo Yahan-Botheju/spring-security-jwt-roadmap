@@ -1682,3 +1682,14 @@ After completing this project, the following concepts were practiced:
 - Use Case Layer
 - DTO Mapping
 - Secure Authentication Design
+
+---
+
+
+<h2 align="center">Project 05 - Stateful JWT & Refresh Token Rotation</h2>
+
+---
+
+### Ongoing project...
+
+---
