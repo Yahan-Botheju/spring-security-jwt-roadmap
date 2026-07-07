@@ -52,11 +52,21 @@ For more details, refer to the README & projects repos.
 
 ---
 ### ✅ Project 04 -  Refresh Token
-
- - Ongoing Project...
+- Refresh Token Authentication Flow
+- Access Token Auto Renewal
+- Access Token & Refresh Token Separation
+- Secure Refresh Token Validation
+- HttpOnly Cookie-Based Refresh Tokens
+- Persistent User Session Management
+- Automatic Token Re-Issuing
+- Secure Logout with Token Invalidation
+- Product CRUD Module
+- Clean Architecture Enhancements
 
 ---
 ### ✅ Project 05 - Stateful JWT Authentication with Refresh Token Rotation
+
+- Ongoing Project...
 
 ---
 
@@ -78,12 +88,12 @@ For each request, Spring Security extracts and validates the token, loads the us
 
 The system manages:
 
-- 👤 User Authentication
-- 🔑 JWT Token Generation & Validation
-- 🛡️ Role-Based Authorization
-- 📋 Task Management
-- 🗑️ Soft Delete Support
-- 🧩 Clean Architecture Structure
+-  User Authentication
+-  JWT Token Generation & Validation
+-  Role-Based Authorization
+-  Task Management
+-  Soft Delete Support
+-  Clean Architecture Structure
 
 The application follows a layered architecture with clear separation of concerns:
 
