@@ -1494,99 +1494,99 @@ Responsibilities
 refresh_token_auth
 ├── 📁 domain                                           @Core Business Logic & Enterprise Rules (Framework Independent)
 │   ├── 📁 models                                       @Pure Domain Entities & Aggregates
-│   │   ├── Product.java                                # Product Domain Model [cite: 1]
-│   │   ├── RefreshToken.java                           # Refresh Token Domain Model [cite: 1]
-│   │   ├── Role.java                                   # User Role Domain Enum / Model [cite: 1]
-│   │   └── User.java                                   # User Domain Model [cite: 1]
+│   │   ├── Product.java                                # Product Domain Model 
+│   │   ├── RefreshToken.java                           # Refresh Token Domain Model 
+│   │   ├── Role.java                                   # User Role Domain Enum / Model 
+│   │   └── User.java                                   # User Domain Model 
 │   ├── 📁 repositories                                 @Domain Repository Interfaces (Outbound Ports)
-│   │   ├── ProductRepository.java                      # Product Outbound Contract [cite: 2]
-│   │   ├── RefreshTokenRepository.java                 # Refresh Token Outbound Contract [cite: 2]
-│   │   └── UserRepository.java                         # User Outbound Contract [cite: 2]
+│   │   ├── ProductRepository.java                      # Product Outbound Contract 
+│   │   ├── RefreshTokenRepository.java                 # Refresh Token Outbound Contract 
+│   │   └── UserRepository.java                         # User Outbound Contract 
 │   └── 📁 services                                     @Domain Services (Pure Business Contracts)
-│       ├── CookieService.java                          # Core Cookie Operations Contract [cite: 1]
-│       └── TokenService.java                           # Token Generation & Validation Contract [cite: 2]
+│       ├── CookieService.java                          # Core Cookie Operations Contract 
+│       └── TokenService.java                           # Token Generation & Validation Contract 
 │
 ├── 📁 usecase                                          @Application Specific Business Rules
 │   ├── 📁 auth                                         @Inbound Port Orchestration for Auth Operations
-│   │   ├── AuthUseCase.java                            # Feature Interface [cite: 9]
-│   │   └── AuthUseCaseImpl.java                        # Registration & Log In/Out Workflow Logic [cite: 9]
+│   │   ├── AuthUseCase.java                            # Feature Interface 
+│   │   └── AuthUseCaseImpl.java                        # Registration & Log In/Out Workflow Logic 
 │   └── 📁 product                                      @Inbound Port Orchestration for Product Operations
-│       ├── ProductUseCase.java                         # Feature Interface [cite: 9]
-│       └── ProductUseCaseImpl.java                     # Product Business Flow Logic [cite: 9]
+│       ├── ProductUseCase.java                         # Feature Interface 
+│       └── ProductUseCaseImpl.java                     # Product Business Flow Logic 
 │
 ├── 📁 infrastructure                                   @External Frameworks, Tools, & Infrastructure Adapters
 │   ├── 📁 _configs                                     @Spring Dependency Injection Configuration Modules
 │   │   ├── 📁 _persistenceBeanConfig                   # Spring Bean Providers for Persistence Layer Adapters
-│   │   │   ├── ProductPersistenceBeanConfig.java       # Wiring for Product Persistence [cite: 2]
-│   │   │   ├── RefreshTokenPersistenceBeanConfig.java  # Wiring for Refresh Token Persistence [cite: 3]
-│   │   │   └── UserPersistenceBeanConfig.java          # Wiring for User Persistence [cite: 3]
+│   │   │   ├── ProductPersistenceBeanConfig.java       # Wiring for Product Persistence 
+│   │   │   ├── RefreshTokenPersistenceBeanConfig.java  # Wiring for Refresh Token Persistence 
+│   │   │   └── UserPersistenceBeanConfig.java          # Wiring for User Persistence 
 │   │   └── 📁 _usecaseBeanConfig                       # Spring Bean Providers for Use Case Implementations
-│   │       ├── AuthUseCaseBeanConfig.java              # Wiring for Authentication Use Case [cite: 3]
-│   │       └── ProductUseCaseBeanConfig.java           # Wiring for Product Use Case [cite: 3]
+│   │       ├── AuthUseCaseBeanConfig.java              # Wiring for Authentication Use Case 
+│   │       └── ProductUseCaseBeanConfig.java           # Wiring for Product Use Case 
 │   ├── 📁 _security                                    @Spring Security Framework Configuration & Extensions
 │   │   ├── 📁 config                                   # Security Beans & Rule Engines
-│   │   │   ├── ApplicationConfig.java                  # Auth Manager, Provider, & Password Encoder Configs [cite: 4]
-│   │   │   ├── CustomUserDetailsBeanConfig.java        # Wiring for UserDetailsService [cite: 4]
-│   │   │   ├── JwtImplConfig.java                      # Configuration for JWT Core Bean [cite: 4]
-│   │   │   ├── JwtSecurityKeyConfig.java               # Cryptographic Configuration for Access Token Keys [cite: 4]
-│   │   │   └── SecurityConfig.java                     # SecurityFilterChain, Session Policy, & Matchers [cite: 4]
+│   │   │   ├── ApplicationConfig.java                  # Auth Manager, Provider, & Password Encoder Configs 
+│   │   │   ├── CustomUserDetailsBeanConfig.java        # Wiring for UserDetailsService 
+│   │   │   ├── JwtImplConfig.java                      # Configuration for JWT Core Bean 
+│   │   │   ├── JwtSecurityKeyConfig.java               # Cryptographic Configuration for Access Token Keys 
+│   │   │   └── SecurityConfig.java                     # SecurityFilterChain, Session Policy, & Matchers 
 │   │   ├── 📁 filter                                   # Servlets Interception Layer
-│   │   │   └── JwtAuthenticationFilter.java            # Authentication Interceptor checking Context state [cite: 5]
+│   │   │   └── JwtAuthenticationFilter.java            # Authentication Interceptor checking Context state 
 │   │   ├── 📁 user_spring_wrapper                      # Security Identity Mappings
-│   │   │   ├── CustomUserDetails.java                  # Bridge between Domain User and Spring UserDetails [cite: 5]
-│   │   │   └── CustomUserDetailsService.java           # Spring Security User Loading database Bridge [cite: 5]
-│   │   └── JwtImpl.java                                # Infrastructure-bound token processing implementation [cite: 5]
+│   │   │   ├── CustomUserDetails.java                  # Bridge between Domain User and Spring UserDetails 
+│   │   │   └── CustomUserDetailsService.java           # Spring Security User Loading database Bridge 
+│   │   └── JwtImpl.java                                # Infrastructure-bound token processing implementation 
 │   ├── 📁 product                                      @Infrastructure Implementation for Product Module
 │   │   └── 📁 persistence                              @Database Storage Adaption Layer (JPA / PostgreSQL)
 │   │       ├── 📁 entities                          
-│   │       │   └── ProductEntity.java                  # Relational Database Mapping Schema (@Entity) [cite: 6]
+│   │       │   └── ProductEntity.java                  # Relational Database Mapping Schema (@Entity)
 │   │       ├── 📁 jpa                               
-│   │       │   └── JpaProductRepository.java           # Spring Data JPA Interface [cite: 6]
+│   │       │   └── JpaProductRepository.java           # Spring Data JPA Interface
 │   │       ├── 📁 persistenceMapper                    # MapStruct / Manual Converter Interface
-│   │       │   └── ProductPersistenceMapper.java       # Translates Domain Model <-> Database Entities [cite: 6]
-│   │       └── ProductRepositoryImpl.java              # Outbound Adapter tying Domain Repo to Jpa Repo [cite: 6]
+│   │       │   └── ProductPersistenceMapper.java       # Translates Domain Model <-> Database Entities
+│   │       └── ProductRepositoryImpl.java              # Outbound Adapter tying Domain Repo to Jpa Repo
 │   ├── 📁 refreshToken                                 @Infrastructure Implementation for RefreshToken Module
 │   │   └── 📁 persistence                              @Database Storage Adaption Layer (JPA / PostgreSQL)
 │   │       ├── 📁 entities                          
-│   │       │   └── RefreshTokenEntity.java             # Relational Database Mapping Schema (@Entity) [cite: 7]
+│   │       │   └── RefreshTokenEntity.java             # Relational Database Mapping Schema (@Entity)
 │   │       ├── 📁 jpa                               
-│   │       │   └── JpaRefreshTokenRepository.java      # Spring Data JPA Interface [cite: 7]
+│   │       │   └── JpaRefreshTokenRepository.java      # Spring Data JPA Interface
 │   │       ├── 📁 persistenceMapper                    # MapStruct / Manual Converter Interface
-│   │       │   └── RefreshTokenPersistenceMapper.java  # Translates Domain Model <-> Database Entities [cite: 7]
-│   │       └── RefreshTokenRepositoryImpl.java         # Outbound Adapter tying Domain Repo to Jpa Repo [cite: 7]
+│   │       │   └── RefreshTokenPersistenceMapper.java  # Translates Domain Model <-> Database Entities
+│   │       └── RefreshTokenRepositoryImpl.java         # Outbound Adapter tying Domain Repo to Jpa Repo
 │   └── 📁 user                                         @Infrastructure Implementation for User Module
 │       └── 📁 persistence                              @Database Storage Adaption Layer (JPA / PostgreSQL)
 │           ├── 📁 entities                          
-│           │   └── UserEntity.java                     # Relational Database Mapping Schema (@Entity) [cite: 8]
+│           │   └── UserEntity.java                     # Relational Database Mapping Schema (@Entity)
 │           ├── 📁 jpa                               
-│           │   └── JpaUserRepository.java              # Spring Data JPA Interface [cite: 8]
+│           │   └── JpaUserRepository.java              # Spring Data JPA Interface
 │           ├── 📁 persistenceMapper                    # MapStruct / Manual Converter Interface
-│           │   └── UserPersistenceMapper.java          # Translates Domain Model <-> Database Entities [cite: 8]
-│           └── UserRepositoryImpl.java                 # Outbound Adapter tying Domain Repo to Jpa Repo [cite: 8]
+│           │   └── UserPersistenceMapper.java          # Translates Domain Model <-> Database Entities
+│           └── UserRepositoryImpl.java                 # Outbound Adapter tying Domain Repo to Jpa Repo
 │
 ├── 📁 web                                              @Entry Points, Transport Delivery Layers, & Web APIs
 │   ├── 📁 _shared                                      @Cross-Cutting Delivery Utilities
 │   │   └── 📁 services                              
-│   │       └── CookieServiceImpl.java                  # Manages Response Cookie writing [cite: 10]
+│   │       └── CookieServiceImpl.java                  # Manages Response Cookie writing 
 │   ├── 📁 auth                                         @Authentication Controller Delivery Module
 │   │   ├── 📁 controller                            
-│   │   │   └── AuthController.java                     # REST Endpoint (@RestController) exposing Auth routes [cite: 10]
+│   │   │   └── AuthController.java                     # REST Endpoint (@RestController) exposing Auth routes 
 │   │   ├── 📁 DTOs                                     @API Serialization Data Contracts
-│   │   │   ├── AuthRequestDTO.java                     # Request credentials transfer contract [cite: 10]
-│   │   │   ├── AuthResponseDTO.java                    # Response authentication payload transfer contract [cite: 11]
-│   │   │   └── RefreshTokenResponseDTO.java            # Token refresh payload contract [cite: 11]
+│   │   │   ├── AuthRequestDTO.java                     # Request credentials transfer contract 
+│   │   │   ├── AuthResponseDTO.java                    # Response authentication payload transfer contract 
+│   │   │   └── RefreshTokenResponseDTO.java            # Token refresh payload contract 
 │   │   └── 📁 webMapper                                @MapStruct Web Mapper
-│   │       └── AuthWebMapper.java                      # Translates HTTP DTOs <-> Domain Entities/Use Cases [cite: 11]
+│   │       └── AuthWebMapper.java                      # Translates HTTP DTOs <-> Domain Entities/Use Cases 
 │   └── 📁 product                                      @Product Management API Delivery Module
 │       ├── 📁 controller                            
-│       │   └── ProductController.java                  # REST Endpoint handling CRUD for Products [cite: 11]
+│       │   └── ProductController.java                  # REST Endpoint handling CRUD for Products 
 │       ├── 📁 DTOs                                     @API Serialization Data Contracts
-│       │   ├── ProductRequestDTO.java                  # Product creation/update input format [cite: 12]
-│       │   └── ProductResponseDTO.java                 # Product details output format [cite: 12]
+│       │   ├── ProductRequestDTO.java                  # Product creation/update input format 
+│       │   └── ProductResponseDTO.java                 # Product details output format 
 │       └── 📁 webMapper                                @MapStruct Web Mapper
-│           └── ProductWebMapper.java                   # Translates HTTP DTOs <-> Domain Entities/Use Cases [cite: 12]
+│           └── ProductWebMapper.java                   # Translates HTTP DTOs <-> Domain Entities/Use Cases 
 │
-└── RefreshTokenApplication.java                     @Spring Boot Main Bootstrap Class [cite: 12]
+└── RefreshTokenApplication.java                     @Spring Boot Main Bootstrap Class 
 ```
 
 ---
