@@ -1,6 +1,7 @@
 package lk.spring_security.stateful_jwt_refresh_token_rotation.infrastructure.persistence.refresh_token.entities;
 
 import jakarta.persistence.*;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.infrastructure.persistence.user.entities.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,4 +31,8 @@ public class RefreshTokenEntity {
 
     @Column(nullable = false, name = "is_revoked")
     private boolean isRevoked;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "userId", nullable = false)
+    private UserEntity user;
 }
