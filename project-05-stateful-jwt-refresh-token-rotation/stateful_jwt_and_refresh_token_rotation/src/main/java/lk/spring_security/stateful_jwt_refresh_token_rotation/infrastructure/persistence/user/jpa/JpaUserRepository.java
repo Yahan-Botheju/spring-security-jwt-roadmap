@@ -3,5 +3,9 @@ package lk.spring_security.stateful_jwt_refresh_token_rotation.infrastructure.pe
 import lk.spring_security.stateful_jwt_refresh_token_rotation.infrastructure.persistence.user.entities.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
+
 public interface JpaUserRepository extends JpaRepository<UserEntity, Long> {
+    //get user by email
+    Optional<UserEntity> findByEmail(String email);
 }

@@ -1,8 +1,11 @@
 package lk.spring_security.stateful_jwt_refresh_token_rotation.infrastructure.persistence.user;
 
+import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.models.User;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.UserRepository;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.infrastructure.persistence.user.jpa.JpaUserRepository;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.infrastructure.persistence.user.mappers.UserPersistenceMapper;
+
+import java.util.Optional;
 
 public class UserRepositoryImpl implements UserRepository {
 
@@ -17,5 +20,11 @@ public class UserRepositoryImpl implements UserRepository {
     ) {
         this.jpaUserRepository=jpaUserRepository;
         this.userPersistenceMapper=userPersistenceMapper;
+    }
+
+    //get user by email
+    @Override
+    public Optional<User> findByEmail(String email){
+        return jpaUserRepository.findByEmail(email).map(userPersistenceMapper::toDomainModel);
     }
 }
