@@ -8,8 +8,17 @@ public class JwtServiceImpl implements TokenService {
 
     //inject required dependencies
     private final SecretKey secretKey;
+    private final Long accessTokenExpirationMs;
+    private final Long refreshTokenExpirationMs;
 
-    public JwtServiceImpl(SecretKey secretKey) {
+    public JwtServiceImpl(
+            SecretKey secretKey,
+            long accessTokenExpirationMs,
+            long refreshTokenExpirationMs
+
+    ) {
         this.secretKey = secretKey;
+        this.accessTokenExpirationMs = accessTokenExpirationMs;
+        this.refreshTokenExpirationMs = refreshTokenExpirationMs;
     }
 }
