@@ -5,8 +5,7 @@ import io.jsonwebtoken.Jwts;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.models.User;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.TokenService;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.infrastructure._security.user_spring_wrapper.CustomUserDetails;
-import lk.spring_security.stateful_jwt_refresh_token_rotation.infrastructure._security.user_spring_wrapper.CustomUserDetailsService;
-import lombok.Data;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
@@ -101,5 +100,12 @@ public class JwtServiceImpl implements TokenService {
     //check token is expired or not
     private boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
+    }
+
+    //check token valid
+    @Override
+    public boolean isTokenValid(String token, UserDetails userDetails){
+        final String username = extractUsername(token);
+        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 }
