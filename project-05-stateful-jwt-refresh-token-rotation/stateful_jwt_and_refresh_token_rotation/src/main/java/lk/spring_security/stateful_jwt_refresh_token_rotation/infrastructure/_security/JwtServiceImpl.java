@@ -45,6 +45,12 @@ public class JwtServiceImpl implements TokenService {
         return buildToken(extraClaims, customUserDetails.getUsername(), accessTokenExpirationMs);
     }
 
+    //generate refresh token
+    @Override
+    public String generateRefreshToken(User user){
+        CustomUserDetails customUserDetails = new CustomUserDetails(user);
+        return buildToken(new  HashMap<>(), customUserDetails.getUsername(), refreshTokenExpirationMs);
+    }
 
 
      /* __JWT HELPER METHODS__ */
