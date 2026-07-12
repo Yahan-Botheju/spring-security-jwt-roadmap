@@ -85,5 +85,11 @@ public class JwtServiceImpl implements TokenService {
         return claimsResolver.apply(claims);
     }
 
+    //extract email
+    @Override
+    public String extractUsername(String token) {
+        return extractClaim(token, Claims::getSubject);
+    }
+
     /* __VALIDATION_METHODS__ */
 }
