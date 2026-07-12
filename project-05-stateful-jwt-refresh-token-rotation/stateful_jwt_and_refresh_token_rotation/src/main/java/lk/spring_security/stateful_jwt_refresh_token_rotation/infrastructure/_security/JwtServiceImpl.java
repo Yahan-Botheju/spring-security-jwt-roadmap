@@ -32,7 +32,7 @@ public class JwtServiceImpl implements TokenService {
         this.refreshTokenExpirationMs = refreshTokenExpirationMs;
     }
 
-    /* __GENERATE TOKENS__ */
+    /* __GENERATE_TOKENS__ */
 
     //generate access token
     @Override
@@ -55,7 +55,7 @@ public class JwtServiceImpl implements TokenService {
     }
 
 
-     /* __JWT HELPER METHODS__ */
+     /* __JWT_HELPER_METHODS__ */
 
     //common token builder method
      private String buildToken(Map<String, Object> extraClaims, String subject, long expirationMs) {
@@ -68,7 +68,7 @@ public class JwtServiceImpl implements TokenService {
                 .compact();
      }
 
-    /* __VALIDATION METHODS__ */
+    /* __TOKEN_EXTRACTION_METHODS__ */
 
     //create parser API
     private Claims extractAllClaims(String token) {
@@ -79,4 +79,11 @@ public class JwtServiceImpl implements TokenService {
                 .getPayload();
     }
 
+    //create generic for get data
+    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+        final Claims claims = extractAllClaims(token);
+        return claimsResolver.apply(claims);
+    }
+
+    /* __VALIDATION_METHODS__ */
 }
