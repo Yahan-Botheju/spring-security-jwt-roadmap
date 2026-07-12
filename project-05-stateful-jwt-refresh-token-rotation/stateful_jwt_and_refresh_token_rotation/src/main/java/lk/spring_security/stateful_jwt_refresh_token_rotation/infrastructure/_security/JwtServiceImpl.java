@@ -1,5 +1,6 @@
 package lk.spring_security.stateful_jwt_refresh_token_rotation.infrastructure._security;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.models.User;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.TokenService;
@@ -11,6 +12,7 @@ import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 public class JwtServiceImpl implements TokenService {
 
@@ -68,5 +70,13 @@ public class JwtServiceImpl implements TokenService {
 
     /* __VALIDATION METHODS__ */
 
+    //create parser API
+    private Claims extractAllClaims(String token) {
+        return Jwts.parser()
+                .verifyWith(secretKey)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+    }
 
 }
