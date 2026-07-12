@@ -62,7 +62,7 @@ public class JwtServiceImpl implements TokenService {
         return  Jwts.builder()
                 .claims(extraClaims)
                 .subject(subject)
-                .issuedAt(new Data(System.currentTimeMillis()))
+                .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + expirationMs))
                 .signWith(secretKey)
                 .compact();
@@ -92,4 +92,9 @@ public class JwtServiceImpl implements TokenService {
     }
 
     /* __VALIDATION_METHODS__ */
+
+    //create token expiration
+    private Date extractExpiration(String token) {
+        return extractClaim(token, Claims::getExpiration);
+    }
 }
