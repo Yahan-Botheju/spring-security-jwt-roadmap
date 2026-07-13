@@ -54,4 +54,18 @@ public class CookieServiceImpl implements CookieService {
         }
         return null;
     }
+
+    //clear cookie when logout
+    @Override
+    public void clearCookie(HttpServletResponse httpServletResponse) {
+        ResponseCookie responseCookie = ResponseCookie.from(COOKIE_NAME, " ")
+                .httpOnly(true)
+                .secure(false)
+                .path("/")
+                .maxAge(0)
+                .sameSite("Strict")
+                .build();
+
+        httpServletResponse.addHeader(HttpHeaders.SET_COOKIE, responseCookie.toString());
+    }
 }
