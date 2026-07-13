@@ -69,4 +69,22 @@ public class CookieServiceImpl implements CookieService {
 
         httpServletResponse.addHeader(HttpHeaders.SET_COOKIE, responseCookie.toString());
     }
+
+    /* __PRIVATE HELPER_METHOD__ */
+
+    private void createCookie(
+            HttpServletResponse httpServletResponse,
+            String value,
+            long maxAge
+    ) {
+        ResponseCookie responseCookie = ResponseCookie.from(cookieName, value)
+                .httpOnly(true) //anti XSS
+                .secure(false)  //for development
+                .path("/")      //entire application
+                .maxAge(refreshTokenExpiry)
+                .sameSite("Strict") //anti CSRF
+                .build();
+
+        httpServletResponse.addHeader(HttpHeaders.SET_COOKIE, responseCookie.toString());
+    }
 }
