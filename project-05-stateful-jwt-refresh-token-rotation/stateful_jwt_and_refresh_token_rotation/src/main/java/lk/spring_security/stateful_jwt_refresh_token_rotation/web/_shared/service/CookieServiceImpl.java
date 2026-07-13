@@ -31,16 +31,7 @@ public class CookieServiceImpl implements CookieService {
             HttpServletResponse httpServletResponse,
             String refreshToken
     ) {
-       //use response cookie builder
-       ResponseCookie responseCookie = ResponseCookie.from(cookieName, refreshToken)
-               .httpOnly(true) //anti XSS
-               .secure(false)  //for development
-               .path("/")      //entire application
-               .maxAge(refreshTokenExpiry)
-               .sameSite("Strict") //anti CSRF
-               .build();
-
-       httpServletResponse.addHeader(HttpHeaders.SET_COOKIE, responseCookie.toString());
+       createCookie(httpServletResponse, refreshToken, refreshTokenExpiry);
     }
 
     //extract refresh token from cookie
@@ -59,16 +50,9 @@ public class CookieServiceImpl implements CookieService {
     //clear cookie when logout
     @Override
     public void clearCookie(HttpServletResponse httpServletResponse) {
-        ResponseCookie responseCookie = ResponseCookie.from(cookieName, " ")
-                .httpOnly(true)
-                .secure(false)
-                .path("/")
-                .maxAge(0)
-                .sameSite("Strict")
-                .build();
-
-        httpServletResponse.addHeader(HttpHeaders.SET_COOKIE, responseCookie.toString());
+        createCookie(httpServletResponse, "", 0);
     }
+
 
     /* __PRIVATE HELPER_METHOD__ */
 
@@ -81,7 +65,7 @@ public class CookieServiceImpl implements CookieService {
                 .httpOnly(true) //anti XSS
                 .secure(false)  //for development
                 .path("/")      //entire application
-                .maxAge(refreshTokenExpiry)
+                .maxAge(maxAge)
                 .sameSite("Strict") //anti CSRF
                 .build();
 
