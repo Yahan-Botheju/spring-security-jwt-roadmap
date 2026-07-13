@@ -1,5 +1,7 @@
 package lk.spring_security.stateful_jwt_refresh_token_rotation.web._shared.service;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.CookieService;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,5 +40,18 @@ public class CookieServiceImpl implements CookieService {
                .build();
 
        httpServletResponse.addHeader(HttpHeaders.SET_COOKIE, responseCookie.toString());
+    }
+
+    //extract refresh token from cookie
+    @Override
+    public String extractRefreshTokenFromCookie(HttpServletRequest  httpServletRequest) {
+        if(httpServletRequest.getCookies() != null){
+            for (Cookie cookie : httpServletRequest.getCookies()) {
+                if(COOKIE_NAME.equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
     }
 }
