@@ -13,15 +13,17 @@ import org.springframework.stereotype.Service;
 public class CookieServiceImpl implements CookieService {
 
     //inject required dependencies
-    @Value("${application.security.cookie-name}")
-    private final String COOKIE_NAME;
 
-    @Value("${application.security.cookie.refresh-token-expiry-seconds}")
-    private final long REFRESH_TOKEN_EXPIRY;
+    private final String cookieName;
+    private final long refreshTokenExpiry;
 
-    public CookieServiceImpl(String cookieName, long refreshTokenExpiry) {
-        this.COOKIE_NAME = cookieName;
-        this.REFRESH_TOKEN_EXPIRY = refreshTokenExpiry;
+
+    public CookieServiceImpl(
+            @Value("${application.security.cookie-name}") String cookieName,
+            @Value("${application.security.cookie.refresh-token-expiry-seconds}") long refreshTokenExpiry
+    ) {
+        this.cookieName = cookieName;
+        this.refreshTokenExpiry = refreshTokenExpiry;
     }
 
     //add refresh token to cookie
