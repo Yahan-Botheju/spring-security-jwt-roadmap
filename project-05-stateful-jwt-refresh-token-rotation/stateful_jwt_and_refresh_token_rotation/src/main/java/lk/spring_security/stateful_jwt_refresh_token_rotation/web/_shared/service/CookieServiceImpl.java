@@ -13,10 +13,9 @@ import org.springframework.stereotype.Service;
 public class CookieServiceImpl implements CookieService {
 
     //inject required dependencies
-
+    @Value("${application.security.cookie-name}")
     private final String cookieName;
     private final long refreshTokenExpiry;
-
 
     public CookieServiceImpl(
             @Value("${application.security.cookie-name}") String cookieName,
@@ -33,11 +32,11 @@ public class CookieServiceImpl implements CookieService {
             String refreshToken
     ) {
        //use response cookie builder
-       ResponseCookie responseCookie = ResponseCookie.from(COOKIE_NAME, refreshToken)
+       ResponseCookie responseCookie = ResponseCookie.from(cookieName, refreshToken)
                .httpOnly(true) //anti XSS
                .secure(false)  //for development
                .path("/")      //entire application
-               .maxAge(REFRESH_TOKEN_EXPIRY)
+               .maxAge(refreshTokenExpiry)
                .sameSite("Strict") //anti CSRF
                .build();
 
@@ -49,7 +48,7 @@ public class CookieServiceImpl implements CookieService {
     public String extractRefreshTokenFromCookie(HttpServletRequest  httpServletRequest) {
         if(httpServletRequest.getCookies() != null){
             for (Cookie cookie : httpServletRequest.getCookies()) {
-                if(COOKIE_NAME.equals(cookie.getName())) {
+                if(cookieName.equals(cookie.getName())) {
                     return cookie.getValue();
                 }
             }
@@ -60,7 +59,7 @@ public class CookieServiceImpl implements CookieService {
     //clear cookie when logout
     @Override
     public void clearCookie(HttpServletResponse httpServletResponse) {
-        ResponseCookie responseCookie = ResponseCookie.from(COOKIE_NAME, " ")
+        ResponseCookie responseCookie = ResponseCookie.from(cookieName, " ")
                 .httpOnly(true)
                 .secure(false)
                 .path("/")
