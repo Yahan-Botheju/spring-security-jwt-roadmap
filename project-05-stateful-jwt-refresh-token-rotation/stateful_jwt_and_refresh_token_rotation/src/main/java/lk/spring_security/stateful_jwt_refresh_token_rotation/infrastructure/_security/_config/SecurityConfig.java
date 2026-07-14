@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -40,6 +41,11 @@ public class SecurityConfig {
                         .anyRequest().authenticated() //for all other routes user logged in initial
                 )
                 .sessionManagement( session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // disable session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)// disable session
+                )
+                .authenticationProvider(authenticationProvider)
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); //add jwt filter before access system
+
+    return http.build();
     }
 }
