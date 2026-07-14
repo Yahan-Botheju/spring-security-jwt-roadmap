@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.CookieService;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.TokenService;
 import org.jspecify.annotations.NonNull;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -64,6 +65,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             //check token is valid
             if(tokenService.isTokenValid(jwt, userDetails)) {
 
+                //create authentication object
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                        userDetails,
+                        null,
+                        userDetails.getAuthorities()
+                );
 
             }
         }
