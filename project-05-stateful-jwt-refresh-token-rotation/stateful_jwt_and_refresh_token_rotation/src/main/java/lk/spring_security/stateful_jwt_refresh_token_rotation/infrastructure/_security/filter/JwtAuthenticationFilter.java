@@ -8,6 +8,7 @@ import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositorie
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.TokenService;
 import org.jspecify.annotations.NonNull;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -57,7 +58,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         //check user email is available and spring security context is empty
         if(userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-
+            //check user email from db and wrap it
+            UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
         }
     }
 }
