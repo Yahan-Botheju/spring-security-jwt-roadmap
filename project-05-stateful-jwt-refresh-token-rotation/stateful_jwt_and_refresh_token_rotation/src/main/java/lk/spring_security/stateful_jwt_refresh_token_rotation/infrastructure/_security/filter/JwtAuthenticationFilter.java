@@ -60,6 +60,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if(userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             //check user email from db and wrap it
             UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
+
+            //check token is valid
+            if(tokenService.isTokenValid(jwt, userDetails)) {
+
+
+            }
         }
     }
 }
