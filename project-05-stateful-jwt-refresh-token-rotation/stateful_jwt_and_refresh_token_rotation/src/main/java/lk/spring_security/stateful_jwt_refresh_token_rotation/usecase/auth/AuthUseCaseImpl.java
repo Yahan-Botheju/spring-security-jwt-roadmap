@@ -1,9 +1,6 @@
 package lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.auth;
 
-import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.CookieService;
-import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.RefreshTokenReposiroty;
-import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.TokenService;
-import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.UserRepository;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.*;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -16,6 +13,7 @@ public class AuthUseCaseImpl implements AuthUseCase{
     private final CookieService cookieService;
     private final TokenService tokenService;
     private final AuthenticationManager authenticationManager;
+    private final WalletRepository walletRepository;
 
     public AuthUseCaseImpl(
             RefreshTokenReposiroty refreshTokenReposiroty,
@@ -23,7 +21,8 @@ public class AuthUseCaseImpl implements AuthUseCase{
             PasswordEncoder passwordEncoder,
             CookieService cookieService,
             TokenService tokenService,
-            AuthenticationManager authenticationManager
+            AuthenticationManager authenticationManager,
+            WalletRepository walletRepository
     ) {
         this.refreshTokenReposiroty = refreshTokenReposiroty;
         this.userRepository = userRepository;
@@ -31,5 +30,6 @@ public class AuthUseCaseImpl implements AuthUseCase{
         this.cookieService = cookieService;
         this.tokenService = tokenService;
         this.authenticationManager = authenticationManager;
+        this.walletRepository = walletRepository;
     }
 }
