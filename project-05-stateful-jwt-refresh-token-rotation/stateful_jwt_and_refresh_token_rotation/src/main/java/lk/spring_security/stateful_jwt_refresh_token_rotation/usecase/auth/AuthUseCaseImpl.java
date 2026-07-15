@@ -76,5 +76,12 @@ public class AuthUseCaseImpl implements AuthUseCase{
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(email, password)
         );
+        //get user from db
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalStateException("User not found"));
+
+        //generate tokens
+        String accessToken = tokenService.generateAccessToken(user);
+        String refreshToken = tokenService.generateRefreshToken(user);
     }
 }
