@@ -1,9 +1,6 @@
 package lk.spring_security.stateful_jwt_refresh_token_rotation.infrastructure._config._usecaseBeanConfig;
 
-import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.CookieService;
-import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.RefreshTokenReposiroty;
-import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.TokenService;
-import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.UserRepository;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.*;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.auth.AuthUseCase;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.auth.AuthUseCaseImpl;
 import org.springframework.context.annotation.Bean;
@@ -20,7 +17,8 @@ public class AuthUseCaseBeanConfig {
             PasswordEncoder passwordEncoder,
             CookieService cookieService,
             TokenService tokenService,
-            AuthenticationManager authenticationManager
+            AuthenticationManager authenticationManager,
+            WalletRepository walletRepository
     ){
         return new AuthUseCaseImpl(
                 refreshTokenReposiroty,
@@ -28,7 +26,8 @@ public class AuthUseCaseBeanConfig {
                 passwordEncoder,
                 cookieService,
                 tokenService,
-                authenticationManager
+                authenticationManager,
+                walletRepository
         );
     }
 }
