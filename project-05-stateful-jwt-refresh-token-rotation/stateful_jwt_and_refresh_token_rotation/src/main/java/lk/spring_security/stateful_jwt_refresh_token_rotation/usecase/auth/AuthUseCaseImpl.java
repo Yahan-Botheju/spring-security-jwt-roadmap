@@ -1,17 +1,23 @@
 package lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.auth;
 
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.models.RefreshToken;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.models.Role;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.models.User;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.models.Wallet;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.*;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 
 public class AuthUseCaseImpl implements AuthUseCase{
 
     //inject required dependencies
-    private final RefreshTokenReposiroty refreshTokenReposiroty;
+    private final RefreshTokenRepository refreshTokenRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final CookieService cookieService;
@@ -20,7 +26,7 @@ public class AuthUseCaseImpl implements AuthUseCase{
     private final WalletRepository walletRepository;
 
     public AuthUseCaseImpl(
-            RefreshTokenReposiroty refreshTokenReposiroty,
+            RefreshTokenRepository refreshTokenRepository,
             UserRepository userRepository,
             PasswordEncoder passwordEncoder,
             CookieService cookieService,
@@ -28,7 +34,7 @@ public class AuthUseCaseImpl implements AuthUseCase{
             AuthenticationManager authenticationManager,
             WalletRepository walletRepository
     ) {
-        this.refreshTokenReposiroty = refreshTokenReposiroty;
+        this.refreshTokenRepository = refreshTokenRepository;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.cookieService = cookieService;
@@ -60,5 +66,38 @@ public class AuthUseCaseImpl implements AuthUseCase{
                 .build();
 
         walletRepository.saveWallet(wallet);
+    }
+
+    //login user
+    @Override
+    @Transactional
+    public User loginUser(
+            String email,
+            String password,
+            HttpServletResponse httpServletResponse
+    ){
+        //check email password correctness through auth provider
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(email, password)
+        );
+        //get user from db
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalStateException("User not found"));
+
+        //generate tokens
+        String accessToken = tokenService.generateAccessToken(user);
+        String refreshToken = tokenService.generateRefreshToken(user);
+
+        RefreshToken statfullRefreshToken = RefreshToken.builder()
+                .token(refreshToken)
+                .expiryDate(Instant.now().plus(7, ChronoUnit.DAYS))
+                .isUsed(false)
+                .isRevoked(false)
+                .user(user)
+                .build();
+        refreshTokenRepository.saveRefreshToken(statfullRefreshToken);
+
+        //set as http only cookie to browser
+        cookieService.addRefreshTokenCookie(httpServletResponse, refreshToken);
     }
 }

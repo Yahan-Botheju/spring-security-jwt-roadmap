@@ -1,11 +1,13 @@
 package lk.spring_security.stateful_jwt_refresh_token_rotation.infrastructure.persistence.refresh_token;
 
-import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.RefreshTokenReposiroty;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.models.RefreshToken;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.RefreshTokenRepository;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.UserRepository;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.infrastructure.persistence.refresh_token.entities.RefreshTokenEntity;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.infrastructure.persistence.refresh_token.jpa.JpaRefreshTokenRepository;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.infrastructure.persistence.refresh_token.mappers.RefreshTokenPersistenceMapper;
 
-public class RefreshTokenRepositoryImpl implements RefreshTokenReposiroty {
+public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
 
     //inject required dependencies
     private final JpaRefreshTokenRepository jpaRefreshTokenRepository;
@@ -24,4 +26,12 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenReposiroty {
         this.refreshTokenPersistenceMapper = refreshTokenPersistenceMapper;
     }
 
+    //save refresh token
+    @Override
+    public RefreshToken  saveRefreshToken(RefreshToken refreshToken) {
+        RefreshTokenEntity toEntity = refreshTokenPersistenceMapper.toEntity(refreshToken);
+        RefreshTokenEntity savedTokenEntity = jpaRefreshTokenRepository.save(toEntity);
+
+        return refreshTokenPersistenceMapper.toDomainModel(savedTokenEntity);
+    }
 }
