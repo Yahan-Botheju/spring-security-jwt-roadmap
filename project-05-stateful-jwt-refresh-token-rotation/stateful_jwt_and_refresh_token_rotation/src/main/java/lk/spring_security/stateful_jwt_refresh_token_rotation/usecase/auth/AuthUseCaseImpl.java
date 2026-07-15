@@ -1,11 +1,13 @@
 package lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.auth;
 
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.models.Role;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.models.User;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.models.Wallet;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.*;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class AuthUseCaseImpl implements AuthUseCase{
@@ -60,5 +62,19 @@ public class AuthUseCaseImpl implements AuthUseCase{
                 .build();
 
         walletRepository.saveWallet(wallet);
+    }
+
+    //login user
+    @Override
+    @Transactional
+    public User loginUser(
+            String email,
+            String password,
+            HttpServletResponse httpServletResponse
+    ){
+        //check email password correctness through auth provider
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(email, password)
+        );
     }
 }
