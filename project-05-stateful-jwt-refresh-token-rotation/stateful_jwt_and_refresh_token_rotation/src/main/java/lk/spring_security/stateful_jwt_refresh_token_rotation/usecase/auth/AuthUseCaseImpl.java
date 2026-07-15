@@ -1,5 +1,8 @@
 package lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.auth;
 
+import jakarta.transaction.Transactional;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.models.Role;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.models.User;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.*;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,5 +34,22 @@ public class AuthUseCaseImpl implements AuthUseCase{
         this.tokenService = tokenService;
         this.authenticationManager = authenticationManager;
         this.walletRepository = walletRepository;
+    }
+
+    //register user
+    @Override
+    @Transactional
+    public void registerUser(User user){
+        //check user existence by email
+        if(userRepository.findByEmail(user.getEmail()).isPresent()){
+            throw new IllegalStateException("User already exists");
+        }
+        //encode user password
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        //set role
+        user.setRole(Role.USER);
+
+        //save user
+        User savedUser = userRepository.registerUser(user);
     }
 }
