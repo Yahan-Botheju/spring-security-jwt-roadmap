@@ -1,9 +1,10 @@
 package lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.auth;
 
-import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.CookieService;
-import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.RefreshTokenReposiroty;
-import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.TokenService;
-import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.UserRepository;
+import jakarta.transaction.Transactional;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.models.Role;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.models.User;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.models.Wallet;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.*;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -16,6 +17,7 @@ public class AuthUseCaseImpl implements AuthUseCase{
     private final CookieService cookieService;
     private final TokenService tokenService;
     private final AuthenticationManager authenticationManager;
+    private final WalletRepository walletRepository;
 
     public AuthUseCaseImpl(
             RefreshTokenReposiroty refreshTokenReposiroty,
@@ -23,7 +25,8 @@ public class AuthUseCaseImpl implements AuthUseCase{
             PasswordEncoder passwordEncoder,
             CookieService cookieService,
             TokenService tokenService,
-            AuthenticationManager authenticationManager
+            AuthenticationManager authenticationManager,
+            WalletRepository walletRepository
     ) {
         this.refreshTokenReposiroty = refreshTokenReposiroty;
         this.userRepository = userRepository;
@@ -31,5 +34,31 @@ public class AuthUseCaseImpl implements AuthUseCase{
         this.cookieService = cookieService;
         this.tokenService = tokenService;
         this.authenticationManager = authenticationManager;
+        this.walletRepository = walletRepository;
+    }
+
+    //register user
+    @Override
+    @Transactional
+    public void registerUser(User user){
+        //check user existence by email
+        if(userRepository.findByEmail(user.getEmail()).isPresent()){
+            throw new IllegalStateException("User already exists");
+        }
+        //encode user password
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        //set role
+        user.setRole(Role.USER);
+
+        //save user
+        User savedUser = userRepository.registerUser(user);
+
+        //create wallet and save to user
+        Wallet wallet = Wallet.builder()
+                .walletBalance(1000.0)
+                .user(savedUser)
+                .build();
+
+        walletRepository.saveWallet(wallet);
     }
 }
