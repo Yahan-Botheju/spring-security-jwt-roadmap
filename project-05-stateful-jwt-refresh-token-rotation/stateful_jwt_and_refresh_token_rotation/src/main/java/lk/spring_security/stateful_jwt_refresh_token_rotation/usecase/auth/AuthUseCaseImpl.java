@@ -89,14 +89,8 @@ public class AuthUseCaseImpl implements AuthUseCase{
         String accessToken = tokenService.generateAccessToken(user);
         String refreshToken = tokenService.generateRefreshToken(user);
 
-        RefreshToken statfullRefreshToken = RefreshToken.builder()
-                .token(refreshToken)
-                .expiryDate(Instant.now().plus(7, ChronoUnit.DAYS))
-                .isUsed(false)
-                .isRevoked(false)
-                .user(user)
-                .build();
-        refreshTokenRepository.saveRefreshToken(statfullRefreshToken);
+        //use private method
+        generateNewRefreshToken(user, refreshToken);
 
         //set as http only cookie to browser
         cookieService.addRefreshTokenCookie(httpServletResponse, refreshToken);
