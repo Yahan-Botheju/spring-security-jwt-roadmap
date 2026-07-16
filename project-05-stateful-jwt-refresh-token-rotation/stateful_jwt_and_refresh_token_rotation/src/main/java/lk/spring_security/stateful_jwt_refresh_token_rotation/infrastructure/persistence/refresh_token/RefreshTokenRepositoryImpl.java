@@ -28,7 +28,7 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
         this.refreshTokenPersistenceMapper = refreshTokenPersistenceMapper;
     }
 
-
+    //find token
     @Override
     public Optional<RefreshToken> findByToken(String token) {
         return jpaRefreshTokenRepository.findByToken(token)
@@ -42,5 +42,14 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
         RefreshTokenEntity savedTokenEntity = jpaRefreshTokenRepository.save(toEntity);
 
         return refreshTokenPersistenceMapper.toDomainModel(savedTokenEntity);
+    }
+
+    //revoke user all tokens
+    @Override
+    public void revokeAllUserTokens(Long userId) {
+        if (jpaRefreshTokenRepository.findById(userId).isEmpty()) {
+            throw new RuntimeException("user not found");
+        }
+        jpaRefreshTokenRepository.revokeRefreshToken(userId);
     }
 }
