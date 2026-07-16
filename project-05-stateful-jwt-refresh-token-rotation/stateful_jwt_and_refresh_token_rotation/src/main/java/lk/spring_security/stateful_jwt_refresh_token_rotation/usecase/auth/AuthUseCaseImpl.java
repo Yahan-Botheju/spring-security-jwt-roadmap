@@ -141,5 +141,11 @@ public class AuthUseCaseImpl implements AuthUseCase{
             cookieService.clearCookie(httpServletResponse);
             throw new IllegalStateException("Refresh token has been revoked!! Please login again");
         }
+
+        /* __TOKEN_ROTATION_PATH__ */
+        //marking old token is used
+        storedToken.setUsed(true);
+        refreshTokenRepository.saveRefreshToken(storedToken);
+
     }
 }
