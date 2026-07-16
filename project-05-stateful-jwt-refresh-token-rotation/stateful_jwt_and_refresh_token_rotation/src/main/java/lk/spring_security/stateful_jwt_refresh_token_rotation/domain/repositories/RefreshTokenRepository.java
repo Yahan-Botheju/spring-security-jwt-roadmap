@@ -12,5 +12,8 @@ public interface RefreshTokenRepository {
     //save token
     RefreshToken saveRefreshToken(RefreshToken refreshToken);
 
+    //revoke tokens
+    void revokeAllUserTokens(Long userId);
+
 
 }
