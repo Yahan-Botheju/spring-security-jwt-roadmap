@@ -134,5 +134,12 @@ public class AuthUseCaseImpl implements AuthUseCase{
 
         //get user related to token
         User user = storedToken.getUser();
+
+        //if used token is represented user all tokens are remove from db
+        if(storedToken.isUsed()){
+            refreshTokenRepository.revokeAllUserTokens(user.getUserId());
+            cookieService.clearCookie(httpServletResponse);
+            throw new IllegalStateException("Refresh token has been revoked!! Please login again");
+        }
     }
 }
