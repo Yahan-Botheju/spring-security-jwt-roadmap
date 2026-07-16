@@ -1,5 +1,6 @@
 package lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.auth;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.models.User;
 
@@ -13,4 +14,7 @@ public interface AuthUseCase {
 
     //logout
     void logout(HttpServletResponse httpServletResponse);
+
+    //refresh token
+    AuthResult refreshToken(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse);
 }

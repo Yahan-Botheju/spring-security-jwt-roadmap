@@ -44,6 +44,24 @@ public class AuthUseCaseImpl implements AuthUseCase{
         this.walletRepository = walletRepository;
     }
 
+    /*  __HELPER_METHODS__  */
+
+    //generate new refresh token and save in db
+    private void generateNewRefreshToken(User user,String refreshToken){
+        RefreshToken newRefreshToken = RefreshToken.builder()
+                .token(refreshToken)
+                .expiryDate(Instant.now().plus(7, ChronoUnit.DAYS))
+                .isUsed(false)
+                .isRevoked(false)
+                .user(user)
+                .build();
+        refreshTokenRepository.saveRefreshToken(newRefreshToken);
+    }
+
+
+
+    /*  __PUBLIC_METHODS__  */
+
     //register user
     @Override
     @Transactional
@@ -89,14 +107,8 @@ public class AuthUseCaseImpl implements AuthUseCase{
         String accessToken = tokenService.generateAccessToken(user);
         String refreshToken = tokenService.generateRefreshToken(user);
 
-        RefreshToken statfullRefreshToken = RefreshToken.builder()
-                .token(refreshToken)
-                .expiryDate(Instant.now().plus(7, ChronoUnit.DAYS))
-                .isUsed(false)
-                .isRevoked(false)
-                .user(user)
-                .build();
-        refreshTokenRepository.saveRefreshToken(statfullRefreshToken);
+        //use private method
+        generateNewRefreshToken(user, refreshToken);
 
         //set as http only cookie to browser
         cookieService.addRefreshTokenCookie(httpServletResponse, refreshToken);
@@ -141,5 +153,27 @@ public class AuthUseCaseImpl implements AuthUseCase{
             cookieService.clearCookie(httpServletResponse);
             throw new IllegalStateException("Refresh token has been revoked!! Please login again");
         }
+
+        /* __TOKEN_ROTATION_PATH__ */
+        //marking old token is used
+        storedToken.setUsed(true);
+        refreshTokenRepository.saveRefreshToken(storedToken);
+
+        //generate fresh tokens
+        String accessToken = tokenService.generateAccessToken(user);
+        String refreshToken = tokenService.generateRefreshToken(user);
+
+        //use private method
+        generateNewRefreshToken(user, refreshToken);
+
+        //set refresh to cookie
+        cookieService.addRefreshTokenCookie(httpServletResponse, refreshToken);
+
+        return  new AuthResult(
+                accessToken,
+                user.getEmail(),
+                user.getRole().name()
+        );
     }
+
 }
