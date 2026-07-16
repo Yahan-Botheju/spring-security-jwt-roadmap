@@ -107,4 +107,10 @@ public class AuthUseCaseImpl implements AuthUseCase{
         );
 
     }
+
+    //logout user
+    @Override
+    public void logout(HttpServletResponse httpServletResponse) {
+        cookieService.clearCookie(httpServletResponse);
+    }
 }
