@@ -7,6 +7,8 @@ import lk.spring_security.stateful_jwt_refresh_token_rotation.infrastructure.per
 import lk.spring_security.stateful_jwt_refresh_token_rotation.infrastructure.persistence.refresh_token.jpa.JpaRefreshTokenRepository;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.infrastructure.persistence.refresh_token.mappers.RefreshTokenPersistenceMapper;
 
+import java.util.Optional;
+
 public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
 
     //inject required dependencies
@@ -24,6 +26,13 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
         this.jpaRefreshTokenRepository = jpaRefreshTokenRepository;
         this.userRepository = userRepository;
         this.refreshTokenPersistenceMapper = refreshTokenPersistenceMapper;
+    }
+
+
+    @Override
+    public Optional<RefreshToken> findByToken(String token) {
+        return jpaRefreshTokenRepository.findByToken(token)
+                .map(refreshTokenPersistenceMapper::toDomainModel);
     }
 
     //save refresh token
