@@ -147,5 +147,10 @@ public class AuthUseCaseImpl implements AuthUseCase{
         storedToken.setUsed(true);
         refreshTokenRepository.saveRefreshToken(storedToken);
 
+        //generate fresh tokens
+        String accessToken = tokenService.generateAccessToken(user);
+        String refreshToken = tokenService.generateRefreshToken(user);
+
+
     }
 }
