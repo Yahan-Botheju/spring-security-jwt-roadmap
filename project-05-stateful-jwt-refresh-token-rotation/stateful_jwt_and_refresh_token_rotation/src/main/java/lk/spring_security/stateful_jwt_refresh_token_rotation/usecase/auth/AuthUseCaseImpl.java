@@ -1,5 +1,6 @@
 package lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.auth;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.models.RefreshToken;
@@ -71,7 +72,7 @@ public class AuthUseCaseImpl implements AuthUseCase{
     //login user
     @Override
     @Transactional
-    public User loginUser(
+    public AuthResult loginUser(
             String email,
             String password,
             HttpServletResponse httpServletResponse
@@ -99,5 +100,46 @@ public class AuthUseCaseImpl implements AuthUseCase{
 
         //set as http only cookie to browser
         cookieService.addRefreshTokenCookie(httpServletResponse, refreshToken);
+
+        return  new AuthResult(
+                accessToken,
+                user.getEmail(),
+                user.getRole().name()
+        );
+
+    }
+
+    //logout user
+    @Override
+    public void logout(HttpServletResponse httpServletResponse) {
+        cookieService.clearCookie(httpServletResponse);
+    }
+
+    //refresh token
+    @Override
+    public AuthResult refreshToken(
+            HttpServletRequest httpServletRequest,
+            HttpServletResponse httpServletResponse
+    ) {
+       //get token from cookie
+        String extractToken = cookieService.extractRefreshTokenFromCookie(httpServletRequest);
+
+        //check token availability
+        if(extractToken == null){
+            throw new IllegalStateException("Refresh token is missing");
+        }
+        //get token from db
+        RefreshToken storedToken = refreshTokenRepository.findByToken(extractToken)
+                .orElseThrow(() -> new IllegalStateException("Invalid refresh token"));
+
+        //get user related to token
+        User user = storedToken.getUser();
+
+        //if used token is represented user all tokens are remove from db
+        if(storedToken.isUsed()){
+            refreshTokenRepository.revokeAllUserTokens(user.getUserId());
+            cookieService.clearCookie(httpServletResponse);
+            throw new IllegalStateException("Refresh token has been revoked!! Please login again");
+        }
     }
 }
