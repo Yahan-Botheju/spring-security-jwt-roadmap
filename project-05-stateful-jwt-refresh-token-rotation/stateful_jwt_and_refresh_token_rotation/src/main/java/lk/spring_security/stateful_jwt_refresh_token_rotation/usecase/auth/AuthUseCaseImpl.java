@@ -71,7 +71,7 @@ public class AuthUseCaseImpl implements AuthUseCase{
     //login user
     @Override
     @Transactional
-    public User loginUser(
+    public AuthResult loginUser(
             String email,
             String password,
             HttpServletResponse httpServletResponse
@@ -99,5 +99,12 @@ public class AuthUseCaseImpl implements AuthUseCase{
 
         //set as http only cookie to browser
         cookieService.addRefreshTokenCookie(httpServletResponse, refreshToken);
+
+        return  new AuthResult(
+                accessToken,
+                user.getEmail(),
+                user.getRole().name()
+        );
+
     }
 }
