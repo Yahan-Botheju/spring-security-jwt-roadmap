@@ -123,5 +123,16 @@ public class AuthUseCaseImpl implements AuthUseCase{
     ) {
        //get token from cookie
         String extractToken = cookieService.extractRefreshTokenFromCookie(httpServletRequest);
+
+        //check token availability
+        if(extractToken == null){
+            throw new IllegalStateException("Refresh token is missing");
+        }
+        //get token from db
+        RefreshToken storedToken = refreshTokenRepository.findByToken(extractToken)
+                .orElseThrow(() -> new IllegalStateException("Invalid refresh token"));
+
+        //get user related to token
+        User user = storedToken.getUser();
     }
 }
