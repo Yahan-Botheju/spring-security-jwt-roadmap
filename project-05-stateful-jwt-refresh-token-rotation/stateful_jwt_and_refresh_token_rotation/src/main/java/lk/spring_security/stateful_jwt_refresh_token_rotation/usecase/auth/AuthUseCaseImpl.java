@@ -1,5 +1,6 @@
 package lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.auth;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.models.RefreshToken;
@@ -112,5 +113,15 @@ public class AuthUseCaseImpl implements AuthUseCase{
     @Override
     public void logout(HttpServletResponse httpServletResponse) {
         cookieService.clearCookie(httpServletResponse);
+    }
+
+    //refresh token
+    @Override
+    public AuthResult refreshToken(
+            HttpServletRequest httpServletRequest,
+            HttpServletResponse httpServletResponse
+    ) {
+       //get token from cookie
+        String extractToken = cookieService.extractRefreshTokenFromCookie(httpServletRequest);
     }
 }
