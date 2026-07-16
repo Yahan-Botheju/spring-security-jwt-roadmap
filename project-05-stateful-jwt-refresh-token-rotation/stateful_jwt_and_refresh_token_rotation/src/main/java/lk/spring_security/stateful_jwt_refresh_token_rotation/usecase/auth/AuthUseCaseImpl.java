@@ -153,4 +153,16 @@ public class AuthUseCaseImpl implements AuthUseCase{
 
 
     }
+
+    //generate new refresh token and save in db
+    private void generateNewRefreshToken(User user,String refreshToken){
+        RefreshToken newRefreshToken = RefreshToken.builder()
+                .token(refreshToken)
+                .expiryDate(Instant.now().plus(7, ChronoUnit.DAYS))
+                .isUsed(false)
+                .isRevoked(false)
+                .user(user)
+                .build();
+        refreshTokenRepository.saveRefreshToken(newRefreshToken);
+    }
 }
