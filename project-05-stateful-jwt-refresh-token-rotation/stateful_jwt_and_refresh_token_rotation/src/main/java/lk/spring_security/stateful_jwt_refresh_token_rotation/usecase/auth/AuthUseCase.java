@@ -10,4 +10,7 @@ public interface AuthUseCase {
 
     //login user
     AuthResult loginUser(String email, String password, HttpServletResponse httpServletResponse);
+
+    //logout
+    void logout(HttpServletResponse httpServletResponse);
 }
