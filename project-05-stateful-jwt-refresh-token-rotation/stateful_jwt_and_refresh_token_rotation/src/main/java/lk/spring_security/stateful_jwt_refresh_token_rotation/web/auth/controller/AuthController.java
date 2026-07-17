@@ -1,5 +1,7 @@
 package lk.spring_security.stateful_jwt_refresh_token_rotation.web.auth.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.models.User;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.auth.AuthUseCase;
@@ -39,5 +41,18 @@ public class AuthController {
         authUseCase.registerUser(toDomainModel);
 
         return new ResponseEntity<>("User registered successfully", HttpStatus.CREATED);
+    }
+
+    //login user
+    @PostMapping("/login")
+    public ResponseEntity<String> loginUser(
+            @Valid @RequestBody AuthRequestDTO authRequestDTO,
+            HttpServletResponse httpServletResponse
+    ){
+        //get token
+        var tokenResponse = authUseCase.loginUser(
+                authRequestDTO.getEmail(),
+                authRequestDTO.getPassword(),
+                httpServletResponse);
     }
 }
