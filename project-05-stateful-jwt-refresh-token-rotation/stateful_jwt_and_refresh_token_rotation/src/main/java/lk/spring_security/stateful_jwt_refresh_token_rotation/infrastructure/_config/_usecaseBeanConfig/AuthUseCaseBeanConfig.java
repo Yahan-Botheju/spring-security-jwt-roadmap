@@ -12,7 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class AuthUseCaseBeanConfig {
     @Bean
     public AuthUseCase authUseCase(
-            RefreshTokenReposiroty refreshTokenReposiroty,
+            RefreshTokenRepository refreshTokenRepository,
             UserRepository userRepository,
             PasswordEncoder passwordEncoder,
             CookieService cookieService,
@@ -21,7 +21,7 @@ public class AuthUseCaseBeanConfig {
             WalletRepository walletRepository
     ){
         return new AuthUseCaseImpl(
-                refreshTokenReposiroty,
+                refreshTokenRepository,
                 userRepository,
                 passwordEncoder,
                 cookieService,
