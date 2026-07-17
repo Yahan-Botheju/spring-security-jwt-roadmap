@@ -4,11 +4,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.models.User;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.CookieService;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.auth.AuthUseCase;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.web.auth.DTOs.AuthRequestDTO;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.web.auth.DTOs.AuthResponseDTO;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.web.auth.webMapper.AuthWebMapper;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,13 +24,16 @@ public class AuthController {
     //inject required dependencies
     private final AuthUseCase authUseCase;
     private final AuthWebMapper authWebMapper;
+    private final CookieService cookieService;
 
     public AuthController(
             AuthUseCase authUseCase,
-            AuthWebMapper authWebMapper
+            AuthWebMapper authWebMapper,
+            CookieService cookieService
     ) {
         this.authUseCase = authUseCase;
         this.authWebMapper = authWebMapper;
+        this.cookieService = cookieService;
     }
 
     //register user
@@ -54,5 +59,7 @@ public class AuthController {
                 authRequestDTO.getEmail(),
                 authRequestDTO.getPassword(),
                 httpServletResponse);
+
+        ResponseCookie refreshTokenCookie = cook
     }
 }
