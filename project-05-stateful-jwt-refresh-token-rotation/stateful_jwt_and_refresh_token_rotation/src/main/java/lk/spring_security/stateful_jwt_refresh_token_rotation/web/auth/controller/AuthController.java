@@ -1,7 +1,15 @@
 package lk.spring_security.stateful_jwt_refresh_token_rotation.web.auth.controller;
 
+import jakarta.validation.Valid;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.models.User;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.auth.AuthUseCase;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.web.auth.DTOs.AuthRequestDTO;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.web.auth.DTOs.AuthResponseDTO;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.web.auth.webMapper.AuthWebMapper;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,5 +27,17 @@ public class AuthController {
     ) {
         this.authUseCase = authUseCase;
         this.authWebMapper = authWebMapper;
+    }
+
+    //register user
+    @PostMapping("/register")
+    public ResponseEntity<String> registerUser(
+            @Valid @RequestBody AuthRequestDTO authRequestDTO
+            ){
+
+        User toDomainModel = authWebMapper.toDomainModel(authRequestDTO);
+        authUseCase.registerUser(toDomainModel);
+
+        return new ResponseEntity<>("User registered successfully", HttpStatus.CREATED);
     }
 }
