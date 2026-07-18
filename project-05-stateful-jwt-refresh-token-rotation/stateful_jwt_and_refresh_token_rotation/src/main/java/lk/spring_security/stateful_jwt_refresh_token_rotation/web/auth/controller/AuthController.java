@@ -84,6 +84,9 @@ public class AuthController {
     ){
         //create new token
         AuthResult authResult = authUseCase.refreshToken(httpServletRequest, httpServletResponse);
+        AuthResponseDTO responseDTO = authWebMapper.toResponse(authResult);
+
+        return ResponseEntity.ok(responseDTO);
     }
 
 }
