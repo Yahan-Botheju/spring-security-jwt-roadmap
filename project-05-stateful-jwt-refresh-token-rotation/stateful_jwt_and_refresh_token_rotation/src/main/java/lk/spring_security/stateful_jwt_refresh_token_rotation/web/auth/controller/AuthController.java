@@ -37,9 +37,9 @@ public class AuthController {
         this.cookieService = cookieService;
     }
 
-    //register user
+    //register endpoint
     @PostMapping("/register")
-    public ResponseEntity<String> registerUser(
+    public ResponseEntity<String> register(
             @Valid @RequestBody AuthRequestDTO authRequestDTO
             ){
 
@@ -49,9 +49,9 @@ public class AuthController {
         return new ResponseEntity<>("User registered successfully", HttpStatus.CREATED);
     }
 
-    //login user
+    //login endpoint
     @PostMapping("/login")
-    public ResponseEntity<AuthResponseDTO> loginUser(
+    public ResponseEntity<AuthResponseDTO> login(
             @Valid @RequestBody AuthRequestDTO authRequestDTO,
             HttpServletResponse httpServletResponse
     ){
@@ -65,4 +65,15 @@ public class AuthController {
 
         return ResponseEntity.ok(responseDTO);
     }
+
+    //logout endpoint
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(
+            HttpServletResponse httpServletResponse
+    ){
+        authUseCase.logout(httpServletResponse);
+
+        return new ResponseEntity<>("Logout successfully", HttpStatus.OK);
+    }
+
 }
