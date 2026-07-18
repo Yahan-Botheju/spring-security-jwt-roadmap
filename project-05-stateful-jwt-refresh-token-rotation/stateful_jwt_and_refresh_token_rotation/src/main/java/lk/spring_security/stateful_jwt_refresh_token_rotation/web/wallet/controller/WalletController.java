@@ -1,5 +1,6 @@
 package lk.spring_security.stateful_jwt_refresh_token_rotation.web.wallet.controller;
 
+import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.models.Wallet;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.wallet.WalletUseCase;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.web.wallet.DTOs.WalletResponseDTO;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.web.wallet.webMapper.WalletWebMapper;
@@ -34,7 +35,8 @@ public class WalletController {
             ){
         //get user email
         String currentUserEmail = userDetails.getUsername();
+        Wallet setWallet = walletUseCase.getWalletBalance(currentUserEmail);
 
-
+        return ResponseEntity.ok(walletWebMapper.toResponseDTO(setWallet));
     }
 }
