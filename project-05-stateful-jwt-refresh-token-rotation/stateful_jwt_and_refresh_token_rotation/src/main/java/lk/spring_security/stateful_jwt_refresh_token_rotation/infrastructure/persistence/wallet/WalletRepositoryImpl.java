@@ -6,6 +6,8 @@ import lk.spring_security.stateful_jwt_refresh_token_rotation.infrastructure.per
 import lk.spring_security.stateful_jwt_refresh_token_rotation.infrastructure.persistence.wallet.jpa.JpaWalletRepository;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.infrastructure.persistence.wallet.mappers.WalletPersistenceMapper;
 
+import java.util.Optional;
+
 public class WalletRepositoryImpl implements WalletRepository {
 
     //inject required dependencies
@@ -20,6 +22,12 @@ public class WalletRepositoryImpl implements WalletRepository {
         this.walletPersistenceMapper = walletPersistenceMapper;
     }
 
+    //find wallet by user email
+    @Override
+    public Optional<Wallet> findByUserEmail(String email) {
+        return jpaWalletRepository.findByUser_Email(email).map(walletPersistenceMapper::toDomainModel);
+    }
+
     //save wallet
     @Override
     public Wallet saveWallet(Wallet wallet) {
@@ -31,4 +39,6 @@ public class WalletRepositoryImpl implements WalletRepository {
 
         return walletPersistenceMapper.toDomainModel(savedEntity);
     }
+
+
 }

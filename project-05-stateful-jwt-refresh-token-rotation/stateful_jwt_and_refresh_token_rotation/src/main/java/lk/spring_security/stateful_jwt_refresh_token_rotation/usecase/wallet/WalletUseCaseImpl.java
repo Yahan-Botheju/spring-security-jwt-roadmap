@@ -1,5 +1,6 @@
 package lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.wallet;
 
+import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.models.Wallet;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.UserRepository;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.WalletRepository;
 
@@ -16,5 +17,12 @@ public class WalletUseCaseImpl implements WalletUseCase {
     ) {
         this.walletRepository=walletRepository;
         this.userRepository=userRepository;
+    }
+
+    //get wallet balance
+    @Override
+    public Wallet getWalletBalance(String email){
+        return walletRepository.findByUserEmail(email)
+                .orElseThrow(() ->  new RuntimeException("wallet not found"));
     }
 }
