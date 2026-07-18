@@ -76,4 +76,14 @@ public class AuthController {
         return new ResponseEntity<>("Logout successfully", HttpStatus.OK);
     }
 
+    //refresh token route
+    @PostMapping("/refresh-token")
+    public ResponseEntity<AuthResponseDTO> refreshToken(
+            HttpServletRequest httpServletRequest,
+            HttpServletResponse httpServletResponse
+    ){
+        //create new token
+        AuthResult authResult = authUseCase.refreshToken(httpServletRequest, httpServletResponse);
+    }
+
 }
