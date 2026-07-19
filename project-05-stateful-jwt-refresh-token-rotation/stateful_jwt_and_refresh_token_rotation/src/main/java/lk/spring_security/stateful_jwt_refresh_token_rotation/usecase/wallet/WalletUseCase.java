@@ -9,4 +9,7 @@ public interface WalletUseCase {
 
     //get deposit amount
     Wallet depositMoney(String email, double amount);
+
+    //withdraw money
+    Wallet withdrawMoney(String email, double amount);
 }
