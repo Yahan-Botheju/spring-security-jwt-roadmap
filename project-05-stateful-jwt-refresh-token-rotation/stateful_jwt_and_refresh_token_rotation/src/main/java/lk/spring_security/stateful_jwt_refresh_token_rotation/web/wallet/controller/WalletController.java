@@ -1,16 +1,15 @@
 package lk.spring_security.stateful_jwt_refresh_token_rotation.web.wallet.controller;
 
+import jakarta.validation.Valid;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.models.Wallet;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.wallet.WalletUseCase;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.web.wallet.DTOs.TransferRequestDTO;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.web.wallet.DTOs.WalletResponseDTO;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.web.wallet.webMapper.WalletWebMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/wallet")
@@ -38,5 +37,29 @@ public class WalletController {
         Wallet setWallet = walletUseCase.getWalletBalance(currentUserEmail);
 
         return ResponseEntity.ok(walletWebMapper.toResponseDTO(setWallet));
+    }
+
+    //deposit money
+    @PostMapping("/deposit")
+    public ResponseEntity<WalletResponseDTO> depositMoney(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @Valid @RequestBody TransferRequestDTO  transferRequestDTO
+            ){
+        String currentUserEmail = userDetails.getUsername();
+        Wallet updateWallet = walletUseCase.depositMoney(currentUserEmail, transferRequestDTO.getAmount());
+
+        return ResponseEntity.ok(walletWebMapper.toResponseDTO(updateWallet));
+    }
+
+    //withdraw money
+    @PostMapping("/withdraw")
+    public ResponseEntity<WalletResponseDTO> withdrawMoney(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @Valid @RequestBody TransferRequestDTO  transferRequestDTO
+    ){
+        String currentUserEmail = userDetails.getUsername();
+        Wallet updatedWallet = walletUseCase.withdrawMoney(currentUserEmail, transferRequestDTO.getAmount());
+
+        return ResponseEntity.ok(walletWebMapper.toResponseDTO(updatedWallet));
     }
 }
