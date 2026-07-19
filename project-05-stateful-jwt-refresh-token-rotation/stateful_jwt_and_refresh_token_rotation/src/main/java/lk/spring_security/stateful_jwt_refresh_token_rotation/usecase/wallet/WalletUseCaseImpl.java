@@ -43,4 +43,21 @@ public class WalletUseCaseImpl implements WalletUseCase {
 
       return walletRepository.saveWallet(userWallet);
     }
+
+    //withdraw money
+    @Override
+    public Wallet withdrawMoney(String email, double amount) {
+        //check amount
+        if (amount < 0) {
+            throw new IllegalArgumentException("Deposit amount must be greater than 0");
+        }
+
+        //find user related to wallet
+        Wallet userWallet = walletRepository.findByUserEmail(email)
+                .orElseThrow(() ->  new RuntimeException("users' wallet not found" + "," + email));
+
+        //calculate new balance and update
+        Double newBalance = userWallet.getWalletBalance() - amount;
+        userWallet.setWalletBalance(newBalance);
+    }
 }
