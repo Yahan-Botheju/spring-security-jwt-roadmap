@@ -25,4 +25,13 @@ public class WalletUseCaseImpl implements WalletUseCase {
         return walletRepository.findByUserEmail(email)
                 .orElseThrow(() ->  new RuntimeException("wallet not found"));
     }
+
+    @Override
+    public Wallet depositMoney(String email, double amount) {
+      if (amount < 0) {
+          throw new IllegalArgumentException("Deposit amount must be greater than 0");
+      }
+
+
+    }
 }
