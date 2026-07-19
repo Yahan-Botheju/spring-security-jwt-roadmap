@@ -59,5 +59,7 @@ public class WalletUseCaseImpl implements WalletUseCase {
         //calculate new balance and update
         Double newBalance = userWallet.getWalletBalance() - amount;
         userWallet.setWalletBalance(newBalance);
+
+        return walletRepository.saveWallet(userWallet);
     }
 }
