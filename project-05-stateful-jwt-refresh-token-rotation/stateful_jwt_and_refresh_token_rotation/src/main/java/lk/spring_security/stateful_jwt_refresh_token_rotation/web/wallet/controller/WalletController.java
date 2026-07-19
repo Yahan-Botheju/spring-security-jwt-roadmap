@@ -50,4 +50,16 @@ public class WalletController {
 
         return ResponseEntity.ok(walletWebMapper.toResponseDTO(updateWallet));
     }
+
+    //withdraw money
+    @PostMapping("/withdraw")
+    public ResponseEntity<WalletResponseDTO> withdrawMoney(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @Valid @RequestBody TransferRequestDTO  transferRequestDTO
+    ){
+        String currentUserEmail = userDetails.getUsername();
+        Wallet updatedWallet = walletUseCase.withdrawMoney(currentUserEmail, transferRequestDTO.getAmount());
+
+        return ResponseEntity.ok(walletWebMapper.toResponseDTO(updatedWallet));
+    }
 }
