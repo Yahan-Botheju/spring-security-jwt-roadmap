@@ -32,6 +32,8 @@ public class WalletUseCaseImpl implements WalletUseCase {
           throw new IllegalArgumentException("Deposit amount must be greater than 0");
       }
 
+      Wallet userWallet = walletRepository.findByUserEmail(email)
+              .orElseThrow(() ->  new RuntimeException("users' wallet not found" + "," + email));
 
     }
 }
