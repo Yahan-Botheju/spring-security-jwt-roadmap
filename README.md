@@ -1700,6 +1700,497 @@ After completing this project, the following concepts were practiced:
 
 ---
 
-### Ongoing project...
+
+## 📌 Overview
+
+Project 05 evolves the previous Refresh Token Authentication implementation by introducing **Stateful Authentication** with **Refresh Token Rotation**.
+
+In Project 04, Refresh Tokens allowed users to obtain new Access Tokens without logging in again. However, a stolen Refresh Token could still be reused until it expired.
+
+This project addresses that security concern by implementing **Refresh Token Rotation**, **Token Revocation**, and **Session Management**.
+
+Every time a Refresh Token is used, it is marked as **used**, a brand-new Refresh Token is generated and stored in the database, and the new Refresh Token is returned inside an HttpOnly cookie.
+
+If a previously used Refresh Token is presented again, the system detects the replay attack, revokes all Refresh Tokens belonging to that user, clears the authentication cookie, and forces the user to log in again.
+The project continues to follow **Clean Architecture** while introducing stateful session management for enhanced authentication control.
+
+---
+
+## 🚀 Project V5 Enhancements
+
+### 🔥 What's New in Version 5
+
+Version 5 introduces **Stateful Authentication**.
+
+Unlike previous versions where Refresh Tokens remained valid until expiration, each Refresh Token can now be used only once.
+
+After every successful refresh request:
+
+- Old Refresh Token is revoked
+- New Refresh Token is generated
+- New Access Token is generated
+- Session is updated
+- Old token becomes permanently invalid
+
+This prevents Refresh Token replay attacks and improves overall authentication security.
+
+---
+
+## 📊 Authentication Flow
+
+The authentication process now includes secure session management.
+
+After a successful login:
+
+1. User credentials are validated.
+2. Access Token is generated.
+3. Refresh Token is generated.
+4. Refresh Token is stored in the database.
+5. Refresh Token is stored inside an HttpOnly Cookie.
+6. Access Token is returned in the response body.
+7. Browser automatically includes the Refresh Token cookie during refresh requests.
+8. Spring Security validates the Access Token from the Authorization header.
+9. Authentication continues seamlessly.
+
+---
+
+## 🔄 Refresh Token Rotation Flow
+
+```text
+User Login
+      ↓
+Generate Access Token
+      ↓
+Generate Refresh Token
+      ↓
+Persist Refresh Token
+      ↓
+Store Refresh Token in HttpOnly Cookie
+      ↓
+Client Uses Access Token
+      ↓
+Access Token Expires
+      ↓
+Extract Refresh Token From Cookie
+      ↓
+Lookup Token In Database
+      ↓
+Replay Detection
+      ↓
+Token Already Used?
+      │
+      ├──── Yes ──► Revoke All User Tokens
+      │             Clear Cookie
+      │             Force Login
+      │
+      └──── No
+             ↓
+      Mark Token As Used
+             ↓
+      Generate New Access Token
+             ↓
+      Generate New Refresh Token
+             ↓
+      Persist New Refresh Token
+             ↓
+      Update Cookie
+```
+
+---
+
+### Responsibilities
+
+- Store Refresh Tokens
+- Validate Refresh Tokens
+- Rotate Refresh Tokens
+- Detect Replay Attacks
+- Revoke All User Tokens
+- Clear Authentication Cookie
+
+---
+
+## 🍪 Cookie Management
+
+Authentication continues using secure HttpOnly cookies.
+
+### Cookie Security Features
+
+```text
+
+Refresh Token Cookie
+
+- HttpOnly = true
+- SameSite = Strict
+- Path = /
+- Secure = false (Development)
+- Long Expiration
+- Automatically Replaced During Rotation
+```
+
+### Benefits
+
+- Prevents XSS attacks
+- Secure browser cookie handling
+- Automatic authentication
+- Token replay protection
+- Session tracking
+- Multiple device support
+
+---
+
+## 🔑 Authentication Endpoints
+
+### Register User
+
+```http
+POST /api/v1/auth/register
+```
+### Features
+
+- Register New User
+- Encrypt Password using BCrypt
+- Assign USER Role
+- Create Default Wallet
+---
+
+## Login User
+
+```http
+POST /api/v1/auth/login
+```
+
+### Features
+
+- Authenticate User
+- Create Session
+- Store Refresh Token in Database
+- Return Access Token
+- Store Refresh Token inside HttpOnly Cookie
+
+---
+
+## Refresh Access Token
+
+```http
+POST /api/v1/auth/refresh-token
+```
+
+### Features
+
+- Validate Refresh Token
+- Detect Replay Attacks
+- Mark Current Refresh Token As Used
+- Generate New Access Token
+- Generate New Refresh Token
+- Persist New Refresh Token
+
+---
+
+## Logout User
+
+```http
+POST /api/v1/auth/logout
+```
+### Features
+
+- Clear Refresh Token Cookie
+> Note:
+> The current implementation clears the authentication cookie. Database-side token revocation during logout can be added as a future enhancement.
+---
+
+### Features
+
+- Revoke All Refresh Tokens
+- Remove All Sessions
+- Force Re-login
+
+---
+
+## 💰 Wallet Module
+
+Authenticated users can securely manage their wallet.
+
+### Features
+
+- View Wallet Balance
+- Deposit Funds
+- Withdraw Funds
+
+---
+
+## Wallet Endpoints
+
+| Method | Endpoint | Description |
+|----------|----------|-------------|
+| GET | /api/v1/wallet/balance | View Wallet Balance |
+| POST | /api/v1/wallet/deposit | Deposit Funds |
+| POST | /api/v1/wallet/withdraw | Withdraw Funds |
+
+## 🛡️ Spring Security Enhancements
+
+Version 5 introduces several new security components.
+
+### AuthUseCase
+
+Responsibilities
+
+- Register Users
+- Authenticate Credentials
+- Generate JWT Tokens
+- Refresh Token Rotation
+- Replay Detection
+- Logout
+
+---
+
+### CookieService
+
+Responsibilities
+
+- Create Refresh Token Cookies
+- Read Refresh Token Cookies
+- Clear Authentication Cookies
+
+---
+
+### CookieService
+
+Responsibilities
+
+- Create Cookies
+- Read Cookies
+- Update Cookies
+- Delete Cookies
+
+---
+
+### JwtAuthenticationFilter
+
+Responsibilities
+
+- Read Bearer Token
+- Validate Access Token
+- Load UserDetails
+- Populate SecurityContext
+
+---
+
+## 📂 Project Structure
+
+```text
+
+stateful_jwt_refresh_token_rotation
+├── 📁 domain                                           @Core Business Logic & Enterprise Rules (Framework Independent)
+│   ├── 📁 models                                       @Pure Domain Entities & Aggregates
+│   │   ├── RefreshToken.java                           # Refresh Token Domain Model 
+│   │   ├── Role.java                                   # User Role Domain Enum / Model 
+│   │   ├── User.java                                   # User Domain Model 
+│   │   └── Wallet.java                                 # Wallet Domain Model 
+│   └── 📁 repositories                                 @Domain Repository & Service Interfaces (Outbound Ports)
+│       ├── CookieService.java                          # Core Cookie Operations Contract 
+│       ├── RefreshTokenRepository.java                 # Refresh Token Outbound Contract 
+│       ├── TokenService.java                           # Token Generation & Validation Contract 
+│       ├── UserRepository.java                         # User Outbound Contract 
+│       └── WalletRepository.java                       # Wallet Outbound Contract 
+│
+├── 📁 usecase                                          @Application Specific Business Rules
+│   ├── 📁 auth                                         @Inbound Port Orchestration for Auth Operations
+│   │   ├── AuthResult.java                             # DTO / Value Object wrapping Authentication Outcome Data 
+│   │   ├── AuthUseCase.java                            # Feature Interface for Auth Operations 
+│   │   └── AuthUseCaseImpl.java                        # Registration, Token Rotation, & Log In/Out Logic 
+│   └── 📁 wallet                                       @Inbound Port Orchestration for Wallet Operations
+│       ├── WalletUseCase.java                          # Feature Interface for Wallet Operations 
+│       └── WalletUseCaseImpl.java                      # Wallet & Fund Transfer Business Logic 
+│
+├── 📁 infrastructure                                   @External Frameworks, Tools, & Infrastructure Adapters
+│   ├── 📁 _config                                      @Spring Dependency Injection Configuration Modules
+│   │   ├── 📁 _jwtBeanConfig                           # Spring Bean Configuration for JWT Processing
+│   │   │   └── JwtBeanConfig.java                      # Wiring for JwtService / Token Implementations 
+│   │   ├── 📁 _persistenceBeanConfig                   # Spring Bean Providers for Persistence Layer Adapters
+│   │   │   ├── RefreshTokenPersistenceBeanConfig.java  # Wiring for Refresh Token Persistence Adapter 
+│   │   │   ├── UserPersistenceBeanConfig.java          # Wiring for User Persistence Adapter 
+│   │   │   └── WalletPersistenceBeanConfig.java        # Wiring for Wallet Persistence Adapter 
+│   │   ├── 📁 _usecaseBeanConfig                       # Spring Bean Providers for Use Case Implementations
+│   │   │   ├── AuthUseCaseBeanConfig.java              # Wiring for Authentication Use Case 
+│   │   │   └── WalletUseCaseBeanConfig.java            # Wiring for Wallet Use Case 
+│   │   └── 📁 _wrapperBeanConfig                       # Spring Bean Wiring for UserDetails Adapter
+│   │       └── CustomUserDetailsServiceBeanConfig.java # Wiring for Custom UserDetailsService 
+│   ├── 📁 _security                                    @Spring Security Framework Configuration & Extensions
+│   │   ├── 📁 _config                                  # Security Beans & Rule Engines
+│   │   │   ├── ApplicationConfig.java                  # Auth Manager, Provider, & Password Encoder Configs 
+│   │   │   ├── JwtSecurityKeyConfig.java               # Cryptographic Key Configuration for JWT Tokens 
+│   │   │   └── SecurityConfig.java                     # SecurityFilterChain, Session Policy, & Route Rules 
+│   │   ├── 📁 filter                                   # Servlets Interception Layer
+│   │   │   └── JwtAuthenticationFilter.java            # Interceptor checking Bearer Token Security Context 
+│   │   ├── 📁 user_spring_wrapper                      # Security Identity Mappings
+│   │   │   ├── CustomUserDetails.java                  # Bridge between Domain User and Spring UserDetails 
+│   │   │   └── CustomUserDetailsService.java           # Bridges Spring Security to Database User Repository 
+│   │   └── JwtServiceImpl.java                         # Concrete JWT processing implementation 
+│   └── 📁 persistence                                  @Database Storage Adaption Layer (JPA / PostgreSQL)
+│       ├── 📁 refresh_token                            # Infrastructure Adapter for Refresh Token Domain
+│       │   ├── 📁 entities                         
+│       │   │   └── RefreshTokenEntity.java             # Relational Database Mapping Schema (@Entity)
+│       │   ├── 📁 jpa                              
+│       │   │   └── JpaRefreshTokenRepository.java      # Spring Data JPA Interface
+│       │   ├── 📁 mappers                          
+│       │   │   └── RefreshTokenPersistenceMapper.java  # Translates Domain Model <-> Database Entity
+│       │   └── RefreshTokenRepositoryImpl.java         # Outbound Adapter tying Domain Repo to JPA Repo
+│       ├── 📁 user                                     # Infrastructure Adapter for User Domain
+│       │   ├── 📁 entities                         
+│       │   │   └── UserEntity.java                     # Relational Database Mapping Schema (@Entity)
+│       │   ├── 📁 jpa                              
+│       │   │   └── JpaUserRepository.java              # Spring Data JPA Interface
+│       │   ├── 📁 mappers                          
+│       │   │   └── UserPersistenceMapper.java          # Translates Domain Model <-> Database Entity
+│       │   └── UserRepositoryImpl.java                 # Outbound Adapter tying Domain Repo to JPA Repo
+│       └── 📁 wallet                                   # Infrastructure Adapter for Wallet Domain
+│           ├── 📁 entities                         
+│           │   └── WalletEntity.java                   # Relational Database Mapping Schema (@Entity)
+│           ├── 📁 jpa                              
+│           │   └── JpaWalletRepository.java            # Spring Data JPA Interface
+│           ├── 📁 mappers                          
+│           │   └── WalletPersistenceMapper.java        # Translates Domain Model <-> Database Entity
+│           └── WalletRepositoryImpl.java               # Outbound Adapter tying Domain Repo to JPA Repo
+│
+├── 📁 web                                              @Entry Points, Transport Delivery Layers, & Web APIs
+│   ├── 📁 _shared                                      @Cross-Cutting Delivery Utilities
+│   │   └── 📁 service                             
+│   │       └── CookieServiceImpl.java                  # Manages Response Cookie Creation & Invalidation
+│   ├── 📁 auth                                         @Authentication Delivery Module
+│   │   ├── 📁 controller                           
+│   │   │   └── AuthController.java                     # REST Endpoint (@RestController) for Auth routes 
+│   │   ├── 📁 DTOs                                     @API Serialization Contracts
+│   │   │   ├── AuthRequestDTO.java                     # Login/Register request payload contract 
+│   │   │   └── AuthResponseDTO.java                    # Authentication token response payload 
+│   │   └── 📁 webMapper                                @MapStruct Web Mapper
+│   │       └── AuthWebMapper.java                      # Translates HTTP DTOs <-> Use Case Data
+│   └── 📁 wallet                                       @Wallet API Delivery Module
+│       ├── 📁 controller                           
+│       │   └── WalletController.java                   # REST Endpoint for Wallet Management & Transfers 
+│       ├── 📁 DTOs                                     @API Serialization Contracts
+│       │   ├── TransferRequestDTO.java                 # Fund transfer request payload contract 
+│       │   └── WalletResponseDTO.java                  # Wallet status response payload contract 
+│       └── 📁 webMapper                                @MapStruct Web Mapper
+│           └── WalletWebMapper.java                    # Translates HTTP DTOs <-> Use Case Data
+│
+└── StatefulJwtAndRefreshTokenRotationApplication.java # Spring Boot Application Main Entry Point
+
+```
+
+---
+
+## 🎯 Security Improvements
+
+### Previous Projects
+
+- Replay Detection
+- Refresh Token Rotation
+- Database Stored Refresh Tokens
+- HttpOnly Cookie Authentication
+- Token Revocation
+
+---
+
+### Project 05
+
+- Stateful Authentication
+- Refresh Token Rotation
+- Token Revocation
+- Session Tracking
+- Multiple Device Login
+- Logout All Devices
+- Replay Attack Prevention
+
+---
+
+## 📚 Spring Security Concepts Added
+
+Project 05 introduces:
+
+- Stateful Authentication
+- Refresh Token Rotation
+- Database Stored Refresh Tokens
+- Refresh Token Rotation
+- Replay Attack Detection
+- HttpOnly Cookie Authentication
+- JWT Access Token Validation
+- Security Context Population
+
+---
+
+## ⭐ Project Evolution
+
+## Version 1
+
+- Stateless JWT Authentication
+- Spring Security
+- Role-Based Authorization
+- Clean Architecture
+
+---
+
+## Version 2
+
+- AuthenticationEntryPoint
+- Security Exception Handling
+- Standard API Responses
+
+---
+
+## Version 3
+
+- Cookie-Based JWT Authentication
+- HttpOnly Cookies
+- Secure Cookie Storage
+
+---
+
+## Version 4
+
+- Refresh Token Authentication
+- Access Token Renewal
+- Persistent User Sessions
+
+---
+
+## Version 5
+
+- Stateful Authentication
+- Refresh Token Rotation
+- Token Revocation
+- Session Management
+- Database Stored Refresh Tokens
+- Refresh Token Rotation
+- Replay Detection
+- Token Revocation
+- Wallet Protected APIs
+- HttpOnly Refresh Token Cookies
+
+---
+
+## 🎯 Why This Upgrade Matters
+
+Combined with database-persisted Refresh Tokens, the application can detect Refresh Token replay attacks. If a previously used Refresh Token is presented again, all Refresh Tokens belonging to that user are revoked and the authentication cookie is cleared, preventing further unauthorized access.
+
+This project demonstrates how Spring Security, JWT Authentication, Refresh Token Rotation, Replay Detection, HttpOnly Cookies, and Clean Architecture can be combined to build a more secure authentication system.
+
+---
+
+## ⭐ Learning Outcomes
+
+After completing this project, the following concepts were practiced:
+
+- Stateful JWT Authentication
+- Refresh Token Rotation
+- Refresh Token Rotation
+- Replay Attack Detection
+- Database Stored Refresh Tokens
+- JWT Authentication
+- HttpOnly Cookie Authentication
+- Spring Security Filter Chain
+- Repository Pattern
+- Use Case Layer
+- MapStruct DTO Mapping
+- Clean Architecture
 
 ---
