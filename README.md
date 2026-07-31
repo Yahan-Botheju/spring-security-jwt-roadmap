@@ -66,8 +66,20 @@ For more details, refer to the README & projects repos.
 ---
 ### ✅ Project 05 - Stateful JWT Authentication with Refresh Token Rotation
 
-- Ongoing Project...
-
+- Stateful Refresh Token Authentication
+- Database Stored Refresh Tokens
+- Refresh Token Rotation
+- Refresh Token Replay Detection
+- Token Revocation Strategy
+- HttpOnly Cookie-Based Refresh Tokens
+- JWT Access Token Authentication
+- Secure Access Token Renewal
+- Protected Wallet Management APIs
+- Automatic Wallet Provisioning
+- Custom Cookie Management Service
+- Spring Security AuthenticationManager
+- Custom JWT Authentication Filter
+- Repository Pattern & Clean Architecture Enhancements
 ---
 
 <h2 align="center"> Project 01 - Stateless JWT Authentication API</h2>
