@@ -1,8 +1,10 @@
 package lk.spring_security.stateful_jwt_refresh_token_rotation.infrastructure._config._persistenceBeanConfig;
 
+import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.IdentityProvider;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.RefreshTokenRepository;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.UserRepository;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.WalletRepository;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.infrastructure._security.identity_provider.IdentityProviderImpl;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.infrastructure.persistence.refresh_token.RefreshTokenRepositoryImpl;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.infrastructure.persistence.refresh_token.jpa.JpaRefreshTokenRepository;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.infrastructure.persistence.refresh_token.mappers.RefreshTokenPersistenceMapper;
@@ -14,6 +16,8 @@ import lk.spring_security.stateful_jwt_refresh_token_rotation.infrastructure.per
 import lk.spring_security.stateful_jwt_refresh_token_rotation.infrastructure.persistence.wallet.mappers.WalletPersistenceMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 public class PersistenceBeanConfigs {
@@ -48,5 +52,14 @@ public class PersistenceBeanConfigs {
             WalletPersistenceMapper walletPersistenceMapper
     ){
         return new WalletRepositoryImpl(jpaWalletRepository,walletPersistenceMapper);
+    }
+
+    //identity provider
+    @Bean
+    public IdentityProvider identityProvider(
+            PasswordEncoder passwordEncoder,
+            AuthenticationManager authenticationManager
+    ){
+        return new IdentityProviderImpl(passwordEncoder, authenticationManager);
     }
 }
