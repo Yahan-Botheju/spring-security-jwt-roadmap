@@ -1,4 +1,4 @@
-package lk.spring_security.refresh_token.infrastructure._security.config;
+package lk.spring_security.refresh_token.infrastructure._configs._jwtBeanConfig;
 
 import lk.spring_security.refresh_token.domain.repositories.TokenService;
 import lk.spring_security.refresh_token.infrastructure._security.JwtImpl;
@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import javax.crypto.SecretKey;
 
 @Configuration
-public class JwtImplConfig {
+public class JwtImplBeanConfig {
     @Bean
     public TokenService tokenService(
             SecretKey secretKey,
