@@ -17,4 +17,10 @@ public class IdentityProviderImpl implements IdentityProvider {
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
     }
+
+    //password encoder
+    @Override
+    public String passwordEncoder(String rawPassword) {
+        return passwordEncoder.encode(rawPassword);
+    }
 }
