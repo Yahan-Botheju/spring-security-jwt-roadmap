@@ -8,15 +8,12 @@ public class WalletUseCaseImpl implements WalletUseCase {
 
     //inject required dependencies
     private final WalletRepository walletRepository;
-    private final UserRepository userRepository;
 
 
     public WalletUseCaseImpl(
-            WalletRepository walletRepository,
-            UserRepository userRepository
+            WalletRepository walletRepository
     ) {
         this.walletRepository=walletRepository;
-        this.userRepository=userRepository;
     }
 
     //get wallet balance
