@@ -18,19 +18,17 @@ public class UseCaseBeanConfigs {
     public AuthUseCase authUseCase(
             RefreshTokenRepository refreshTokenRepository,
             UserRepository userRepository,
-            PasswordEncoder passwordEncoder,
+            IdentityProvider identityProvider,
             CookieService cookieService,
             TokenService tokenService,
-            AuthenticationManager authenticationManager,
             WalletRepository walletRepository
     ){
         return new AuthUseCaseImpl(
                 refreshTokenRepository,
                 userRepository,
-                passwordEncoder,
+                identityProvider,
                 cookieService,
                 tokenService,
-                authenticationManager,
                 walletRepository
         );
     }
