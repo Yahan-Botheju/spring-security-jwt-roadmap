@@ -7,8 +7,6 @@ import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.wallet.Wal
 import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.wallet.WalletUseCaseImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 public class UseCaseBeanConfigs {
