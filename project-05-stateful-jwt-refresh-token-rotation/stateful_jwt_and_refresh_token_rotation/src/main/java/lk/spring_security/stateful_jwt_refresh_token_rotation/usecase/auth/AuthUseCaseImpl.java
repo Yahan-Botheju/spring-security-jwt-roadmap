@@ -20,27 +20,24 @@ public class AuthUseCaseImpl implements AuthUseCase{
     //inject required dependencies
     private final RefreshTokenRepository refreshTokenRepository;
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final IdentityProvider identityProvider;
     private final CookieService cookieService;
     private final TokenService tokenService;
-    private final AuthenticationManager authenticationManager;
     private final WalletRepository walletRepository;
 
     public AuthUseCaseImpl(
             RefreshTokenRepository refreshTokenRepository,
             UserRepository userRepository,
-            PasswordEncoder passwordEncoder,
+            IdentityProvider identityProvider,
             CookieService cookieService,
             TokenService tokenService,
-            AuthenticationManager authenticationManager,
             WalletRepository walletRepository
     ) {
         this.refreshTokenRepository = refreshTokenRepository;
         this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
+        this.identityProvider = identityProvider;
         this.cookieService = cookieService;
         this.tokenService = tokenService;
-        this.authenticationManager = authenticationManager;
         this.walletRepository = walletRepository;
     }
 
@@ -71,7 +68,7 @@ public class AuthUseCaseImpl implements AuthUseCase{
             throw new IllegalStateException("User already exists");
         }
         //encode user password
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setPassword(identityProvider.passwordEncoder(user.getPassword()));
         //set role
         user.setRole(Role.USER);
 
@@ -96,9 +93,8 @@ public class AuthUseCaseImpl implements AuthUseCase{
             HttpServletResponse httpServletResponse
     ){
         //check email password correctness through auth provider
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(email, password)
-        );
+        identityProvider.authenticate(email, password);
+
         //get user from db
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalStateException("User not found"));
