@@ -34,9 +34,8 @@ public class UseCaseBeanConfigs {
     //wallet usecase impl
     @Bean
     public WalletUseCase walletUseCase(
-            WalletRepository walletRepository,
-            UserRepository userRepository
+            WalletRepository walletRepository
     ) {
-        return new WalletUseCaseImpl(walletRepository, userRepository);
+        return new WalletUseCaseImpl(walletRepository);
     }
 }
