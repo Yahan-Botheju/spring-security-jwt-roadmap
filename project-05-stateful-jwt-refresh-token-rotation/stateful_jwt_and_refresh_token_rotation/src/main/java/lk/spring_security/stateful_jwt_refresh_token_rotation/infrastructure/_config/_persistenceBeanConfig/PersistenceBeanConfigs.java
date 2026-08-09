@@ -26,13 +26,11 @@ public class PersistenceBeanConfigs {
     @Bean
     public RefreshTokenRepository refreshTokenRepository(
             JpaRefreshTokenRepository jpaRefreshTokenRepository,
-            RefreshTokenPersistenceMapper refreshTokenPersistenceMapper,
-            UserRepository userRepository
+            RefreshTokenPersistenceMapper refreshTokenPersistenceMapper
     ){
         return new RefreshTokenRepositoryImpl(
                 jpaRefreshTokenRepository,
-                refreshTokenPersistenceMapper,
-                userRepository
+                refreshTokenPersistenceMapper
         );
     }
 

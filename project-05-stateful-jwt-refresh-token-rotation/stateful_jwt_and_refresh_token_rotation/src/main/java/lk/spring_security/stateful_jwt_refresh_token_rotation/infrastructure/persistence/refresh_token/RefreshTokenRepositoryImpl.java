@@ -14,17 +14,14 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
     //inject required dependencies
     private final JpaRefreshTokenRepository jpaRefreshTokenRepository;
     private final RefreshTokenPersistenceMapper refreshTokenPersistenceMapper;
-    private final UserRepository userRepository;
 
 
 
     public RefreshTokenRepositoryImpl(
             JpaRefreshTokenRepository jpaRefreshTokenRepository,
-            RefreshTokenPersistenceMapper refreshTokenPersistenceMapper,
-            UserRepository userRepository
+            RefreshTokenPersistenceMapper refreshTokenPersistenceMapper
     ) {
         this.jpaRefreshTokenRepository = jpaRefreshTokenRepository;
-        this.userRepository = userRepository;
         this.refreshTokenPersistenceMapper = refreshTokenPersistenceMapper;
     }
 
