@@ -3,13 +3,17 @@ package lk.spring_security.stateful_jwt_refresh_token_rotation.infrastructure._c
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.*;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.auth.AuthUseCase;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.auth.AuthUseCaseImpl;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.wallet.WalletUseCase;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.wallet.WalletUseCaseImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
-public class AuthUseCaseBeanConfig {
+public class UseCaseBeanConfigs {
+
+    //auth usecase impl
     @Bean
     public AuthUseCase authUseCase(
             RefreshTokenRepository refreshTokenRepository,
@@ -29,5 +33,14 @@ public class AuthUseCaseBeanConfig {
                 authenticationManager,
                 walletRepository
         );
+    }
+
+    //wallet usecase impl
+    @Bean
+    public WalletUseCase walletUseCase(
+            WalletRepository walletRepository,
+            UserRepository userRepository
+    ) {
+        return new WalletUseCaseImpl(walletRepository, userRepository);
     }
 }
