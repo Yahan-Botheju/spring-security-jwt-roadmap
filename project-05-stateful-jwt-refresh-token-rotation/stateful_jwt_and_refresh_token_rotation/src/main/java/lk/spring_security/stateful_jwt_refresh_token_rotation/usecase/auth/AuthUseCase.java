@@ -3,6 +3,7 @@ package lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.auth;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.models.User;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.records.AuthenticatedUser;
 
 public interface AuthUseCase {
 
@@ -10,11 +11,11 @@ public interface AuthUseCase {
     void registerUser(User user);
 
     //login user
-    AuthResult loginUser(String email, String password, HttpServletResponse httpServletResponse);
+    AuthenticatedUser loginUser(String email, String password, HttpServletResponse httpServletResponse);
 
     //logout
     void logout(HttpServletResponse httpServletResponse);
 
     //refresh token
-    AuthResult refreshToken(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse);
+    AuthenticatedUser refreshToken(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse);
 }

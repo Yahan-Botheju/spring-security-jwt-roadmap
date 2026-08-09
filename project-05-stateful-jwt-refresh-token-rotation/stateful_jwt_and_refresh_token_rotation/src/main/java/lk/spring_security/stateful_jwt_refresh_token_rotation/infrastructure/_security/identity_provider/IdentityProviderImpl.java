@@ -1,8 +1,8 @@
 package lk.spring_security.stateful_jwt_refresh_token_rotation.infrastructure._security.identity_provider;
 
+import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.records.AuthenticatedUser;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.IdentityProvider;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.infrastructure._security.user_spring_wrapper.CustomUserDetails;
-import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.auth.AuthResult;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -30,7 +30,7 @@ public class IdentityProviderImpl implements IdentityProvider {
 
     //authenticate user through auth manager
     @Override
-    public AuthResult authenticate(String username, String password){
+    public AuthenticatedUser authenticate(String username, String password){
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(username, password)
@@ -38,7 +38,7 @@ public class IdentityProviderImpl implements IdentityProvider {
 
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
 
-        return new AuthResult(
+        return new AuthenticatedUser(
                 null,
                 customUserDetails.getUsername(),
                 customUserDetails.getUser().getRole().name()

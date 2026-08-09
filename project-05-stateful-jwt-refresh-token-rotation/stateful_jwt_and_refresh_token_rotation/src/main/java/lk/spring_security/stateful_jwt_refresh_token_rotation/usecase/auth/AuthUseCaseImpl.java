@@ -7,10 +7,8 @@ import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.models.Refr
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.models.Role;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.models.User;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.models.Wallet;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.records.AuthenticatedUser;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.*;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -87,7 +85,7 @@ public class AuthUseCaseImpl implements AuthUseCase{
     //login user
     @Override
     @Transactional
-    public AuthResult loginUser(
+    public AuthenticatedUser loginUser(
             String email,
             String password,
             HttpServletResponse httpServletResponse
@@ -109,7 +107,7 @@ public class AuthUseCaseImpl implements AuthUseCase{
         //set as http only cookie to browser
         cookieService.addRefreshTokenCookie(httpServletResponse, refreshToken);
 
-        return  new AuthResult(
+        return  new AuthenticatedUser(
                 accessToken,
                 user.getEmail(),
                 user.getRole().name()
@@ -125,7 +123,7 @@ public class AuthUseCaseImpl implements AuthUseCase{
 
     //refresh token
     @Override
-    public AuthResult refreshToken(
+    public AuthenticatedUser refreshToken(
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse
     ) {
@@ -165,7 +163,7 @@ public class AuthUseCaseImpl implements AuthUseCase{
         //set refresh to cookie
         cookieService.addRefreshTokenCookie(httpServletResponse, refreshToken);
 
-        return  new AuthResult(
+        return  new AuthenticatedUser(
                 accessToken,
                 user.getEmail(),
                 user.getRole().name()
