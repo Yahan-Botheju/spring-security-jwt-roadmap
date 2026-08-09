@@ -1,11 +1,10 @@
 package lk.spring_security.refresh_token.infrastructure._configs._usecaseBeanConfig;
 
-import lk.spring_security.refresh_token.domain.repositories.RefreshTokenRepository;
-import lk.spring_security.refresh_token.domain.repositories.TokenService;
-import lk.spring_security.refresh_token.domain.repositories.UserRepository;
+import lk.spring_security.refresh_token.domain.repositories.*;
 import lk.spring_security.refresh_token.usecase.auth.AuthUseCase;
 import lk.spring_security.refresh_token.usecase.auth.AuthUseCaseImpl;
-import lk.spring_security.refresh_token.domain.repositories.CookieService;
+import lk.spring_security.refresh_token.usecase.product.ProductUseCase;
+import lk.spring_security.refresh_token.usecase.product.ProductUseCaseImpl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,7 +12,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
-public class AuthUseCaseBeanConfig {
+public class UseCaseBeanConfigs {
+
+    //auth usecase impl
     @Bean
     public AuthUseCase authUseCase(
             RefreshTokenRepository refreshTokenRepository,
@@ -32,5 +33,13 @@ public class AuthUseCaseBeanConfig {
                 tokenService ,
                 authenticationManager,
                 refreshTokenExpirationMs);
+    }
+
+    //product usecase impl
+    @Bean
+    public ProductUseCase productUseCase(
+            ProductRepository productRepository
+    ) {
+        return new ProductUseCaseImpl(productRepository);
     }
 }
