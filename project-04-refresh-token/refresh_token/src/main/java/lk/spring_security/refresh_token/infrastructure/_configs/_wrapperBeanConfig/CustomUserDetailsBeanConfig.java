@@ -1,4 +1,4 @@
-package lk.spring_security.refresh_token.infrastructure._security.config;
+package lk.spring_security.refresh_token.infrastructure._configs._wrapperBeanConfig;
 
 import lk.spring_security.refresh_token.domain.repositories.UserRepository;
 import lk.spring_security.refresh_token.infrastructure._security.user_spring_wrapper.CustomUserDetailsService;
