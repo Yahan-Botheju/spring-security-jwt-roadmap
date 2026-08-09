@@ -33,15 +33,15 @@ public class ApplicationConfig {
     ) {
         return authenticationConfiguration.getAuthenticationManager();
     }
-
+    
     //initiate dao auth provider
     @Bean
     public AuthenticationProvider authenticationProvider(
-            UserDetailsService userDetailsService
+            UserDetailsService userDetailsService,
+            PasswordEncoder passwordEncoder
     ) {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider(userDetailsService);
-
-        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder);
 
         return daoAuthenticationProvider;
     }

@@ -7,10 +7,8 @@ import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.models.Refr
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.models.Role;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.models.User;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.models.Wallet;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.records.AuthenticatedUser;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.*;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -20,27 +18,24 @@ public class AuthUseCaseImpl implements AuthUseCase{
     //inject required dependencies
     private final RefreshTokenRepository refreshTokenRepository;
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final IdentityProvider identityProvider;
     private final CookieService cookieService;
     private final TokenService tokenService;
-    private final AuthenticationManager authenticationManager;
     private final WalletRepository walletRepository;
 
     public AuthUseCaseImpl(
             RefreshTokenRepository refreshTokenRepository,
             UserRepository userRepository,
-            PasswordEncoder passwordEncoder,
+            IdentityProvider identityProvider,
             CookieService cookieService,
             TokenService tokenService,
-            AuthenticationManager authenticationManager,
             WalletRepository walletRepository
     ) {
         this.refreshTokenRepository = refreshTokenRepository;
         this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
+        this.identityProvider = identityProvider;
         this.cookieService = cookieService;
         this.tokenService = tokenService;
-        this.authenticationManager = authenticationManager;
         this.walletRepository = walletRepository;
     }
 
@@ -71,7 +66,7 @@ public class AuthUseCaseImpl implements AuthUseCase{
             throw new IllegalStateException("User already exists");
         }
         //encode user password
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setPassword(identityProvider.passwordEncoder(user.getPassword()));
         //set role
         user.setRole(Role.USER);
 
@@ -90,15 +85,14 @@ public class AuthUseCaseImpl implements AuthUseCase{
     //login user
     @Override
     @Transactional
-    public AuthResult loginUser(
+    public AuthenticatedUser loginUser(
             String email,
             String password,
             HttpServletResponse httpServletResponse
     ){
         //check email password correctness through auth provider
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(email, password)
-        );
+        identityProvider.authenticate(email, password);
+
         //get user from db
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalStateException("User not found"));
@@ -113,7 +107,7 @@ public class AuthUseCaseImpl implements AuthUseCase{
         //set as http only cookie to browser
         cookieService.addRefreshTokenCookie(httpServletResponse, refreshToken);
 
-        return  new AuthResult(
+        return  new AuthenticatedUser(
                 accessToken,
                 user.getEmail(),
                 user.getRole().name()
@@ -129,7 +123,7 @@ public class AuthUseCaseImpl implements AuthUseCase{
 
     //refresh token
     @Override
-    public AuthResult refreshToken(
+    public AuthenticatedUser refreshToken(
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse
     ) {
@@ -169,7 +163,7 @@ public class AuthUseCaseImpl implements AuthUseCase{
         //set refresh to cookie
         cookieService.addRefreshTokenCookie(httpServletResponse, refreshToken);
 
-        return  new AuthResult(
+        return  new AuthenticatedUser(
                 accessToken,
                 user.getEmail(),
                 user.getRole().name()

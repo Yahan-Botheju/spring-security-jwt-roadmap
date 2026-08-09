@@ -4,8 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.models.User;
-import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.CookieService;
-import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.auth.AuthResult;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.records.AuthenticatedUser;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.auth.AuthUseCase;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.web.auth.DTOs.AuthRequestDTO;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.web.auth.DTOs.AuthResponseDTO;
@@ -52,12 +51,12 @@ public class AuthController {
             HttpServletResponse httpServletResponse
     ){
         //get token
-        AuthResult authResult = authUseCase.loginUser(
+        AuthenticatedUser authenticatedUser = authUseCase.loginUser(
                 authRequestDTO.getEmail(),
                 authRequestDTO.getPassword(),
                 httpServletResponse);
 
-        AuthResponseDTO responseDTO = authWebMapper.toResponse(authResult);
+        AuthResponseDTO responseDTO = authWebMapper.toResponse(authenticatedUser);
 
         return ResponseEntity.ok(responseDTO);
     }
@@ -79,8 +78,8 @@ public class AuthController {
             HttpServletResponse httpServletResponse
     ){
         //create new token
-        AuthResult authResult = authUseCase.refreshToken(httpServletRequest, httpServletResponse);
-        AuthResponseDTO responseDTO = authWebMapper.toResponse(authResult);
+        AuthenticatedUser authenticatedUser = authUseCase.refreshToken(httpServletRequest, httpServletResponse);
+        AuthResponseDTO responseDTO = authWebMapper.toResponse(authenticatedUser);
 
         return ResponseEntity.ok(responseDTO);
     }
