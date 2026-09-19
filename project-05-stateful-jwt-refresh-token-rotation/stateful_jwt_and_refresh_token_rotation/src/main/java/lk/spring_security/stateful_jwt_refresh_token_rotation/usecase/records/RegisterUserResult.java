@@ -1,4 +1,10 @@
 package lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.records;
 
-public record RegisterUserResult() {
+public record RegisterUserResult(
+        Long userId,
+        String email,
+        String userRole,
+        Long walletId,
+        Double walletBalance
+) {
 }
