@@ -40,5 +40,12 @@ public class RefreshToken {
                 .build();
     }
 
+    /* __DOMAIN_LOGIC__ */
+
+    //refresh token marking
+    public void markAsUsed() {
+        this.isUsed = true;
+    }
+
 
 }
