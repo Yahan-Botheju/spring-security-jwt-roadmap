@@ -6,9 +6,12 @@ import jakarta.validation.Valid;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.models.User;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.records.AuthenticatedUser;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.CookieService;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.RefreshTokenUseCase;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.auth.AuthUseCase;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.records.RefreshTokenResult;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.web.auth.DTOs.AuthRequestDTO;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.web.auth.DTOs.AuthResponseDTO;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.web.auth.DTOs.RefreshTokenResponseDTO;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.web.auth.webMapper.AuthWebMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,14 +29,18 @@ public class AuthController {
     private final AuthWebMapper authWebMapper;
     private final CookieService cookieService;
 
+    private final RefreshTokenUseCase refreshTokenUseCase;
+
     public AuthController(
             AuthUseCase authUseCase,
             AuthWebMapper authWebMapper,
-            CookieService cookieService
+            CookieService cookieService,
+            RefreshTokenUseCase refreshTokenUseCase
     ) {
         this.authUseCase = authUseCase;
         this.authWebMapper = authWebMapper;
         this.cookieService = cookieService;
+        this.refreshTokenUseCase = refreshTokenUseCase;
     }
 
     //register endpoint
@@ -77,15 +84,19 @@ public class AuthController {
 
     //refresh token route
     @PostMapping("/refresh-token")
-    public ResponseEntity<AuthResponseDTO> refreshToken(
+    public ResponseEntity<RefreshTokenResponseDTO> refreshToken(
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse
-    ){
-        //create new token
-        AuthenticatedUser authenticatedUser = authUseCase.refreshToken(httpServletRequest, httpServletResponse);
-        AuthResponseDTO responseDTO = authWebMapper.toResponse(authenticatedUser);
+    ) {
 
-        return ResponseEntity.ok(responseDTO);
+        String refreshToken = cookieService.extractRefreshTokenFromCookie(httpServletRequest);
+
+        RefreshTokenResult refreshTokenResult = refreshTokenUseCase.refreshToken(refreshToken);
+        cookieService.addRefreshTokenCookie(httpServletResponse, refreshTokenResult.newRefreshToken());
+
+        RefreshTokenResponseDTO responseDTO = authWebMapper.toRefreshTokenResponse(refreshTokenResult);
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(responseDTO);
     }
 
 }
