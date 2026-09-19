@@ -40,11 +40,14 @@ public class CookieServiceImpl implements CookieService {
         if(httpServletRequest.getCookies() != null){
             for (Cookie cookie : httpServletRequest.getCookies()) {
                 if(cookieName.equals(cookie.getName())) {
-                    return cookie.getValue();
+                    String token = cookie.getValue();
+                    if(token != null && !token.isBlank()) {
+                        return token;
+                    }
                 }
             }
         }
-        return null;
+        throw new IllegalStateException("Refresh token cookie not found");
     }
 
     //clear cookie when logout

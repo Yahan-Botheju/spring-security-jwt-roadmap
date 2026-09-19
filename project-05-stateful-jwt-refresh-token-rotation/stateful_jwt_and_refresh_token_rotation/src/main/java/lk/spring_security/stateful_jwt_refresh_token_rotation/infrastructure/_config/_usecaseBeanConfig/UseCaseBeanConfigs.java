@@ -1,6 +1,7 @@
 package lk.spring_security.stateful_jwt_refresh_token_rotation.infrastructure._config._usecaseBeanConfig;
 
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.*;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.*;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.auth.AuthUseCase;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.auth.AuthUseCaseImpl;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.wallet.WalletUseCase;
@@ -20,7 +21,7 @@ public class UseCaseBeanConfigs {
             CookieService cookieService,
             TokenService tokenService,
             WalletRepository walletRepository
-    ){
+    ) {
         return new AuthUseCaseImpl(
                 refreshTokenRepository,
                 userRepository,
@@ -37,5 +38,39 @@ public class UseCaseBeanConfigs {
             WalletRepository walletRepository
     ) {
         return new WalletUseCaseImpl(walletRepository);
+    }
+
+
+    /* _REF__ */
+
+
+    //refresh token usecase impl
+    @Bean
+    public RefreshTokenUseCase refreshTokenUseCase(
+            RefreshTokenRepository refreshTokenRepository,
+            TokenService tokenService
+    ) {
+        return new RefreshTokenUseCaseImpl(refreshTokenRepository, tokenService);
+    }
+
+    //register usecase impl
+    @Bean
+    public RegisterUserUseCase registerUserUseCase(
+            UserRepository userRepository,
+            IdentityProvider identityProvider,
+            WalletRepository walletRepository
+    ) {
+        return new RegisterUserUseCaseImpl(userRepository, identityProvider, walletRepository);
+    }
+
+    //login user usecase impl
+    @Bean
+    public LoginUserUseCase loginUserUseCase(
+            UserRepository userRepository,
+            TokenService tokenService,
+            IdentityProvider identityProvider,
+            CookieService cookieService
+    ) {
+        return new LoginUserUseCaseImpl(userRepository, tokenService, identityProvider, cookieService);
     }
 }
