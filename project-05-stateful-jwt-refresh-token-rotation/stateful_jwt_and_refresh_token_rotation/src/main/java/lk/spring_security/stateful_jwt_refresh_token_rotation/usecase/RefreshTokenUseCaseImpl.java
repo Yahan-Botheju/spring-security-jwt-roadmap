@@ -4,11 +4,8 @@ import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.models.Refr
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.models.User;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.RefreshTokenRepository;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.TokenService;
-import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.records.RefreshTokenCommand;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.records.RefreshTokenResult;
 
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 
 public class RefreshTokenUseCaseImpl implements RefreshTokenUseCase {
 
@@ -29,21 +26,15 @@ public class RefreshTokenUseCaseImpl implements RefreshTokenUseCase {
 
     //generate new refresh token and save in db
     private void generateNewRefreshToken(User user, String refreshToken){
-        RefreshToken newRefreshToken = RefreshToken.builder()
-                .token(refreshToken)
-                .expiryDate(Instant.now().plus(7, ChronoUnit.DAYS))
-                .isUsed(false)
-                .isRevoked(false)
-                .user(user)
-                .build();
+        RefreshToken newRefreshToken = RefreshToken.createNewRefreshToken(user, refreshToken);
         refreshTokenRepository.saveRefreshToken(newRefreshToken);
     }
 
+    /*  __PUBLIC_METHODS__  */
 
-
-
-
-        public RefreshTokenResult refreshToken(String refreshToken) {
+    //create refresh token
+    @Override
+    public RefreshTokenResult refreshToken(String refreshToken) {
 
         //get token from db
         RefreshToken storedToken = refreshTokenRepository.findByToken(refreshToken)
@@ -63,12 +54,18 @@ public class RefreshTokenUseCaseImpl implements RefreshTokenUseCase {
         storedToken.markAsUsed();
         refreshTokenRepository.saveRefreshToken(storedToken);
 
-
+        String newAccessToken = tokenService.generateAccessToken(user);
+        String newRefreshToken = tokenService.generateRefreshToken(user);
 
         //use private method
-        generateNewRefreshToken(user, refreshToken);
+        generateNewRefreshToken(user, newRefreshToken);
 
 
-        return null;
+        return new RefreshTokenResult(
+                newAccessToken,
+                newRefreshToken,
+                user.getEmail(),
+                user.getRole().name()
+        );
     }
 }
