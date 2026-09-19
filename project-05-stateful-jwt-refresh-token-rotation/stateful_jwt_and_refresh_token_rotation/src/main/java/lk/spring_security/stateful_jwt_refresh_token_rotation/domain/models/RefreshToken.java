@@ -1,15 +1,12 @@
 package lk.spring_security.stateful_jwt_refresh_token_rotation.domain.models;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
 @Builder
 public class RefreshToken {
     private Long tokenId;
@@ -21,4 +18,27 @@ public class RefreshToken {
     private boolean isRevoked;
 
     private User user;
+
+    public RefreshToken(Long tokenId, String token, Instant expiryDate, boolean isUsed, boolean isRevoked, User user) {
+        this.tokenId = tokenId;
+        this.token = token;
+        this.expiryDate = expiryDate;
+        this.isUsed = isUsed;
+        this.isRevoked = isRevoked;
+        this.user = user;
+    }
+
+    /* __CREATE_FACTORY_METHOD__ */
+
+    public static RefreshToken createNewRefreshToken(User user, String refreshToken){
+        return RefreshToken.builder()
+                .token(refreshToken)
+                .expiryDate(Instant.now().plus(7, ChronoUnit.DAYS))
+                .isUsed(false)
+                .isRevoked(false)
+                .user(user)
+                .build();
+    }
+
+
 }
