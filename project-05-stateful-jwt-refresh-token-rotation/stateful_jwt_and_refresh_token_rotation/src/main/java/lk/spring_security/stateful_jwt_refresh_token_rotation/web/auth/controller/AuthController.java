@@ -10,9 +10,9 @@ import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.RefreshTok
 import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.RegisterUserUseCase;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.auth.AuthUseCase;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.records.RefreshTokenResult;
-import lk.spring_security.stateful_jwt_refresh_token_rotation.web.auth.DTOs.LoginUserRequestDTO;
-import lk.spring_security.stateful_jwt_refresh_token_rotation.web.auth.DTOs.LoginUserResponseDTO;
-import lk.spring_security.stateful_jwt_refresh_token_rotation.web.auth.DTOs.RefreshTokenResponseDTO;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.records.RegisterUseCommand;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.records.RegisterUserResult;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.web.auth.DTOs.*;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.web.auth.webMapper.AuthWebMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,14 +49,15 @@ public class AuthController {
 
     //register endpoint
     @PostMapping("/register")
-    public ResponseEntity<String> register(
-            @Valid @RequestBody LoginUserRequestDTO authRequestDTO
+    public ResponseEntity<RegisterUserResponseDTO> register(
+            @Valid @RequestBody RegisterUserRequestDTO registerUserRequestDTO
             ){
 
-        User toDomainModel = authWebMapper.toDomainModel(authRequestDTO);
-        authUseCase.registerUser(toDomainModel);
+        RegisterUseCommand toCommand = authWebMapper.toRegisterUserCommand(registerUserRequestDTO);
+        RegisterUserResult toUseCase = registerUserUseCase.registerUser(toCommand);
+        RegisterUserResponseDTO responseDTO = authWebMapper.toRegisterUserResponse(toUseCase);
 
-        return new ResponseEntity<>("User registered successfully", HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
     //login endpoint
