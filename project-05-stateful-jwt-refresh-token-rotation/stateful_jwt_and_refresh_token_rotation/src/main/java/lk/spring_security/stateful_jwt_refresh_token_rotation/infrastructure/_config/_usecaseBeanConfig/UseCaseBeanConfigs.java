@@ -44,8 +44,9 @@ public class UseCaseBeanConfigs {
     //refresh token usecase impl
     @Bean
     public RefreshTokenUseCase refreshTokenUseCase(
-            RefreshTokenRepository refreshTokenRepository
+            RefreshTokenRepository refreshTokenRepository,
+            TokenService tokenService
     ){
-        return new RefreshTokenUseCaseImpl(refreshTokenRepository);
+        return new RefreshTokenUseCaseImpl(refreshTokenRepository, tokenService);
     }
 }
