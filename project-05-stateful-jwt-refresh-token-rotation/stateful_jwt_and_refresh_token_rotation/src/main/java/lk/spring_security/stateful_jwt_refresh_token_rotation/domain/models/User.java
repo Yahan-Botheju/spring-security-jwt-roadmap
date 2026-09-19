@@ -15,4 +15,12 @@ public class User {
     private String password;
 
     private Role role;
+
+    /* __DOMAIN_LOGIC__ */
+    public void setDefaultRole(){
+        if(role != null){
+            throw new IllegalStateException("There is already a role set");
+        }
+        this.role = Role.USER;
+    }
 }
