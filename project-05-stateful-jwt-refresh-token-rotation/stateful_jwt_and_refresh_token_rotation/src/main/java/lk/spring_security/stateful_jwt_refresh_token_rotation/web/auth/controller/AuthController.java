@@ -7,10 +7,11 @@ import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.models.User
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.records.AuthenticatedUser;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.CookieService;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.RefreshTokenUseCase;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.RegisterUserUseCase;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.auth.AuthUseCase;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.records.RefreshTokenResult;
-import lk.spring_security.stateful_jwt_refresh_token_rotation.web.auth.DTOs.AuthRequestDTO;
-import lk.spring_security.stateful_jwt_refresh_token_rotation.web.auth.DTOs.AuthResponseDTO;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.web.auth.DTOs.LoginUserRequestDTO;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.web.auth.DTOs.LoginUserResponseDTO;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.web.auth.DTOs.RefreshTokenResponseDTO;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.web.auth.webMapper.AuthWebMapper;
 import org.springframework.http.HttpStatus;
@@ -30,23 +31,26 @@ public class AuthController {
     private final CookieService cookieService;
 
     private final RefreshTokenUseCase refreshTokenUseCase;
+    private final RegisterUserUseCase registerUserUseCase;
 
     public AuthController(
             AuthUseCase authUseCase,
             AuthWebMapper authWebMapper,
             CookieService cookieService,
-            RefreshTokenUseCase refreshTokenUseCase
+            RefreshTokenUseCase refreshTokenUseCase,
+            RegisterUserUseCase registerUserUseCase
     ) {
         this.authUseCase = authUseCase;
         this.authWebMapper = authWebMapper;
         this.cookieService = cookieService;
         this.refreshTokenUseCase = refreshTokenUseCase;
+        this.registerUserUseCase = registerUserUseCase;
     }
 
     //register endpoint
     @PostMapping("/register")
     public ResponseEntity<String> register(
-            @Valid @RequestBody AuthRequestDTO authRequestDTO
+            @Valid @RequestBody LoginUserRequestDTO authRequestDTO
             ){
 
         User toDomainModel = authWebMapper.toDomainModel(authRequestDTO);
@@ -57,8 +61,8 @@ public class AuthController {
 
     //login endpoint
     @PostMapping("/login")
-    public ResponseEntity<AuthResponseDTO> login(
-            @Valid @RequestBody AuthRequestDTO authRequestDTO,
+    public ResponseEntity<LoginUserResponseDTO> login(
+            @Valid @RequestBody LoginUserRequestDTO authRequestDTO,
             HttpServletResponse httpServletResponse
     ){
         //get token
@@ -67,7 +71,7 @@ public class AuthController {
                 authRequestDTO.getPassword(),
                 httpServletResponse);
 
-        AuthResponseDTO responseDTO = authWebMapper.toResponse(authenticatedUser);
+        LoginUserResponseDTO responseDTO = authWebMapper.toResponse(authenticatedUser);
 
         return ResponseEntity.ok(responseDTO);
     }
