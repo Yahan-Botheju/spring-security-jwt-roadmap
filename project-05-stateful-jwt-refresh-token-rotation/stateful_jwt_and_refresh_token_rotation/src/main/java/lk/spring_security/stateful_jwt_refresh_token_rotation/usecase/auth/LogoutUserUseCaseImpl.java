@@ -1,4 +1,4 @@
-package lk.spring_security.stateful_jwt_refresh_token_rotation.usecase;
+package lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.auth;
 
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.models.RefreshToken;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.RefreshTokenRepository;
