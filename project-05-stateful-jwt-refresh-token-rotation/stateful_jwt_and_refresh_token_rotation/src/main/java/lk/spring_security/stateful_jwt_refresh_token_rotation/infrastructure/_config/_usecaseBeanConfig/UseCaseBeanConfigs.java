@@ -1,46 +1,14 @@
 package lk.spring_security.stateful_jwt_refresh_token_rotation.infrastructure._config._usecaseBeanConfig;
 
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.*;
-import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.*;
-import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.wallet.WalletUseCase;
-import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.wallet.WalletUseCaseImpl;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.auth.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class UseCaseBeanConfigs {
 
-    //auth usecase impl
-    @Bean
-    public AuthUseCase authUseCase(
-            RefreshTokenRepository refreshTokenRepository,
-            UserRepository userRepository,
-            IdentityProvider identityProvider,
-            CookieService cookieService,
-            TokenService tokenService,
-            WalletRepository walletRepository
-    ) {
-        return new AuthUseCaseImpl(
-                refreshTokenRepository,
-                userRepository,
-                identityProvider,
-                cookieService,
-                tokenService,
-                walletRepository
-        );
-    }
-
-    //wallet usecase impl
-    @Bean
-    public WalletUseCase walletUseCase(
-            WalletRepository walletRepository
-    ) {
-        return new WalletUseCaseImpl(walletRepository);
-    }
-
-
-    /* _REF__ */
-
+    /* __AUTH_USECASES__ */
 
     //refresh token usecase impl
     @Bean
