@@ -11,15 +11,19 @@ public class User {
 
     private Role role;
 
+    public User(Long userId, String email, String password, Role role) {
+        this.userId = userId;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+    }
 
     /* __FACTORY_METHOD__ */
     public static User createNewUser(
-            Long userId,
             String email,
-            String password,
-            Role role
+            String password
     ) {
-        return new User(userId, email, password, role);
+        return new User(null, email, password, Role.USER);
     }
 
 
