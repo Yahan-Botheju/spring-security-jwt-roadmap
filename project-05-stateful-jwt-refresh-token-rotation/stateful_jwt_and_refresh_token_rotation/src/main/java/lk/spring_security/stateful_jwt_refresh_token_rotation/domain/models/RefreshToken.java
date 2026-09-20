@@ -47,5 +47,10 @@ public class RefreshToken {
         this.isUsed = true;
     }
 
+    //refresh token revoked
+    public void markAsRevoked() {
+        this.isRevoked = true;
+    }
+
 
 }
