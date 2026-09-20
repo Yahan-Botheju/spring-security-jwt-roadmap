@@ -2,6 +2,8 @@ package lk.spring_security.stateful_jwt_refresh_token_rotation.usecase;
 
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.models.User;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.*;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.records.LoginUserCommand;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.records.LoginUserResult;
 
 public class LoginUserUseCaseImpl extends GenerateRefreshTokenSupport implements LoginUserUseCase {
 
@@ -9,33 +11,42 @@ public class LoginUserUseCaseImpl extends GenerateRefreshTokenSupport implements
     private final UserRepository userRepository;
     private final TokenService tokenService;
     private final IdentityProvider identityProvider;
-    private final CookieService cookieService;
 
     public LoginUserUseCaseImpl(
             UserRepository userRepository,
             TokenService tokenService,
             IdentityProvider identityProvider,
-            CookieService cookieService,
             RefreshTokenRepository refreshTokenRepository
     ) {
         super(refreshTokenRepository);
         this.userRepository = userRepository;
         this.tokenService = tokenService;
         this.identityProvider = identityProvider;
-        this.cookieService = cookieService;
     }
 
-    public void loginUser(String email, String password){
+    @Override
+    public LoginUserResult loginUser(LoginUserCommand loginUserCommand) {
 
         //check email password correctness through auth provider
-        identityProvider.authenticate(email, password);
+        identityProvider.authenticate(loginUserCommand.email(), loginUserCommand.password());
 
         //get user from db
-        User user = userRepository.findByEmail(email)
+        User user = userRepository.findByEmail(loginUserCommand.email())
                 .orElseThrow(() -> new IllegalStateException("User not found"));
 
         //generate tokens
         String accessToken = tokenService.generateAccessToken(user);
         String refreshToken = tokenService.generateRefreshToken(user);
+
+        //user abstract method
+        generateRefreshToken(user, refreshToken);
+
+        return new LoginUserResult(
+                accessToken,
+                refreshToken,
+                user.getUserId(),
+                user.getEmail(),
+                user.getRole()
+        );
     }
 }
