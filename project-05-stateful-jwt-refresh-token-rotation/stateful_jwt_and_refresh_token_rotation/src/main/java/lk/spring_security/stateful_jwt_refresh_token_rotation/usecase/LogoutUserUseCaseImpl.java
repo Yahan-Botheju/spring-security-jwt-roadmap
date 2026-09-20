@@ -2,7 +2,6 @@ package lk.spring_security.stateful_jwt_refresh_token_rotation.usecase;
 
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.models.RefreshToken;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.RefreshTokenRepository;
-import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.records.LogoutUserCommand;
 
 public class LogoutUserUseCaseImpl implements LogoutUserUseCase {
 
@@ -15,16 +14,16 @@ public class LogoutUserUseCaseImpl implements LogoutUserUseCase {
 
     //create logout user
     @Override
-    public void logout(LogoutUserCommand logoutUserCommand) {
+    public void logout(String refreshToken) {
         //toke validation
-        if(logoutUserCommand.refreshToken() == null || logoutUserCommand.refreshToken().isBlank()){
+        if(refreshToken == null || refreshToken.isBlank()){
             return;
         }
         //get token
-        RefreshToken token = refreshTokenRepository.findByToken(logoutUserCommand.refreshToken())
+        RefreshToken token = refreshTokenRepository.findByToken(refreshToken)
                 .orElseThrow(() ->  new RuntimeException("Refresh token not found"));
         //use domain model
-        token.markAsUsed();
+        token.markAsRevoked();
         //save as use one
         refreshTokenRepository.saveRefreshToken(token);
     }
