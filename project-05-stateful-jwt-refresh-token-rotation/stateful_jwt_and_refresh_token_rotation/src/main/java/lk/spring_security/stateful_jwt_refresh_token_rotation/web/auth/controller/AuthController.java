@@ -10,9 +10,7 @@ import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.LoginUserU
 import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.RefreshTokenUseCase;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.RegisterUserUseCase;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.auth.AuthUseCase;
-import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.records.RefreshTokenResult;
-import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.records.RegisterUseCommand;
-import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.records.RegisterUserResult;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.records.*;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.web.auth.DTOs.*;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.web.auth.webMapper.AuthWebMapper;
 import org.springframework.http.HttpStatus;
@@ -67,18 +65,17 @@ public class AuthController {
     //login endpoint
     @PostMapping("/login")
     public ResponseEntity<LoginUserResponseDTO> login(
-            @Valid @RequestBody LoginUserRequestDTO authRequestDTO,
+            @Valid @RequestBody LoginUserRequestDTO loginUserRequestDTO,
             HttpServletResponse httpServletResponse
     ){
-        //get token
-        AuthenticatedUser authenticatedUser = authUseCase.loginUser(
-                authRequestDTO.getEmail(),
-                authRequestDTO.getPassword(),
-                httpServletResponse);
+        LoginUserCommand command = authWebMapper.toLoginUserCommand(loginUserRequestDTO);
+        LoginUserResult toUseCase = loginUserUseCase.loginUser(command);
+        LoginUserResponseDTO responseDTO = authWebMapper.toLoginUserResponse(toUseCase);
 
-        LoginUserResponseDTO responseDTO = authWebMapper.toResponse(authenticatedUser);
+        //call cookie service in controller
+        cookieService.addRefreshTokenCookie(httpServletResponse, toUseCase.refreshToken());
 
-        return ResponseEntity.ok(responseDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
     }
 
     //logout endpoint
