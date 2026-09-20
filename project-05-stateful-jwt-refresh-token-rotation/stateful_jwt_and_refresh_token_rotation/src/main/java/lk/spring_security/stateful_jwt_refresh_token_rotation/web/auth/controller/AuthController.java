@@ -7,6 +7,7 @@ import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.models.User
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.records.AuthenticatedUser;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.CookieService;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.LoginUserUseCase;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.LogoutUserUseCase;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.RefreshTokenUseCase;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.RegisterUserUseCase;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.auth.AuthUseCase;
@@ -32,6 +33,7 @@ public class AuthController {
     private final RefreshTokenUseCase refreshTokenUseCase;
     private final RegisterUserUseCase registerUserUseCase;
     private final LoginUserUseCase loginUserUseCase;
+    private final LogoutUserUseCase logoutUserUseCase;
 
     public AuthController(
             AuthUseCase authUseCase,
@@ -39,7 +41,8 @@ public class AuthController {
             CookieService cookieService,
             RefreshTokenUseCase refreshTokenUseCase,
             RegisterUserUseCase registerUserUseCase,
-            LoginUserUseCase loginUserUseCase
+            LoginUserUseCase loginUserUseCase,
+            LogoutUserUseCase logoutUserUseCase
     ) {
         this.authUseCase = authUseCase;
         this.authWebMapper = authWebMapper;
@@ -47,6 +50,7 @@ public class AuthController {
         this.refreshTokenUseCase = refreshTokenUseCase;
         this.registerUserUseCase = registerUserUseCase;
         this.loginUserUseCase = loginUserUseCase;
+        this.logoutUserUseCase = logoutUserUseCase;
     }
 
     //register endpoint
