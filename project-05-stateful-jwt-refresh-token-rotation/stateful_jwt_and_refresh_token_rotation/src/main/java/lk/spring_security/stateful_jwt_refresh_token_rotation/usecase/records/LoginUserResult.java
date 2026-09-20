@@ -7,7 +7,6 @@ public record LoginUserResult(
         String refreshToken,
         Long userId,
         String email,
-        String password,
         Role role
 ) {
 }
