@@ -69,9 +69,16 @@ public class UseCaseBeanConfigs {
             UserRepository userRepository,
             TokenService tokenService,
             IdentityProvider identityProvider,
-            CookieService cookieService,
             RefreshTokenRepository refreshTokenRepository
     ) {
-        return new LoginUserUseCaseImpl(userRepository, tokenService, identityProvider, cookieService, refreshTokenRepository);
+        return new LoginUserUseCaseImpl(userRepository, tokenService, identityProvider, refreshTokenRepository);
+    }
+
+    //logout user usecase impl
+    @Bean
+    public LogoutUserUseCase logoutUserUseCase(
+            RefreshTokenRepository refreshTokenRepository
+    ){
+        return new LogoutUserUseCaseImpl(refreshTokenRepository);
     }
 }
