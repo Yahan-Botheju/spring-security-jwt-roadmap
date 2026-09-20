@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.models.User;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.records.AuthenticatedUser;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.CookieService;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.LoginUserUseCase;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.RefreshTokenUseCase;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.RegisterUserUseCase;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.auth.AuthUseCase;
@@ -32,19 +33,22 @@ public class AuthController {
 
     private final RefreshTokenUseCase refreshTokenUseCase;
     private final RegisterUserUseCase registerUserUseCase;
+    private final LoginUserUseCase loginUserUseCase;
 
     public AuthController(
             AuthUseCase authUseCase,
             AuthWebMapper authWebMapper,
             CookieService cookieService,
             RefreshTokenUseCase refreshTokenUseCase,
-            RegisterUserUseCase registerUserUseCase
+            RegisterUserUseCase registerUserUseCase,
+            LoginUserUseCase loginUserUseCase
     ) {
         this.authUseCase = authUseCase;
         this.authWebMapper = authWebMapper;
         this.cookieService = cookieService;
         this.refreshTokenUseCase = refreshTokenUseCase;
         this.registerUserUseCase = registerUserUseCase;
+        this.loginUserUseCase = loginUserUseCase;
     }
 
     //register endpoint
