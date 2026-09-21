@@ -2,6 +2,8 @@ package lk.spring_security.stateful_jwt_refresh_token_rotation.infrastructure._c
 
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.*;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.auth.*;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.wallet.WalletBalanceUseCase;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.wallet.WalletBalanceUseCaseImpl;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.wallet.WalletUseCase;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.wallet.WalletUseCaseImpl;
 import org.springframework.context.annotation.Bean;
@@ -54,9 +56,9 @@ public class UseCaseBeanConfigs {
 
     //wallet usecase impl
     @Bean
-    public WalletUseCase walletUseCase(
+    public WalletBalanceUseCase walletBalanceUseCase(
             WalletRepository walletRepository
     ){
-        return new WalletUseCaseImpl(walletRepository);
+        return new WalletBalanceUseCaseImpl(walletRepository);
     }
 }
