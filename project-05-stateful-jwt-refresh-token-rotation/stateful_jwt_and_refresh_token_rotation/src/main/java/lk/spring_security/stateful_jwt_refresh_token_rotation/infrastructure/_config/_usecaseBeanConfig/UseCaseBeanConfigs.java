@@ -64,4 +64,12 @@ public class UseCaseBeanConfigs {
     public DepositMoneyUseCase depositMoneyUseCase(WalletRepository walletRepository){
         return new DepositMoneyUseCaseImpl(walletRepository);
     }
+
+    //withdraw money usecase impl
+    @Bean
+    public WithdrawMoneyUseCase withdrawMoneyUseCase(
+            WalletRepository walletRepository
+    ){
+        return new WithdrawMoneyUseCaseImpl(walletRepository);
+    }
 }
