@@ -4,11 +4,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.CookieService;
-import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.LoginUserUseCase;
-import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.LogoutUserUseCase;
-import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.RefreshTokenUseCase;
-import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.RegisterUserUseCase;
-import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.records.*;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.auth.LoginUserUseCase;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.auth.LogoutUserUseCase;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.auth.RefreshTokenUseCase;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.auth.RegisterUserUseCase;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.auth.records.*;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.web.auth.DTOs.*;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.web.auth.webMapper.AuthWebMapper;
 import org.springframework.http.HttpStatus;
@@ -53,7 +53,7 @@ public class AuthController {
             @Valid @RequestBody RegisterUserRequestDTO registerUserRequestDTO
             ){
 
-        RegisterUseCommand toCommand = authWebMapper.toRegisterUserCommand(registerUserRequestDTO);
+        RegisterUserCommand toCommand = authWebMapper.toRegisterUserCommand(registerUserRequestDTO);
         RegisterUserResult toUseCase = registerUserUseCase.registerUser(toCommand);
         RegisterUserResponseDTO responseDTO = authWebMapper.toRegisterUserResponse(toUseCase);
 

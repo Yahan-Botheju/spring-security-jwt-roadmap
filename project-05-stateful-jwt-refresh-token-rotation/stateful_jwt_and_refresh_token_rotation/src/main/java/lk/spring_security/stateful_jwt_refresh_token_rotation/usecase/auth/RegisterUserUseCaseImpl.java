@@ -5,8 +5,8 @@ import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.models.Wall
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.IdentityProvider;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.UserRepository;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.WalletRepository;
-import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.records.RegisterUseCommand;
-import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.records.RegisterUserResult;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.auth.records.RegisterUserCommand;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.auth.records.RegisterUserResult;
 
 public class RegisterUserUseCaseImpl implements RegisterUserUseCase {
 
@@ -26,7 +26,7 @@ public class RegisterUserUseCaseImpl implements RegisterUserUseCase {
     }
 
     @Override
-    public RegisterUserResult registerUser(RegisterUseCommand registerUseCommand){
+    public RegisterUserResult registerUser(RegisterUserCommand registerUseCommand){
 
         //check user existence by email
         if(userRepository.findByEmail(registerUseCommand.email()).isPresent()){

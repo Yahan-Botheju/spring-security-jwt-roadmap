@@ -2,13 +2,14 @@ package lk.spring_security.stateful_jwt_refresh_token_rotation.infrastructure._c
 
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.*;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.auth.*;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.wallet.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class UseCaseBeanConfigs {
 
-    /* __AUTH_USECASES__ */
+    /* __AUTH_USE_CASES__ */
 
     //refresh token usecase impl
     @Bean
@@ -46,5 +47,29 @@ public class UseCaseBeanConfigs {
             RefreshTokenRepository refreshTokenRepository
     ){
         return new LogoutUserUseCaseImpl(refreshTokenRepository);
+    }
+
+    /* __WALLET_USE_CASES__ */
+
+    //wallet usecase impl
+    @Bean
+    public WalletBalanceUseCase walletBalanceUseCase(
+            WalletRepository walletRepository
+    ){
+        return new WalletBalanceUseCaseImpl(walletRepository);
+    }
+
+    //deposit money usecase impl
+    @Bean
+    public DepositMoneyUseCase depositMoneyUseCase(WalletRepository walletRepository){
+        return new DepositMoneyUseCaseImpl(walletRepository);
+    }
+
+    //withdraw money usecase impl
+    @Bean
+    public WithdrawMoneyUseCase withdrawMoneyUseCase(
+            WalletRepository walletRepository
+    ){
+        return new WithdrawMoneyUseCaseImpl(walletRepository);
     }
 }

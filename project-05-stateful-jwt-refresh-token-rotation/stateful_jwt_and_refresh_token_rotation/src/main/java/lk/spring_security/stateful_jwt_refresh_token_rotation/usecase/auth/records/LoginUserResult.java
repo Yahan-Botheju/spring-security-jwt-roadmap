@@ -1,4 +1,4 @@
-package lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.records;
+package lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.auth.records;
 
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.models.Role;
 
