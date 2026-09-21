@@ -8,7 +8,7 @@ import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.auth.Login
 import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.auth.LogoutUserUseCase;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.auth.RefreshTokenUseCase;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.auth.RegisterUserUseCase;
-import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.records.*;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.auth.records.*;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.web.auth.DTOs.*;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.web.auth.webMapper.AuthWebMapper;
 import org.springframework.http.HttpStatus;

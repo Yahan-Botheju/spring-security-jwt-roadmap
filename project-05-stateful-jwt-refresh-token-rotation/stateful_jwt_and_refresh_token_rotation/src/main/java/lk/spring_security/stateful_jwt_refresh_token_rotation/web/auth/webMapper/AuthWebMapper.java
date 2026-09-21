@@ -1,7 +1,7 @@
 package lk.spring_security.stateful_jwt_refresh_token_rotation.web.auth.webMapper;
 
 
-import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.records.*;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.auth.records.*;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.web.auth.DTOs.*;
 import org.mapstruct.Mapper;
 
@@ -27,7 +27,7 @@ public interface AuthWebMapper {
     /* __LOGIN_USER__ */
 
     //requestDTO to usecase obj
-    LoginUserCommand  toLoginUserCommand(LoginUserRequestDTO loginUserRequestDTO);
+    LoginUserCommand toLoginUserCommand(LoginUserRequestDTO loginUserRequestDTO);
 
     //domain model to responseDTO
     LoginUserResponseDTO toLoginUserResponse(LoginUserResult loginUserResult);
