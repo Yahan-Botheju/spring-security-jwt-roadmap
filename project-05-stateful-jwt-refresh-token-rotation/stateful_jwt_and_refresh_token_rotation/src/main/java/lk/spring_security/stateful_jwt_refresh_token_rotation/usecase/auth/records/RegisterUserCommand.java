@@ -1,7 +1,7 @@
 package lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.auth.records;
 
 
-public record RegisterUseCommand(
+public record RegisterUserCommand(
         String email,
         String password
 ) {

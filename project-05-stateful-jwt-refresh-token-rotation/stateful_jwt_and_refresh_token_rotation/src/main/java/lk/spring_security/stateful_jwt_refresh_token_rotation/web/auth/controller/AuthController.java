@@ -53,7 +53,7 @@ public class AuthController {
             @Valid @RequestBody RegisterUserRequestDTO registerUserRequestDTO
             ){
 
-        RegisterUseCommand toCommand = authWebMapper.toRegisterUserCommand(registerUserRequestDTO);
+        RegisterUserCommand toCommand = authWebMapper.toRegisterUserCommand(registerUserRequestDTO);
         RegisterUserResult toUseCase = registerUserUseCase.registerUser(toCommand);
         RegisterUserResponseDTO responseDTO = authWebMapper.toRegisterUserResponse(toUseCase);
 

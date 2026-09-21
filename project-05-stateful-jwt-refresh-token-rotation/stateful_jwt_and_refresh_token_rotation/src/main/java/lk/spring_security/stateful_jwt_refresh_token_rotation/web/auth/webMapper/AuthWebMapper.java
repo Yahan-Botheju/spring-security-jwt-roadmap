@@ -17,7 +17,7 @@ public interface AuthWebMapper {
     /* __REGISTER_USER__ */
 
     //requestDTO to usecase obj
-    RegisterUseCommand toRegisterUserCommand(RegisterUserRequestDTO registerUserRequestDTO);
+    RegisterUserCommand toRegisterUserCommand(RegisterUserRequestDTO registerUserRequestDTO);
 
     //domain model to responseDTO
     RegisterUserResponseDTO toRegisterUserResponse(RegisterUserResult registerUserResult);
