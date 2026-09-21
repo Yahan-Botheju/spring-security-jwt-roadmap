@@ -23,13 +23,6 @@ public class RefreshTokenUseCaseImpl extends  GenerateRefreshTokenSupport implem
         this.tokenService = tokenService;
     }
 
-    /*  __HELPER_METHODS__  */
-
-    //generate new refresh token and save in db
-    private void generateNewRefreshToken(User user, String refreshToken){
-        RefreshToken newRefreshToken = RefreshToken.createNewRefreshToken(user, refreshToken);
-        refreshTokenRepository.saveRefreshToken(newRefreshToken);
-    }
 
     /*  __PUBLIC_METHODS__  */
 
@@ -59,7 +52,7 @@ public class RefreshTokenUseCaseImpl extends  GenerateRefreshTokenSupport implem
         String newRefreshToken = tokenService.generateRefreshToken(user);
 
         //use private method
-        generateNewRefreshToken(user, newRefreshToken);
+        generateRefreshToken(user, newRefreshToken);
 
 
         return new RefreshTokenResult(
