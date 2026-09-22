@@ -5,13 +5,11 @@ import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositorie
 import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.wallet.records.WithdrawCommand;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.wallet.records.WithdrawResult;
 
-public class WithdrawMoneyUseCaseImpl implements WithdrawMoneyUseCase {
+public class WithdrawMoneyUseCaseImpl extends UserFindSupport implements WithdrawMoneyUseCase {
 
     //inject required dependencies
-    private final WalletRepository walletRepository;
-
     public WithdrawMoneyUseCaseImpl(WalletRepository walletRepository) {
-        this.walletRepository = walletRepository;
+        super(walletRepository);
     }
 
     //withdraw money
@@ -23,14 +21,14 @@ public class WithdrawMoneyUseCaseImpl implements WithdrawMoneyUseCase {
         }
 
         //find user related to wallet
-        Wallet userWallet = walletRepository.findByUserEmail(withdrawCommand.email())
-                .orElseThrow(() ->  new RuntimeException("users' wallet not found" + "," + withdrawCommand.email()));
+        Wallet userWallet = findUserWalletByEmail(withdrawCommand.email());
 
         //calculate new balance and update
         Double newBalance = userWallet.getWalletBalance() - withdrawCommand.amount();
         userWallet.depositMoney(newBalance);
 
-        walletRepository.saveWallet(userWallet);
+        //use abstract method
+        saveWallet(userWallet);
 
         return new WithdrawResult(
                 userWallet.getUser().getEmail(),
