@@ -2,6 +2,7 @@ package lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.auth;
 
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.models.User;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.*;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.auth.abstract_helper.GenerateRefreshTokenSupport;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.auth.records.LoginUserCommand;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.auth.records.LoginUserResult;
 
