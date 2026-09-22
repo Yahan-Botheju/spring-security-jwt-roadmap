@@ -3,7 +3,15 @@ package lk.spring_security.stateful_jwt_refresh_token_rotation.web.wallet.contro
 import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.wallet.DepositMoneyUseCase;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.wallet.WalletBalanceUseCase;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.wallet.WithdrawMoneyUseCase;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.wallet.records.WalletBalanceCommand;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.wallet.records.WalletBalanceResult;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.web.wallet.DTOs.WalletBalanceRequestDTO;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.web.wallet.DTOs.WalletBalanceResponseDTO;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.web.wallet.webMapper.WalletWebMapper;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -29,16 +37,20 @@ public class WalletController {
     }
 
     //get wallet balance
-//    @GetMapping("/balance")
-//    public ResponseEntity<WalletResponseDTO> getWalletBalance(
-//            @AuthenticationPrincipal UserDetails userDetails
-//            ){
-//        //get user email
-//        String currentUserEmail = userDetails.getUsername();
-//        Wallet setWallet = walletUseCase.getWalletBalance(currentUserEmail);
-//
-//        return ResponseEntity.ok(walletWebMapper.toResponseDTO(setWallet));
-//    }
+    @GetMapping("/balance")
+    public ResponseEntity<WalletBalanceResponseDTO> getWalletBalance(
+            @AuthenticationPrincipal UserDetails userDetails
+            ){
+        //get user email
+        String currentUserEmail = userDetails.getUsername();
+        WalletBalanceRequestDTO  walletBalanceRequestDTO = new WalletBalanceRequestDTO(currentUserEmail);
+
+        WalletBalanceCommand toCommand = walletWebMapper.toBalanceCommand(walletBalanceRequestDTO);
+        WalletBalanceResult toUseCase = walletBalanceUseCase.getWalletBalance(toCommand);
+        WalletBalanceResponseDTO responseDTO = walletWebMapper.toBalanceResponseDTO(toUseCase);
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
+    }
 
     //deposit money
 //    @PostMapping("/deposit")
