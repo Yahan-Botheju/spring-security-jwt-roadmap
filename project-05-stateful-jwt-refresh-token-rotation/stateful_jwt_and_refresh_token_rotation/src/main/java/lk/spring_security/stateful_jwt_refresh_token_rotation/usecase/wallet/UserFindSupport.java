@@ -18,4 +18,9 @@ public abstract class UserFindSupport {
         return walletRepository.findByUserEmail(email)
                 .orElseThrow(() ->  new ResourceNotFoundException("wallet not found"));
     }
+
+    //save wallet
+    protected void saveWallet(Wallet wallet) {
+        walletRepository.saveWallet(wallet);
+    }
 }
