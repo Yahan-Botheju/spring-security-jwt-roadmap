@@ -1,4 +1,4 @@
-package lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.wallet;
+package lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.wallet.abstract_helper;
 
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.models.Wallet;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.WalletRepository;

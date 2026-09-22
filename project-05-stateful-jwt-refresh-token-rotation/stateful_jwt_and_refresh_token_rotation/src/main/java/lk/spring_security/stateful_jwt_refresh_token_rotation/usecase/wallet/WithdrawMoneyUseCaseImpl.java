@@ -2,6 +2,7 @@ package lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.wallet;
 
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.models.Wallet;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.WalletRepository;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.wallet.abstract_helper.UserFindSupport;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.wallet.records.WithdrawCommand;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.wallet.records.WithdrawResult;
 
