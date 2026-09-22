@@ -1,11 +1,13 @@
 package lk.spring_security.stateful_jwt_refresh_token_rotation.web.wallet.controller;
 
 import jakarta.validation.Valid;
-import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.models.Wallet;
-import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.wallet.WalletUseCase;
-import lk.spring_security.stateful_jwt_refresh_token_rotation.web.wallet.DTOs.TransferRequestDTO;
-import lk.spring_security.stateful_jwt_refresh_token_rotation.web.wallet.DTOs.WalletResponseDTO;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.wallet.DepositMoneyUseCase;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.wallet.WalletBalanceUseCase;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.wallet.WithdrawMoneyUseCase;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.wallet.records.*;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.web.wallet.DTOs.*;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.web.wallet.webMapper.WalletWebMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,50 +18,73 @@ import org.springframework.web.bind.annotation.*;
 public class WalletController {
 
     //inject required dependencies
-    private final WalletUseCase walletUseCase;
+    private final DepositMoneyUseCase depositMoneyUseCase;
+    private final WithdrawMoneyUseCase withdrawMoneyUseCase;
+    private final WalletBalanceUseCase walletBalanceUseCase;
     private final WalletWebMapper walletWebMapper;
 
     public WalletController(
-            WalletUseCase walletUseCase,
+            DepositMoneyUseCase depositMoneyUseCase,
+            WithdrawMoneyUseCase withdrawMoneyUseCase,
+            WalletBalanceUseCase walletBalanceUseCase,
             WalletWebMapper walletWebMapper
     ) {
-        this.walletUseCase = walletUseCase;
+        this.depositMoneyUseCase = depositMoneyUseCase;
+        this.withdrawMoneyUseCase = withdrawMoneyUseCase;
+        this.walletBalanceUseCase = walletBalanceUseCase;
         this.walletWebMapper = walletWebMapper;
     }
 
     //get wallet balance
     @GetMapping("/balance")
-    public ResponseEntity<WalletResponseDTO> getWalletBalance(
+    public ResponseEntity<WalletBalanceResponseDTO> getWalletBalance(
             @AuthenticationPrincipal UserDetails userDetails
             ){
         //get user email
         String currentUserEmail = userDetails.getUsername();
-        Wallet setWallet = walletUseCase.getWalletBalance(currentUserEmail);
+        //make requestDto
+        WalletBalanceRequestDTO  walletBalanceRequestDTO = new WalletBalanceRequestDTO(currentUserEmail);
 
-        return ResponseEntity.ok(walletWebMapper.toResponseDTO(setWallet));
+        //turn to command
+        WalletBalanceCommand toCommand = walletWebMapper.toBalanceCommand(walletBalanceRequestDTO);
+        //set to usecase
+        WalletBalanceResult toUseCase = walletBalanceUseCase.getWalletBalance(toCommand);
+        //turn to response obj
+        WalletBalanceResponseDTO responseDTO = walletWebMapper.toBalanceResponseDTO(toUseCase);
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
     }
 
     //deposit money
     @PostMapping("/deposit")
-    public ResponseEntity<WalletResponseDTO> depositMoney(
+    public ResponseEntity<DepositResponseDTO> depositMoney(
             @AuthenticationPrincipal UserDetails userDetails,
-            @Valid @RequestBody TransferRequestDTO  transferRequestDTO
+            @Valid @RequestBody DepositRequestDTO depositRequestDTO
             ){
-        String currentUserEmail = userDetails.getUsername();
-        Wallet updateWallet = walletUseCase.depositMoney(currentUserEmail, transferRequestDTO.getAmount());
 
-        return ResponseEntity.ok(walletWebMapper.toResponseDTO(updateWallet));
+        String currentUserEmail = userDetails.getUsername();
+        DepositRequestDTO toDepositRequestDTO = new DepositRequestDTO(currentUserEmail,depositRequestDTO.getAmount());
+
+        DepositCommand toCommand = walletWebMapper.toDepositCommand(toDepositRequestDTO);
+        DepositResult toUseCase = depositMoneyUseCase.depositMoney(toCommand);
+        DepositResponseDTO responseDTO = walletWebMapper.toDepositResponseDTO(toUseCase);
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
     }
 
     //withdraw money
     @PostMapping("/withdraw")
-    public ResponseEntity<WalletResponseDTO> withdrawMoney(
+    public ResponseEntity<WithdrawResponseDTO> withdrawMoney(
             @AuthenticationPrincipal UserDetails userDetails,
-            @Valid @RequestBody TransferRequestDTO  transferRequestDTO
+            @Valid @RequestBody WithdrawRequestDTO withdrawRequestDTO
     ){
         String currentUserEmail = userDetails.getUsername();
-        Wallet updatedWallet = walletUseCase.withdrawMoney(currentUserEmail, transferRequestDTO.getAmount());
+        WithdrawRequestDTO toWithdrawRequestDTO = new WithdrawRequestDTO(currentUserEmail,withdrawRequestDTO.getAmount());
 
-        return ResponseEntity.ok(walletWebMapper.toResponseDTO(updatedWallet));
+        WithdrawCommand toCommand = walletWebMapper.toWithdrawCommand(toWithdrawRequestDTO);
+        WithdrawResult toUseCase = withdrawMoneyUseCase.withdrawMoney(toCommand);
+        WithdrawResponseDTO responseDTO = walletWebMapper.toWithdrawResponseDTO(toUseCase);
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
     }
 }

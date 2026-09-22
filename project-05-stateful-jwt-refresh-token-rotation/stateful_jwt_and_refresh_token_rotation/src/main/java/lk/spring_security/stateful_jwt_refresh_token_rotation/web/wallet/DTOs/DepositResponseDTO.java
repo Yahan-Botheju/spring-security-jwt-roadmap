@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class WalletResponseDTO {
+public class DepositResponseDTO {
     private String email;
     private Double walletBalance;
 }

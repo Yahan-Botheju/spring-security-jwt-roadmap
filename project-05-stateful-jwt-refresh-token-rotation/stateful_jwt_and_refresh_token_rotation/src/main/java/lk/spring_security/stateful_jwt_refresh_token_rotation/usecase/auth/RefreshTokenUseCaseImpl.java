@@ -4,10 +4,11 @@ import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.models.Refr
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.models.User;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.RefreshTokenRepository;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.domain.repositories.TokenService;
+import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.auth.abstract_helper.GenerateRefreshTokenSupport;
 import lk.spring_security.stateful_jwt_refresh_token_rotation.usecase.auth.records.RefreshTokenResult;
 
 
-public class RefreshTokenUseCaseImpl extends  GenerateRefreshTokenSupport implements RefreshTokenUseCase {
+public class RefreshTokenUseCaseImpl extends GenerateRefreshTokenSupport implements RefreshTokenUseCase {
 
     //inject required dependencies
     private final RefreshTokenRepository refreshTokenRepository;
