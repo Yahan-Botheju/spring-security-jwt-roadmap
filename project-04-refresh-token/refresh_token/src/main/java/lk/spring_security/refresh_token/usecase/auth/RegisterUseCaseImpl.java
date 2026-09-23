@@ -1,6 +1,5 @@
 package lk.spring_security.refresh_token.usecase.auth;
 
-import lk.spring_security.refresh_token.domain.enums.Role;
 import lk.spring_security.refresh_token.domain.models.User;
 import lk.spring_security.refresh_token.domain.repositories.UserRepository;
 import lk.spring_security.refresh_token.usecase.auth.records.RegisterCommand;
@@ -13,32 +12,37 @@ public class RegisterUseCaseImpl implements RegisterUseCase {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public RegisterUseCaseImpl(UserRepository userRepository,  PasswordEncoder passwordEncoder) {
+    public RegisterUseCaseImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
+    //register user
     @Override
     public RegisterResult register(RegisterCommand registerCommand) {
-
-        if(registerCommand.email() == null || registerCommand.password() == null) {
+        //check incoming fields are empty
+        if (registerCommand.email() == null || registerCommand.password() == null) {
             throw new IllegalArgumentException("Fields email and password are mandatory");
         }
-
-        if(userRepository.findByEmail(registerCommand.email()).isPresent()){
+        //check user email exists
+        if (userRepository.findByEmail(registerCommand.email()).isPresent()) {
             throw new IllegalArgumentException("User with this email already exists");
         }
-
+        //create new user
         User newUser = User.createUser(
-                e
-        )
+                registerCommand.email(),
+                passwordEncoder.encode(registerCommand.password()),
+                null
+        );
+        //set role
+        newUser.setDefaultRole();
+        //save
+        User savedUser = userRepository.registerUser(newUser);
 
-
-        //hash the password
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        //set default role as USER
-        user.setRole(Role.USER);
-
-        return userRepository.registerUser(user);
+        return new RegisterResult(
+                savedUser.getUserId(),
+                savedUser.getEmail(),
+                savedUser.getRole().toString()
+        );
     }
 }
