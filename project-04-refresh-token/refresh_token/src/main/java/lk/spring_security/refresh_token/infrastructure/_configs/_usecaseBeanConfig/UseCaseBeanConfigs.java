@@ -3,6 +3,8 @@ package lk.spring_security.refresh_token.infrastructure._configs._usecaseBeanCon
 import lk.spring_security.refresh_token.domain.repositories.*;
 import lk.spring_security.refresh_token.usecase.auth.AuthUseCase;
 import lk.spring_security.refresh_token.usecase.auth.AuthUseCaseImpl;
+import lk.spring_security.refresh_token.usecase.auth.RegisterUseCase;
+import lk.spring_security.refresh_token.usecase.auth.RegisterUseCaseImpl;
 import lk.spring_security.refresh_token.usecase.product.ProductUseCase;
 import lk.spring_security.refresh_token.usecase.product.ProductUseCaseImpl;
 import org.springframework.beans.factory.annotation.Value;
@@ -42,4 +44,16 @@ public class UseCaseBeanConfigs {
     ) {
         return new ProductUseCaseImpl(productRepository);
     }
+
+    /* __ */
+
+    //register user
+    @Bean
+    public RegisterUseCase registerUseCase(
+            UserRepository userRepository,
+            PasswordEncoder passwordEncoder
+    ){
+        return new RegisterUseCaseImpl(userRepository, passwordEncoder);
+    }
+
 }
