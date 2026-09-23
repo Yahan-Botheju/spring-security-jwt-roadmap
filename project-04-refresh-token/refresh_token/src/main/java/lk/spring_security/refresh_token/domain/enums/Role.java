@@ -1,4 +1,4 @@
-package lk.spring_security.refresh_token.domain.models;
+package lk.spring_security.refresh_token.domain.enums;
 
 public enum Role {
     ADMIN,
