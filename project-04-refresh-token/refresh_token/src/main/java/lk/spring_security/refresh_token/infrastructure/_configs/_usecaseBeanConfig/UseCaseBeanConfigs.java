@@ -50,9 +50,10 @@ public class UseCaseBeanConfigs {
     //register user
     @Bean
     public RegisterUseCase registerUseCase(
-            UserRepository userRepository
+            UserRepository userRepository,
+            PasswordEncoder passwordEncoder
     ){
-        return new RegisterUseCaseImpl(userRepository);
+        return new RegisterUseCaseImpl(userRepository, passwordEncoder);
     }
 
 }
