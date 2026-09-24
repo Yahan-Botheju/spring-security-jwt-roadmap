@@ -60,9 +60,10 @@ public class UseCaseBeanConfigs {
             TokenService tokenService,
             RefreshTokenRepository refreshTokenRepository,
             CookieService cookieService,
-            IdentityProvider identityProvider
+            IdentityProvider identityProvider,
+            long refreshTokenExpirationMs
     ){
-        return new LoginUseCaseImpl(userRepository, tokenService, refreshTokenRepository, cookieService, identityProvider);
+        return new LoginUseCaseImpl(userRepository, tokenService, refreshTokenRepository, cookieService, identityProvider, refreshTokenExpirationMs);
     }
 
 }
