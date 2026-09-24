@@ -5,6 +5,7 @@ import lk.spring_security.refresh_token.usecase.auth.records.RegisterCommand;
 import lk.spring_security.refresh_token.usecase.auth.records.RegisterResult;
 import lk.spring_security.refresh_token.web.auth.DTOs.AuthRequestDTO;
 import lk.spring_security.refresh_token.web.auth.DTOs.AuthResponseDTO;
+import lk.spring_security.refresh_token.web.auth.DTOs.RegisterRequestDTO;
 import lk.spring_security.refresh_token.web.auth.DTOs.RegisterResponseDTO;
 import org.mapstruct.Mapper;
 
@@ -19,7 +20,7 @@ public interface AuthWebMapper {
     /* __REGISTER_USE__ */
 
     //requestDTO to usecase
-    RegisterCommand toRegisterCommand(RegisterCommand registerCommand);
+    RegisterCommand toRegisterCommand(RegisterRequestDTO registerRequestDTO);
 
     //domain model to usecase
     RegisterResponseDTO toRegisterResponseDTO(RegisterResult registerResult);
