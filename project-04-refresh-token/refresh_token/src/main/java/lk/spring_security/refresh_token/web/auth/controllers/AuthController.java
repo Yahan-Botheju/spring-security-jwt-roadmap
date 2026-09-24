@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lk.spring_security.refresh_token.domain.models.User;
+import lk.spring_security.refresh_token.domain.repositories.CookieService;
 import lk.spring_security.refresh_token.usecase.auth.AuthUseCase;
 import lk.spring_security.refresh_token.usecase.auth.LoginUseCase;
 import lk.spring_security.refresh_token.usecase.auth.RegisterUseCase;
@@ -30,19 +31,22 @@ public class AuthController {
     private RegisterUseCase registerUseCase;
     private final LoginUseCase loginUseCase;
     private final AuthWebMapper authWebMapper;
+    private final CookieService cookieService;
 
     public AuthController(
             AuthUseCase authUseCase,
 
             RegisterUseCase registerUseCase,
             LoginUseCase loginUseCase,
-            AuthWebMapper authWebMapper
+            AuthWebMapper authWebMapper,
+            CookieService cookieService
     ) {
         this.authUseCase = authUseCase;
 
         this.registerUseCase = registerUseCase;
         this.loginUseCase = loginUseCase;
         this.authWebMapper = authWebMapper;
+        this.cookieService = cookieService;
     }
 
     //register user
