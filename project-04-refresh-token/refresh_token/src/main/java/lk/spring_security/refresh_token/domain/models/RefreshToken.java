@@ -1,6 +1,7 @@
 package lk.spring_security.refresh_token.domain.models;
 
 import java.time.Instant;
+import java.util.UUID;
 
 public class RefreshToken {
     private Long id;
@@ -29,6 +30,16 @@ public class RefreshToken {
 
     public User getUser() {
         return user;
+    }
+
+    /* __DOMAIN_LOGICS__ */
+
+    //set uuid as refresh token to token field
+    public void allocateRefreshTokenStr(UUID refreshTokenStr) {
+        if(refreshTokenStr == null){
+            throw new NullPointerException("refreshTokenStr is null");
+        }
+        this.token = refreshTokenStr.toString();
     }
 
     //check token is expired

@@ -4,8 +4,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lk.spring_security.refresh_token.domain.models.User;
+import lk.spring_security.refresh_token.domain.repositories.CookieService;
 import lk.spring_security.refresh_token.usecase.auth.AuthUseCase;
+import lk.spring_security.refresh_token.usecase.auth.LoginUseCase;
+import lk.spring_security.refresh_token.usecase.auth.RegisterUseCase;
+import lk.spring_security.refresh_token.usecase.auth.records.RegisterCommand;
+import lk.spring_security.refresh_token.usecase.auth.records.RegisterResult;
 import lk.spring_security.refresh_token.web.auth.DTOs.AuthRequestDTO;
+import lk.spring_security.refresh_token.web.auth.DTOs.RegisterRequestDTO;
+import lk.spring_security.refresh_token.web.auth.DTOs.RegisterResponseDTO;
 import lk.spring_security.refresh_token.web.auth.webMappers.AuthWebMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,25 +27,38 @@ public class AuthController {
 
     //inject required dependencies
     private final AuthUseCase authUseCase;
+
+    private RegisterUseCase registerUseCase;
+    private final LoginUseCase loginUseCase;
     private final AuthWebMapper authWebMapper;
+    private final CookieService cookieService;
 
     public AuthController(
             AuthUseCase authUseCase,
-            AuthWebMapper authWebMapper
+
+            RegisterUseCase registerUseCase,
+            LoginUseCase loginUseCase,
+            AuthWebMapper authWebMapper,
+            CookieService cookieService
     ) {
         this.authUseCase = authUseCase;
+
+        this.registerUseCase = registerUseCase;
+        this.loginUseCase = loginUseCase;
         this.authWebMapper = authWebMapper;
+        this.cookieService = cookieService;
     }
 
     //register user
     @PostMapping("/register")
-    public ResponseEntity<String> registerUser(
-            @Valid @RequestBody AuthRequestDTO authRequestDTO
-            ){
-        User toDomainModel = authWebMapper.toDomainModel(authRequestDTO);
-        authUseCase.registerUser(toDomainModel);
+    public ResponseEntity<RegisterResponseDTO> register(
+            @Valid @RequestBody RegisterRequestDTO registerRequestDTO
+    ){
+        RegisterCommand toCommand = authWebMapper.toRegisterCommand(registerRequestDTO);
+        RegisterResult toUseCase = registerUseCase.register(toCommand);
+        RegisterResponseDTO responseDTO = authWebMapper.toRegisterResponseDTO(toUseCase);
 
-        return new ResponseEntity<>("User registered successfully..!!", HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
     //login route

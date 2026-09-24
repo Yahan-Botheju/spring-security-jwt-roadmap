@@ -30,4 +30,20 @@ public class User {
     public Role getRole() {
         return role;
     }
+
+    /* __FACTORY_METHOD__ */
+
+    public static User createUser(String email, String password, Role role) {
+        return new User(null, email, password, role);
+    }
+
+
+
+    /* __DOMAIN_LOGIC__ */
+    public void setDefaultRole(){
+        if(this.role == null || this.role == Role.ADMIN){
+            throw new IllegalArgumentException("Cannot set role");
+        }
+        this.role = Role.USER;
+    }
 }
