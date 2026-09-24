@@ -1,15 +1,13 @@
 package lk.spring_security.refresh_token.usecase.auth.records;
 
-import lk.spring_security.refresh_token.domain.enums.Role;
-
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 public record LoginResult(
         Long userId,
         String email,
-        Role role,
+        String role,
         String refreshToken,
         String accessToken,
-        LocalDateTime expiryDate
+        Instant expiryDate
 ) {
 }
