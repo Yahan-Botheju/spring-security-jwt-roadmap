@@ -59,9 +59,10 @@ public class UseCaseBeanConfigs {
             UserRepository userRepository,
             TokenService tokenService,
             RefreshTokenRepository refreshTokenRepository,
-            CookieService cookieService
+            CookieService cookieService,
+            IdentityProvider identityProvider
     ){
-        return new LoginUseCaseImpl(userRepository, tokenService, refreshTokenRepository, cookieService);
+        return new LoginUseCaseImpl(userRepository, tokenService, refreshTokenRepository, cookieService, identityProvider);
     }
 
 }
