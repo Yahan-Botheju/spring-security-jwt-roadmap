@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lk.spring_security.refresh_token.domain.models.User;
 import lk.spring_security.refresh_token.usecase.auth.AuthUseCase;
+import lk.spring_security.refresh_token.usecase.auth.RegisterUseCase;
 import lk.spring_security.refresh_token.web.auth.DTOs.AuthRequestDTO;
 import lk.spring_security.refresh_token.web.auth.webMappers.AuthWebMapper;
 import org.springframework.http.HttpStatus;
@@ -20,13 +21,19 @@ public class AuthController {
 
     //inject required dependencies
     private final AuthUseCase authUseCase;
+
+    private RegisterUseCase registerUseCase;
     private final AuthWebMapper authWebMapper;
 
     public AuthController(
             AuthUseCase authUseCase,
+
+            RegisterUseCase registerUseCase,
             AuthWebMapper authWebMapper
     ) {
         this.authUseCase = authUseCase;
+
+        this.registerUseCase = registerUseCase;
         this.authWebMapper = authWebMapper;
     }
 
