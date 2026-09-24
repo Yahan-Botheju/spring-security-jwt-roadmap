@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginResponseSTO {
+public class LoginResponseDTO {
     private Long userId;
     private String email;
     private Role role;
