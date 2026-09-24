@@ -55,11 +55,29 @@ public class LoginUseCaseImpl implements LoginUseCase {
         //create refresh token as UUID string
         String refreshTokenStr = UUID.randomUUID().toString();
 
+
+        /*
+        * --Token is UUID generated
+        * --Set 7d for expiration, check --> refreshTokenExpirationMs
+        * */
+
+        //set values by Refresh Token object (UUID_TOKEN, EXPIRY, ALLOCATE TOKEN_TO_USER)
         RefreshToken newRefreshToken = RefreshToken.createRefreshToken(
                 refreshTokenStr,
-                Instant.now().minusSeconds()
-        )
+                Instant.now().plusSeconds(refreshTokenExpirationMs),
+                exstingUser
+        );
 
-        return null;
+        //save refresh token in db
+        refreshTokenRepository.saveToken(newRefreshToken);
+
+        return new LoginResult(
+                exstingUser.getUserId(),
+                exstingUser.getEmail(),
+                exstingUser.getRole().toString(),
+                refreshTokenStr,
+                accessToken,
+                newRefreshToken.getExpiryDate()
+        );
     }
 }
