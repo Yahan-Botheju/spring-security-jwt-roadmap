@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lk.spring_security.refresh_token.domain.models.User;
 import lk.spring_security.refresh_token.usecase.auth.AuthUseCase;
+import lk.spring_security.refresh_token.usecase.auth.LoginUseCase;
 import lk.spring_security.refresh_token.usecase.auth.RegisterUseCase;
 import lk.spring_security.refresh_token.usecase.auth.records.RegisterCommand;
 import lk.spring_security.refresh_token.usecase.auth.records.RegisterResult;
@@ -27,17 +28,20 @@ public class AuthController {
     private final AuthUseCase authUseCase;
 
     private RegisterUseCase registerUseCase;
+    private final LoginUseCase loginUseCase;
     private final AuthWebMapper authWebMapper;
 
     public AuthController(
             AuthUseCase authUseCase,
 
             RegisterUseCase registerUseCase,
+            LoginUseCase loginUseCase,
             AuthWebMapper authWebMapper
     ) {
         this.authUseCase = authUseCase;
 
         this.registerUseCase = registerUseCase;
+        this.loginUseCase = loginUseCase;
         this.authWebMapper = authWebMapper;
     }
 
