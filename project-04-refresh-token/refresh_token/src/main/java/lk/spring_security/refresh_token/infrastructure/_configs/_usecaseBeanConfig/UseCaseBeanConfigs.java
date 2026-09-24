@@ -1,10 +1,7 @@
 package lk.spring_security.refresh_token.infrastructure._configs._usecaseBeanConfig;
 
 import lk.spring_security.refresh_token.domain.repositories.*;
-import lk.spring_security.refresh_token.usecase.auth.AuthUseCase;
-import lk.spring_security.refresh_token.usecase.auth.AuthUseCaseImpl;
-import lk.spring_security.refresh_token.usecase.auth.RegisterUseCase;
-import lk.spring_security.refresh_token.usecase.auth.RegisterUseCaseImpl;
+import lk.spring_security.refresh_token.usecase.auth.*;
 import lk.spring_security.refresh_token.usecase.product.ProductUseCase;
 import lk.spring_security.refresh_token.usecase.product.ProductUseCaseImpl;
 import org.springframework.beans.factory.annotation.Value;
@@ -54,6 +51,17 @@ public class UseCaseBeanConfigs {
             PasswordEncoder passwordEncoder
     ){
         return new RegisterUseCaseImpl(userRepository, passwordEncoder);
+    }
+
+    //login user
+    @Bean
+    public LoginUseCase loginUseCase(
+            UserRepository userRepository,
+            TokenService tokenService,
+            RefreshTokenRepository refreshTokenRepository,
+            CookieService cookieService
+    ){
+        return new LoginUseCaseImpl(userRepository, tokenService, refreshTokenRepository, cookieService);
     }
 
 }
