@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import lk.spring_security.refresh_token.domain.repositories.CookieService;
 import lk.spring_security.refresh_token.usecase.auth.AuthUseCase;
 import lk.spring_security.refresh_token.usecase.auth.LoginUseCase;
+import lk.spring_security.refresh_token.usecase.auth.LogoutUseCase;
 import lk.spring_security.refresh_token.usecase.auth.RegisterUseCase;
 import lk.spring_security.refresh_token.usecase.auth.records.LoginCommand;
 import lk.spring_security.refresh_token.usecase.auth.records.LoginResult;
@@ -27,8 +28,9 @@ public class AuthController {
     //inject required dependencies
     private final AuthUseCase authUseCase;
 
-    private RegisterUseCase registerUseCase;
+    private final RegisterUseCase registerUseCase;
     private final LoginUseCase loginUseCase;
+    private final LogoutUseCase logoutUseCase;
     private final AuthWebMapper authWebMapper;
     private final CookieService cookieService;
 
@@ -37,6 +39,7 @@ public class AuthController {
 
             RegisterUseCase registerUseCase,
             LoginUseCase loginUseCase,
+            LogoutUseCase logoutUseCase,
             AuthWebMapper authWebMapper,
             CookieService cookieService
     ) {
@@ -44,6 +47,7 @@ public class AuthController {
 
         this.registerUseCase = registerUseCase;
         this.loginUseCase = loginUseCase;
+        this.logoutUseCase = logoutUseCase;
         this.authWebMapper = authWebMapper;
         this.cookieService = cookieService;
     }
@@ -84,6 +88,10 @@ public class AuthController {
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse
     ){
+
+        String refreshToken = cookieService.extractCookieByName(httpServletRequest, "refresh_token");
+
+
         authUseCase.logoutUser(httpServletRequest, httpServletResponse);
 
         return ResponseEntity.ok("User logged out successfully..!!");
