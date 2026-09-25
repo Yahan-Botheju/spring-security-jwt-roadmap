@@ -53,7 +53,7 @@ public class UseCaseBeanConfigs {
         return new RegisterUseCaseImpl(userRepository, passwordEncoder);
     }
 
-    //login user
+    //login usecase impl
     @Bean
     public LoginUseCase loginUseCase(
             UserRepository userRepository,
@@ -66,4 +66,12 @@ public class UseCaseBeanConfigs {
         return new LoginUseCaseImpl(userRepository, tokenService, refreshTokenRepository, cookieService, identityProvider, refreshTokenExpirationMs);
     }
 
+    //logout usecase impl
+    @Bean
+    public LogoutUseCase logoutUseCase(
+            UserRepository userRepository,
+            RefreshTokenRepository refreshTokenRepository
+    ){
+        return new LogoutUseCaseImpl(userRepository, refreshTokenRepository);
+    }
 }
