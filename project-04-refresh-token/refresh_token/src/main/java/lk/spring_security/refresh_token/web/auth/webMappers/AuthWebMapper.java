@@ -7,11 +7,6 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface AuthWebMapper {
-    //requestDTO to domain model
-    User toDomainModel(AuthRequestDTO authRequestDTO);
-
-    //domain model to responseDTO
-    AuthResponseDTO toResponseDTO(User user);
 
     /* __REGISTER_USE_CASE__ */
 
@@ -40,4 +35,11 @@ public interface AuthWebMapper {
     LogoutResponseDTO toLogoutResponseDTO(LogoutResult logoutResult);
 
 
+    /* __LOGOUT_USE_CASE__*/
+
+    //requestDTO to usecase
+    RefreshTokenCommand toRefreshTokenCommand(RefreshTokenRequestDTO refreshTokenRequestDTO);
+
+    //domain model to responseDTO
+    RefreshTokenResponseDTO toRefreshTokenResponseDTO(RefreshTokenResult refreshTokenResult);
 }
