@@ -4,10 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lk.spring_security.refresh_token.domain.repositories.CookieService;
-import lk.spring_security.refresh_token.usecase.auth.AuthUseCase;
-import lk.spring_security.refresh_token.usecase.auth.LoginUseCase;
-import lk.spring_security.refresh_token.usecase.auth.LogoutUseCase;
-import lk.spring_security.refresh_token.usecase.auth.RegisterUseCase;
+import lk.spring_security.refresh_token.usecase.auth.*;
 import lk.spring_security.refresh_token.usecase.auth.records.*;
 import lk.spring_security.refresh_token.web.auth.DTOs.*;
 import lk.spring_security.refresh_token.web.auth.webMappers.AuthWebMapper;
@@ -24,28 +21,26 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     //inject required dependencies
-    private final AuthUseCase authUseCase;
-
     private final RegisterUseCase registerUseCase;
     private final LoginUseCase loginUseCase;
     private final LogoutUseCase logoutUseCase;
+    private final RefreshTokenUseCase refreshTokenUseCase;
     private final AuthWebMapper authWebMapper;
     private final CookieService cookieService;
 
-    public AuthController(
-            AuthUseCase authUseCase,
 
+    public AuthController(
             RegisterUseCase registerUseCase,
             LoginUseCase loginUseCase,
             LogoutUseCase logoutUseCase,
+            RefreshTokenUseCase refreshTokenUseCase,
             AuthWebMapper authWebMapper,
             CookieService cookieService
     ) {
-        this.authUseCase = authUseCase;
-
         this.registerUseCase = registerUseCase;
         this.loginUseCase = loginUseCase;
         this.logoutUseCase = logoutUseCase;
+        this.refreshTokenUseCase = refreshTokenUseCase;
         this.authWebMapper = authWebMapper;
         this.cookieService = cookieService;
     }
@@ -107,8 +102,11 @@ public class AuthController {
             HttpServletRequest servletRequest,
             HttpServletResponse servletResponse
     ){
-        authUseCase.refreshToken(servletRequest, servletResponse);
+        String refreshToken = cookieService.extractCookieByName(servletRequest, "refresh_token");
+        RefreshTokenRequestDTO refreshTokenRequestDTO = new RefreshTokenRequestDTO(refreshToken);
 
-        return ResponseEntity.ok("Token refresh successfully..!!");
+        RefreshTokenCommand refreshTokenCommand = authWebMapper.toRefreshTokenCommand(refreshTokenRequestDTO);
+        RefreshTokenResult refreshTokenResult =
+
     }
 }
