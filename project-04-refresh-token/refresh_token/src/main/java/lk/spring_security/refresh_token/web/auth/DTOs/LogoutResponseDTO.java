@@ -7,8 +7,6 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthResponseDTO {
-    private String status;
-    private String message;
-
+public class LogoutResponseDTO {
+    String message;
 }
