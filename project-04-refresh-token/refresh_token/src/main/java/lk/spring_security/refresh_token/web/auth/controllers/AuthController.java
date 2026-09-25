@@ -98,15 +98,22 @@ public class AuthController {
 
     //REFRESH ENDPOINT ROUTE
     @PostMapping("/refresh-token")
-    public ResponseEntity<String> refreshToken(
+    public ResponseEntity<RefreshTokenResponseDTO> refreshToken(
             HttpServletRequest servletRequest,
             HttpServletResponse servletResponse
     ){
+        //separate token from request
         String refreshToken = cookieService.extractCookieByName(servletRequest, "refresh_token");
+        //turn into request obj
         RefreshTokenRequestDTO refreshTokenRequestDTO = new RefreshTokenRequestDTO(refreshToken);
-
+        //map to usecase
         RefreshTokenCommand refreshTokenCommand = authWebMapper.toRefreshTokenCommand(refreshTokenRequestDTO);
-        RefreshTokenResult refreshTokenResult =
+        RefreshTokenResult refreshTokenResult = refreshTokenUseCase.refreshToken(refreshTokenCommand);
+        //attach access token to browser
+        cookieService.setAccessTokenCookie(servletResponse, refreshTokenResult.accessToken());
 
+        RefreshTokenResponseDTO responseSTO = authWebMapper.toRefreshTokenResponseDTO(refreshTokenResult);
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseSTO);
     }
 }
