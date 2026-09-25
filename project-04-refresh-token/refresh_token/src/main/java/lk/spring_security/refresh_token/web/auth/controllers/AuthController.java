@@ -3,16 +3,15 @@ package lk.spring_security.refresh_token.web.auth.controllers;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import lk.spring_security.refresh_token.domain.models.User;
 import lk.spring_security.refresh_token.domain.repositories.CookieService;
 import lk.spring_security.refresh_token.usecase.auth.AuthUseCase;
 import lk.spring_security.refresh_token.usecase.auth.LoginUseCase;
 import lk.spring_security.refresh_token.usecase.auth.RegisterUseCase;
+import lk.spring_security.refresh_token.usecase.auth.records.LoginCommand;
+import lk.spring_security.refresh_token.usecase.auth.records.LoginResult;
 import lk.spring_security.refresh_token.usecase.auth.records.RegisterCommand;
 import lk.spring_security.refresh_token.usecase.auth.records.RegisterResult;
-import lk.spring_security.refresh_token.web.auth.DTOs.AuthRequestDTO;
-import lk.spring_security.refresh_token.web.auth.DTOs.RegisterRequestDTO;
-import lk.spring_security.refresh_token.web.auth.DTOs.RegisterResponseDTO;
+import lk.spring_security.refresh_token.web.auth.DTOs.*;
 import lk.spring_security.refresh_token.web.auth.webMappers.AuthWebMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -63,14 +62,20 @@ public class AuthController {
 
     //login route
     @PostMapping("/login")
-    public ResponseEntity<String> loginUser(
-            @Valid @RequestBody AuthRequestDTO authRequestDTO,
+    public ResponseEntity<LoginResponseDTO> login(
+            @Valid @RequestBody LoginRequestDTO loginRequestDTO,
             HttpServletResponse servletResponse
     ){
-        //set email, paw and token for auth user
-        authUseCase.loginUser(authRequestDTO.getEmail(), authRequestDTO.getPassword(), servletResponse);
+         LoginCommand toCommand = authWebMapper.toLoginCommand(loginRequestDTO);
+         LoginResult toLoginResult = loginUseCase.login(toCommand);
 
-        return new ResponseEntity<>("User logged successfully..!!", HttpStatus.OK);
+         //set token to secure cookies
+         cookieService.setAccessTokenCookie(servletResponse, toLoginResult.accessToken());
+         cookieService.setRefreshTokenCookie(servletResponse, toLoginResult.refreshToken());
+
+         LoginResponseDTO responseSTO = authWebMapper.toLoginResponseDTO(toLoginResult);
+
+         return ResponseEntity.status(HttpStatus.OK).body(responseSTO);
     }
 
     //logout route
