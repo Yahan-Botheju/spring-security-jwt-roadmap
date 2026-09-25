@@ -73,4 +73,13 @@ public class UseCaseBeanConfigs {
     ){
         return new LogoutUseCaseImpl(refreshTokenRepository);
     }
+
+    //refresh token usecase impl
+    @Bean
+    public RefreshTokenUseCase refreshTokenUseCase(
+            RefreshTokenUseCase refreshTokenUseCase,
+            TokenService tokenService
+    ){
+        return new RefreshTokenUseCaseImpl(refreshTokenUseCase, tokenService);
+    }
 }
