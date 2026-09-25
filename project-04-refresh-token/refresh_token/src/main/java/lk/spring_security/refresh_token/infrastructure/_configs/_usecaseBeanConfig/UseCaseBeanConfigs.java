@@ -7,42 +7,13 @@ import lk.spring_security.refresh_token.usecase.product.ProductUseCaseImpl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 public class UseCaseBeanConfigs {
 
-    //auth usecase impl
-    @Bean
-    public AuthUseCase authUseCase(
-            RefreshTokenRepository refreshTokenRepository,
-            UserRepository userRepository,
-            PasswordEncoder passwordEncoder,
-            CookieService cookieService,
-            TokenService tokenService,
-            AuthenticationManager authenticationManager,
-            @Value("${application.security.jwt.refresh-token-expiration-ms}") long refreshTokenExpirationMs
-    ) {
-        return new AuthUseCaseImpl(
-                refreshTokenRepository ,
-                userRepository,
-                passwordEncoder,
-                cookieService,
-                tokenService ,
-                authenticationManager,
-                refreshTokenExpirationMs);
-    }
 
-    //product usecase impl
-    @Bean
-    public ProductUseCase productUseCase(
-            ProductRepository productRepository
-    ) {
-        return new ProductUseCaseImpl(productRepository);
-    }
-
-    /* __ */
+    /* __AUTH_USE_CASES__ */
 
     //register user
     @Bean
@@ -61,7 +32,7 @@ public class UseCaseBeanConfigs {
             RefreshTokenRepository refreshTokenRepository,
             CookieService cookieService,
             IdentityProvider identityProvider,
-            long refreshTokenExpirationMs
+            @Value("${application.security.jwt.refresh-token-expiration-ms}") long refreshTokenExpirationMs
     ){
         return new LoginUseCaseImpl(userRepository, tokenService, refreshTokenRepository, cookieService, identityProvider, refreshTokenExpirationMs);
     }
@@ -82,4 +53,16 @@ public class UseCaseBeanConfigs {
     ){
         return new RefreshTokenUseCaseImpl(refreshTokenRepository, tokenService);
     }
+
+    /* __PRODUCTS__*/
+
+
+    //product usecase impl
+    @Bean
+    public ProductUseCase productUseCase(
+            ProductRepository productRepository
+    ) {
+        return new ProductUseCaseImpl(productRepository);
+    }
+
 }

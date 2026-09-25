@@ -1,6 +1,5 @@
 package lk.spring_security.refresh_token.web.auth.webMappers;
 
-import lk.spring_security.refresh_token.domain.models.User;
 import lk.spring_security.refresh_token.usecase.auth.records.*;
 import lk.spring_security.refresh_token.web.auth.DTOs.*;
 import org.mapstruct.Mapper;
