@@ -8,14 +8,12 @@ import lk.spring_security.refresh_token.usecase.auth.AuthUseCase;
 import lk.spring_security.refresh_token.usecase.auth.LoginUseCase;
 import lk.spring_security.refresh_token.usecase.auth.LogoutUseCase;
 import lk.spring_security.refresh_token.usecase.auth.RegisterUseCase;
-import lk.spring_security.refresh_token.usecase.auth.records.LoginCommand;
-import lk.spring_security.refresh_token.usecase.auth.records.LoginResult;
-import lk.spring_security.refresh_token.usecase.auth.records.RegisterCommand;
-import lk.spring_security.refresh_token.usecase.auth.records.RegisterResult;
+import lk.spring_security.refresh_token.usecase.auth.records.*;
 import lk.spring_security.refresh_token.web.auth.DTOs.*;
 import lk.spring_security.refresh_token.web.auth.webMappers.AuthWebMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -84,17 +82,23 @@ public class AuthController {
 
     //logout route
     @PostMapping("/logout")
-    public ResponseEntity<String> logoutUser(
+    public ResponseEntity<LogoutResponseDTO> logout(
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse
     ){
-
         String refreshToken = cookieService.extractCookieByName(httpServletRequest, "refresh_token");
+        LogoutRequestDTO logoutRequestDTO  = new LogoutRequestDTO(refreshToken);
 
+        LogoutCommand logoutCommand = authWebMapper.toLogoutCommand(logoutRequestDTO);
+        LogoutResult logoutResult = logoutUseCase.logout(logoutCommand);
 
-        authUseCase.logoutUser(httpServletRequest, httpServletResponse);
+        cookieService.clearCookies(httpServletResponse);
+        SecurityContextHolder.clearContext();
 
-        return ResponseEntity.ok("User logged out successfully..!!");
+        LogoutResponseDTO responseSTO = authWebMapper.toLogoutResponseDTO(logoutResult);
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseSTO);
+
     }
 
     //REFRESH ENDPOINT ROUTE
