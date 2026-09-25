@@ -8,14 +8,11 @@ import lk.spring_security.refresh_token.usecase.auth.records.LogoutResult;
 public class LogoutUseCaseImpl implements LogoutUseCase {
 
     //inject required dependencies
-    private final UserRepository userRepository;
     private final RefreshTokenRepository refreshTokenRepository;
 
     public LogoutUseCaseImpl(
-            UserRepository userRepository,
             RefreshTokenRepository refreshTokenRepository
     ) {
-        this.userRepository = userRepository;
         this.refreshTokenRepository = refreshTokenRepository;
     }
 

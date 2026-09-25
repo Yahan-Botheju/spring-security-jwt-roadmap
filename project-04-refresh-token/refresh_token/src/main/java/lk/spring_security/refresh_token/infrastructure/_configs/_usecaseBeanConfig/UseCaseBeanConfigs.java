@@ -69,9 +69,8 @@ public class UseCaseBeanConfigs {
     //logout usecase impl
     @Bean
     public LogoutUseCase logoutUseCase(
-            UserRepository userRepository,
             RefreshTokenRepository refreshTokenRepository
     ){
-        return new LogoutUseCaseImpl(userRepository, refreshTokenRepository);
+        return new LogoutUseCaseImpl(refreshTokenRepository);
     }
 }
