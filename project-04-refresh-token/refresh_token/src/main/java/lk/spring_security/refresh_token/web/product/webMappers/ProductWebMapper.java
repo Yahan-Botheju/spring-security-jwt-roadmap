@@ -7,6 +7,7 @@ import lk.spring_security.refresh_token.usecase.product.records.UpdateProductCom
 import lk.spring_security.refresh_token.usecase.product.records.UpdateProductResult;
 import lk.spring_security.refresh_token.web.product.DTOs.ProductRequestDTO;
 import lk.spring_security.refresh_token.web.product.DTOs.ProductResponseDTO;
+import lk.spring_security.refresh_token.web.product.DTOs.UpdateProductRequestDTO;
 import lk.spring_security.refresh_token.web.product.DTOs.UpdateProductResponseDTO;
 import org.mapstruct.Mapper;
 
@@ -31,7 +32,7 @@ public interface ProductWebMapper {
     /* __PRODUCT_UPDATE__ */
 
     //requestDTO to usecase
-    UpdateProductCommand toUpdateProductCommand(UpdateProductCommand updateProductCommand);
+    UpdateProductCommand toUpdateProductCommand(UpdateProductRequestDTO updateProductRequestDTO);
 
     //domain model to usecase
     UpdateProductResponseDTO toUpdateResponseDTO(UpdateProductResult updateProductResult);
