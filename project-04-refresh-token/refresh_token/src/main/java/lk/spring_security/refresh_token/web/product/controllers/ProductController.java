@@ -3,6 +3,7 @@ package lk.spring_security.refresh_token.web.product.controllers;
 import jakarta.validation.Valid;
 import lk.spring_security.refresh_token.domain.models.Product;
 import lk.spring_security.refresh_token.usecase.product.ProductUseCase;
+import lk.spring_security.refresh_token.usecase.product.records.ProductResult;
 import lk.spring_security.refresh_token.web.product.DTOs.ProductRequestDTO;
 import lk.spring_security.refresh_token.web.product.DTOs.ProductResponseDTO;
 import lk.spring_security.refresh_token.web.product.webMappers.ProductWebMapper;
@@ -31,9 +32,9 @@ public class ProductController {
     //get all products
     @GetMapping
     public List<ProductResponseDTO> getAllProducts(){
-        List<Product> productList = productUseCase.getAllProducts().stream().toList();
 
-        return productList.stream().map(productWebMapper::toResponseDTO).toList();
+        List<ProductResult> productList = productUseCase.getAllProducts().stream().toList();
+        return productList.stream().map(productWebMapper::toProductResponseDTO).toList();
     }
 
     //create product
