@@ -12,9 +12,7 @@ public class Product {
     }
 
     public Long getProductId() { return productId; }
-
     public String getProductName() { return productName; }
-
     public Double getProductPrice() { return productPrice; }
 
     /* __FACTORY_METHOD__ */

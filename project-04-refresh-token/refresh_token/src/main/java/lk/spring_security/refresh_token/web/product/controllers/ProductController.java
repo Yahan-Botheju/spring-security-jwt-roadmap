@@ -1,7 +1,6 @@
 package lk.spring_security.refresh_token.web.product.controllers;
 
 import jakarta.validation.Valid;
-import lk.spring_security.refresh_token.domain.models.Product;
 import lk.spring_security.refresh_token.usecase.product.ProductUseCase;
 import lk.spring_security.refresh_token.usecase.product.records.ProductCommand;
 import lk.spring_security.refresh_token.usecase.product.records.ProductResult;

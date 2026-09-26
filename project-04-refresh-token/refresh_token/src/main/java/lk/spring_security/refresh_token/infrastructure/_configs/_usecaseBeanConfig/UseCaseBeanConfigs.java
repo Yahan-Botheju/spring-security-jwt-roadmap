@@ -53,7 +53,7 @@ public class UseCaseBeanConfigs {
         return new RefreshTokenUseCaseImpl(refreshTokenRepository, tokenService);
     }
 
-    /* __PRODUCTS__*/
+    /* __PRODUCTS_USE_CASES__*/
 
 
     //product usecase impl
