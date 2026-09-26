@@ -12,8 +12,19 @@ public class Product {
     }
 
     public Long getProductId() { return productId; }
-
     public String getProductName() { return productName; }
-
     public Double getProductPrice() { return productPrice; }
+
+    /* __FACTORY_METHOD__ */
+
+    public static Product createNewProduct(String productName, Double productPrice) {
+        return new Product(null, productName, productPrice);
+    }
+
+    /* __UPDATE_MODEL__ */
+
+    public void updateProduct(String productName, Double productPrice) {
+        this.productName = productName;
+        this.productPrice = productPrice;
+    }
 }

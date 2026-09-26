@@ -18,15 +18,12 @@ public class User {
     public Long getUserId() {
         return userId;
     }
-
     public String getEmail() {
         return email;
     }
-
     public String getPassword() {
         return password;
     }
-
     public Role getRole() {
         return role;
     }

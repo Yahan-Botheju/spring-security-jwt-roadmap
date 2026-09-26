@@ -1,7 +1,7 @@
 package lk.spring_security.refresh_token.infrastructure.user.entities;
 
 import jakarta.persistence.*;
-import lk.spring_security.refresh_token.domain.models.Role;
+import lk.spring_security.refresh_token.domain.enums.Role;
 import lk.spring_security.refresh_token.infrastructure.product.entities.ProductEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;

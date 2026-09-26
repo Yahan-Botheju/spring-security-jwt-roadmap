@@ -30,11 +30,10 @@ public class UseCaseBeanConfigs {
             UserRepository userRepository,
             TokenService tokenService,
             RefreshTokenRepository refreshTokenRepository,
-            CookieService cookieService,
             IdentityProvider identityProvider,
             @Value("${application.security.jwt.refresh-token-expiration-ms}") long refreshTokenExpirationMs
     ){
-        return new LoginUseCaseImpl(userRepository, tokenService, refreshTokenRepository, cookieService, identityProvider, refreshTokenExpirationMs);
+        return new LoginUseCaseImpl(userRepository, tokenService, refreshTokenRepository, identityProvider, refreshTokenExpirationMs);
     }
 
     //logout usecase impl
@@ -54,7 +53,7 @@ public class UseCaseBeanConfigs {
         return new RefreshTokenUseCaseImpl(refreshTokenRepository, tokenService);
     }
 
-    /* __PRODUCTS__*/
+    /* __PRODUCTS_USE_CASES__*/
 
 
     //product usecase impl
