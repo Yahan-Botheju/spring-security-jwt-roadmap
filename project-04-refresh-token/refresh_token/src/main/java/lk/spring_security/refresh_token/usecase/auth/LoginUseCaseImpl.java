@@ -16,7 +16,6 @@ public class LoginUseCaseImpl implements LoginUseCase {
     private final UserRepository userRepository;
     private final TokenService tokenService;
     private final RefreshTokenRepository refreshTokenRepository;
-    private final CookieService cookieService;
     private final IdentityProvider identityProvider;
 
     //inject token expiration time
@@ -26,14 +25,12 @@ public class LoginUseCaseImpl implements LoginUseCase {
             UserRepository userRepository,
             TokenService tokenService,
             RefreshTokenRepository refreshTokenRepository,
-            CookieService cookieService,
             IdentityProvider identityProvider,
             long refreshTokenExpirationMs
     ) {
         this.userRepository = userRepository;
         this.tokenService = tokenService;
         this.refreshTokenRepository = refreshTokenRepository;
-        this.cookieService = cookieService;
         this.identityProvider = identityProvider;
         this.refreshTokenExpirationMs = refreshTokenExpirationMs;
     }
