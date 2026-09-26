@@ -10,7 +10,7 @@ public interface RefreshTokenRepository {
     Optional<RefreshToken> findByToken(String token);
 
     //save token in db
-    RefreshToken saveToken(RefreshToken refreshToken);
+    void saveToken(RefreshToken refreshToken);
 
     //remove token from db in user log out
     void deleteByToken(String token);

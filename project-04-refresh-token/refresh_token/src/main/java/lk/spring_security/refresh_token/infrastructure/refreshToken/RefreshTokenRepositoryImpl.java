@@ -35,14 +35,14 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
 
     //save token in db
     @Override
-    public RefreshToken saveToken(RefreshToken refreshToken){
+    public void saveToken(RefreshToken refreshToken){
         if(jpaRefreshTokenRepository.findByToken(refreshToken.getToken()).isPresent()){
             throw new IllegalArgumentException("Token already exists");
         }
         RefreshTokenEntity tokenEntity = refreshTokenPersistenceMapper.toEntity(refreshToken);
         RefreshTokenEntity savedToken = jpaRefreshTokenRepository.save(tokenEntity);
 
-        return refreshTokenPersistenceMapper.toDomainModel(savedToken);
+       refreshTokenPersistenceMapper.toDomainModel(savedToken);
     }
 
     //remove token from db when user log out
