@@ -3,9 +3,11 @@ package lk.spring_security.refresh_token.web.product.controllers;
 import jakarta.validation.Valid;
 import lk.spring_security.refresh_token.domain.models.Product;
 import lk.spring_security.refresh_token.usecase.product.ProductUseCase;
+import lk.spring_security.refresh_token.usecase.product.records.ProductCommand;
 import lk.spring_security.refresh_token.usecase.product.records.ProductResult;
 import lk.spring_security.refresh_token.web.product.DTOs.ProductRequestDTO;
 import lk.spring_security.refresh_token.web.product.DTOs.ProductResponseDTO;
+import lk.spring_security.refresh_token.web.product.DTOs.UpdateProductRequestDTO;
 import lk.spring_security.refresh_token.web.product.webMappers.ProductWebMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,10 +44,9 @@ public class ProductController {
      public ResponseEntity<ProductResponseDTO> createProduct(
              @Valid @RequestBody ProductRequestDTO productRequestDTO
              ){
-
-        Product toDomainModel = productWebMapper.toDomainModel(productRequestDTO);
-        Product toUseCase = productUseCase.createProduct(toDomainModel);
-        ProductResponseDTO toResponse =  productWebMapper.toResponseDTO(toUseCase);
+         ProductCommand toCommand = productWebMapper.toProductCommand(productRequestDTO);
+         ProductResult toUseCase = productUseCase.createProduct(toCommand);
+         ProductResponseDTO toResponse = productWebMapper.toProductResponseDTO(toUseCase);
 
         return ResponseEntity.created(URI.create("/api/v1/products")).body(toResponse);
      }
@@ -53,12 +54,9 @@ public class ProductController {
      //update products
     @PutMapping
     public ResponseEntity<ProductResponseDTO> updateProduct(
-            @Valid @RequestParam Long productId,
-            @Valid @RequestBody ProductRequestDTO productRequestDTO
+            @Valid @RequestBody UpdateProductRequestDTO updateProductRequestDTO
     ){
-        Product toDomainModel = productWebMapper.toDomainModel(productRequestDTO);
-        Product toUseCase = productUseCase.updateProducts(productId, toDomainModel);
-        ProductResponseDTO toResponse =  productWebMapper.toResponseDTO(toUseCase);
+
 
         return ResponseEntity.ok(toResponse);
     }
