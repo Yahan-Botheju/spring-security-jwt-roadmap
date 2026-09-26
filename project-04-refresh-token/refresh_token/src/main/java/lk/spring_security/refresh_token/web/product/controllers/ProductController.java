@@ -5,10 +5,14 @@ import lk.spring_security.refresh_token.domain.models.Product;
 import lk.spring_security.refresh_token.usecase.product.ProductUseCase;
 import lk.spring_security.refresh_token.usecase.product.records.ProductCommand;
 import lk.spring_security.refresh_token.usecase.product.records.ProductResult;
+import lk.spring_security.refresh_token.usecase.product.records.UpdateProductCommand;
+import lk.spring_security.refresh_token.usecase.product.records.UpdateProductResult;
 import lk.spring_security.refresh_token.web.product.DTOs.ProductRequestDTO;
 import lk.spring_security.refresh_token.web.product.DTOs.ProductResponseDTO;
 import lk.spring_security.refresh_token.web.product.DTOs.UpdateProductRequestDTO;
+import lk.spring_security.refresh_token.web.product.DTOs.UpdateProductResponseDTO;
 import lk.spring_security.refresh_token.web.product.webMappers.ProductWebMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,31 +37,33 @@ public class ProductController {
 
     //get all products
     @GetMapping
-    public List<ProductResponseDTO> getAllProducts(){
+    public List<ProductResponseDTO> getAllProducts() {
 
         List<ProductResult> productList = productUseCase.getAllProducts().stream().toList();
         return productList.stream().map(productWebMapper::toProductResponseDTO).toList();
     }
 
     //create product
-     @PostMapping
-     public ResponseEntity<ProductResponseDTO> createProduct(
-             @Valid @RequestBody ProductRequestDTO productRequestDTO
-             ){
-         ProductCommand toCommand = productWebMapper.toProductCommand(productRequestDTO);
-         ProductResult toUseCase = productUseCase.createProduct(toCommand);
-         ProductResponseDTO toResponse = productWebMapper.toProductResponseDTO(toUseCase);
+    @PostMapping
+    public ResponseEntity<ProductResponseDTO> createProduct(
+            @Valid @RequestBody ProductRequestDTO productRequestDTO
+    ) {
+        ProductCommand toCommand = productWebMapper.toProductCommand(productRequestDTO);
+        ProductResult toUseCase = productUseCase.createProduct(toCommand);
+        ProductResponseDTO toResponse = productWebMapper.toProductResponseDTO(toUseCase);
 
         return ResponseEntity.created(URI.create("/api/v1/products")).body(toResponse);
-     }
+    }
 
-     //update products
+    //update products
     @PutMapping
-    public ResponseEntity<ProductResponseDTO> updateProduct(
+    public ResponseEntity<UpdateProductResponseDTO> updateProduct(
             @Valid @RequestBody UpdateProductRequestDTO updateProductRequestDTO
-    ){
+    ) {
+        UpdateProductCommand toUpdateCommand = productWebMapper.toUpdateProductCommand(updateProductRequestDTO);
+        UpdateProductResult toUseCase = productUseCase.updateProducts(toUpdateCommand);
+        UpdateProductResponseDTO responseDTO = productWebMapper.toUpdateResponseDTO(toUseCase);
 
-
-        return ResponseEntity.ok(toResponse);
+        return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
     }
 }
