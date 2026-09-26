@@ -4,6 +4,9 @@ import lk.spring_security.refresh_token.domain.models.Product;
 import lk.spring_security.refresh_token.domain.repositories.ProductRepository;
 import lk.spring_security.refresh_token.usecase.product.records.ProductCommand;
 import lk.spring_security.refresh_token.usecase.product.records.ProductResult;
+import lk.spring_security.refresh_token.usecase.product.records.UpdateProductCommand;
+import lk.spring_security.refresh_token.usecase.product.records.UpdateProductResult;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -57,11 +60,27 @@ public class ProductUseCaseImpl implements ProductUseCase {
 
     //update products
     @Override
-    public Product updateProducts(Long productId, Product product) {
-        if (!productRepository.productFindById(productId).isPresent()) {
-            throw new IllegalArgumentException("Product doesn't exists");
+    public UpdateProductResult updateProducts(UpdateProductCommand updateProductCommand) {
+        //check incoming fields
+        if(updateProductCommand.productName().isBlank() || updateProductCommand.productPrice() == 0){
+            throw new IllegalStateException("Product name and product price cannot be empty");
         }
+        //get existing product
+        Product existingProduct = productRepository.productFindById(updateProductCommand.productId())
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
 
-        return productRepository.updateProducts(productId, product);
+        //update model through the domain
+        existingProduct.updateProduct(
+                updateProductCommand.productName(),
+                updateProductCommand.productPrice()
+        );
+
+        productRepository.saveProducts(existingProduct);
+
+        return new UpdateProductResult(
+                existingProduct.getProductId(),
+                existingProduct.getProductName(),
+                existingProduct.getProductPrice()
+        );
     }
 }
