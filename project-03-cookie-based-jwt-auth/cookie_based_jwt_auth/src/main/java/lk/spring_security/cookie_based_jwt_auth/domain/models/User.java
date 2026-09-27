@@ -21,5 +21,9 @@ public class User {
     public Role getRole() { return role; }
 
 
+    /* __FACTORY_METHOD__ */
 
+    public static User createNewUserModel( String email, String password, Role role) {
+        return new User(null, email, password, role);
+    }
 }
