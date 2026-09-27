@@ -1,5 +1,6 @@
 package lk.spring_security.cookie_based_jwt_auth.infrastructure._configs._usecaseBeanConfig;
 
+import lk.spring_security.cookie_based_jwt_auth.domain.repositories.IdentityManager;
 import lk.spring_security.cookie_based_jwt_auth.domain.repositories.UserRepository;
 import lk.spring_security.cookie_based_jwt_auth.domain.services.CookieService;
 import lk.spring_security.cookie_based_jwt_auth.usecase.auth.LoginUseCase;
@@ -33,8 +34,8 @@ public class UseCaseBeanConfigs {
     public LoginUseCase  loginUseCase(
             UserRepository userRepository,
             CookieService cookieService,
-            AuthenticationManager authenticationManager
+            IdentityManager identityManager
     ){
-        return new LoginUseCaseImpl(userRepository,cookieService,authenticationManager);
+        return new LoginUseCaseImpl(userRepository,cookieService, identityManager);
     }
 }
