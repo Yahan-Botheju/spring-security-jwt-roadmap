@@ -2,17 +2,14 @@ package lk.spring_security.cookie_based_jwt_auth.web.auth.controller;
 
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import lk.spring_security.cookie_based_jwt_auth.domain.models.User;
-import lk.spring_security.cookie_based_jwt_auth.usecase.auth.AuthUseCase;
 import lk.spring_security.cookie_based_jwt_auth.usecase.auth.LoginUseCase;
 import lk.spring_security.cookie_based_jwt_auth.usecase.auth.RegisterUseCase;
+import lk.spring_security.cookie_based_jwt_auth.usecase.auth.records.LoginCommand;
+import lk.spring_security.cookie_based_jwt_auth.usecase.auth.records.LoginResult;
 import lk.spring_security.cookie_based_jwt_auth.usecase.auth.records.RegisterCommand;
 import lk.spring_security.cookie_based_jwt_auth.usecase.auth.records.RegisterResult;
 import lk.spring_security.cookie_based_jwt_auth.web._shared.services.HttpCookieProvider;
-import lk.spring_security.cookie_based_jwt_auth.web.auth.DTOs.AuthRequestDTO;
-import lk.spring_security.cookie_based_jwt_auth.web.auth.DTOs.AuthResponseDTO;
-import lk.spring_security.cookie_based_jwt_auth.web.auth.DTOs.RegisterRequestDTO;
-import lk.spring_security.cookie_based_jwt_auth.web.auth.DTOs.RegisterResponseDTO;
+import lk.spring_security.cookie_based_jwt_auth.web.auth.DTOs.*;
 import lk.spring_security.cookie_based_jwt_auth.web.auth.webMapper.AuthWebMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,7 +42,7 @@ public class AuthController {
 
     //register user
     @PostMapping("/register")
-    public ResponseEntity<RegisterResponseDTO> registerUser(
+    public ResponseEntity<RegisterResponseDTO> register(
             @Valid @RequestBody RegisterRequestDTO registerRequestDTO,
             HttpServletResponse httpServletResponse //set cookie to get response
             ){
@@ -61,34 +58,31 @@ public class AuthController {
 
     //login user
     @PostMapping("/login")
-    public ResponseEntity<AuthResponseDTO> loginUser(
-            @Valid @RequestBody AuthRequestDTO authRequestDTO,
-            HttpServletResponse response //get response object to set cookie
+    public ResponseEntity<LoginResponseDTO> login(
+            @Valid @RequestBody LoginRequestDTO loginRequestDTO,
+            HttpServletResponse httpServletResponse //get response object to set cookie
     ){
-        //check credentials and get token
-        String token = authUseCase.loginUser(authRequestDTO.getEmail(),  authRequestDTO.getPassword());
+        LoginCommand toCommand = authWebMapper.toLoginCommand(loginRequestDTO);
+        LoginResult toLoginResult = loginUseCase.login(toCommand);
 
         //set token as HttpOnly Cookie to browser
-        httpCookieProvider.setAuthCookie(response,token);
+        httpCookieProvider.setAuthCookie(httpServletResponse,toLoginResult.token());
 
-        return ResponseEntity.ok(
-                new AuthResponseDTO(
-                        "SUCCESS",
-                        "User logged in successfully"
-                )
-        );
+        LoginResponseDTO responseDTO = authWebMapper.toLoginResponseDTO(toLoginResult);
+
+         return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
     }
 
     //logout user
     @PostMapping("/logout")
-    public ResponseEntity<AuthResponseDTO> logoutUser(
-            HttpServletResponse response //get response object to set cookie
+    public ResponseEntity<LogoutResponseDTO> logoutUser(
+            HttpServletResponse httpServletResponse //get response object to set cookie
     ){
         //clear cookie
-        httpCookieProvider.clearAuthCookie(response);
+        httpCookieProvider.clearAuthCookie(httpServletResponse);
 
         return ResponseEntity.ok(
-                new AuthResponseDTO(
+                new LogoutResponseDTO(
                         "SUCCESS",
                         "User logged out"
                 )
