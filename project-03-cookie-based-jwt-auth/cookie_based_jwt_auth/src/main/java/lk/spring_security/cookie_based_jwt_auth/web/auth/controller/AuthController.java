@@ -6,10 +6,15 @@ import lk.spring_security.cookie_based_jwt_auth.domain.models.User;
 import lk.spring_security.cookie_based_jwt_auth.usecase.auth.AuthUseCase;
 import lk.spring_security.cookie_based_jwt_auth.usecase.auth.LoginUseCase;
 import lk.spring_security.cookie_based_jwt_auth.usecase.auth.RegisterUseCase;
+import lk.spring_security.cookie_based_jwt_auth.usecase.auth.records.RegisterCommand;
+import lk.spring_security.cookie_based_jwt_auth.usecase.auth.records.RegisterResult;
 import lk.spring_security.cookie_based_jwt_auth.web._shared.services.HttpCookieProvider;
 import lk.spring_security.cookie_based_jwt_auth.web.auth.DTOs.AuthRequestDTO;
 import lk.spring_security.cookie_based_jwt_auth.web.auth.DTOs.AuthResponseDTO;
+import lk.spring_security.cookie_based_jwt_auth.web.auth.DTOs.RegisterRequestDTO;
+import lk.spring_security.cookie_based_jwt_auth.web.auth.DTOs.RegisterResponseDTO;
 import lk.spring_security.cookie_based_jwt_auth.web.auth.webMapper.AuthWebMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,23 +45,18 @@ public class AuthController {
 
     //register user
     @PostMapping("/register")
-    public ResponseEntity<AuthResponseDTO> registerUser(
-            @Valid @RequestBody AuthRequestDTO authRequestDTO,
-            HttpServletResponse response //set cookie to get response
+    public ResponseEntity<RegisterResponseDTO> registerUser(
+            @Valid @RequestBody RegisterRequestDTO registerRequestDTO,
+            HttpServletResponse httpServletResponse //set cookie to get response
             ){
-        User toDomainModel = authWebMapper.toDomainModel(authRequestDTO);
-        //generate token
-        String token = authUseCase.registerUser(toDomainModel);
 
+        RegisterCommand toCommand = authWebMapper.toRegisterCommand(registerRequestDTO);
+        RegisterResult toRegisterResult = registerUseCase.register(toCommand);
         //token set as http only cookie
-        httpCookieProvider.setAuthCookie(response,token);
+        httpCookieProvider.setAuthCookie(httpServletResponse, toRegisterResult.token());
+        RegisterResponseDTO responseDTO = authWebMapper.toRegisterResponseDTO(toRegisterResult);
 
-        return ResponseEntity.ok(
-                new AuthResponseDTO(
-                        "SUCCESS",
-                        "User registered successfully"
-                )
-        );
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
     //login user
