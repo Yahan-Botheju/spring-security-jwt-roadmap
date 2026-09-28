@@ -4,6 +4,7 @@ import lk.spring_security.cookie_based_jwt_auth.domain.models.Note;
 import lk.spring_security.cookie_based_jwt_auth.domain.models.User;
 import lk.spring_security.cookie_based_jwt_auth.domain.repositories.NoteRepository;
 import lk.spring_security.cookie_based_jwt_auth.domain.repositories.UserRepository;
+import lk.spring_security.cookie_based_jwt_auth.usecase.note.records.NoteResult;
 
 import java.util.List;
 
@@ -21,8 +22,14 @@ public class NoteUseCaseImpl implements  NoteUseCase {
 
     //get user all notes
     @Override
-    public List<Note> getAllNotesByUserId(Long userId){
-        return noteRepository.getAllNotesByUserId(userId);
+    public List<NoteResult> getAllNotesByUserId(Long userId){
+        return noteRepository.getAllNotesByUserId(userId).stream()
+                .map(note -> new NoteResult(
+                        note.getNoteId(),
+                        note.getTitle(),
+                        note.getContent(),
+                        note.getUser().getUserId()))
+                .toList();
     }
 
     //create note
