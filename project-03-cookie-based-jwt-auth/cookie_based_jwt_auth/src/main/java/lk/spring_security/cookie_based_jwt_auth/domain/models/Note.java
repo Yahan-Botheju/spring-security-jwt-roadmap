@@ -19,4 +19,10 @@ public class Note {
     public String getContent() { return content; }
     public User getUser() { return user; }
 
+
+    /* __FACTORY_METHOD__ */
+
+    public static Note createNewNote(String title, String content, User user) {
+        return new Note(null, title, content, user);
+    }
 }
