@@ -2,6 +2,9 @@ package lk.spring_security.cookie_based_jwt_auth.usecase.user;
 
 import lk.spring_security.cookie_based_jwt_auth.domain.models.User;
 import lk.spring_security.cookie_based_jwt_auth.domain.repositories.UserRepository;
+import lk.spring_security.cookie_based_jwt_auth.usecase.user.records.UpdateUserDetailsCommand;
+import lk.spring_security.cookie_based_jwt_auth.usecase.user.records.UpdateUserDetailsResult;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 
 public class UserUseCaseImpl implements UserUseCase{
 
@@ -14,12 +17,27 @@ public class UserUseCaseImpl implements UserUseCase{
 
     //update user
     @Override
-    public User updateUser(Long userId, User user) {
-        if(!userRepository.userFindById(userId).isPresent()){
-            throw new IllegalArgumentException("User does not exist");
+    public UpdateUserDetailsResult updateUserDetails(UpdateUserDetailsCommand updateUserDetailsCommand) {
+        //check incoming fields
+        if(updateUserDetailsCommand.email().isEmpty() || updateUserDetailsCommand.password().isEmpty()){
+            throw new IllegalArgumentException("Email or password cannot be empty");
         }
-        user.setUserId(userId);
-        return userRepository.updateUser(user);
+        //get user
+        User currentUser = userRepository.userFindById(updateUserDetailsCommand.userId())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        //update through domain model
+        currentUser.updateUser(
+                updateUserDetailsCommand.email(),
+                updateUserDetailsCommand.password()
+        );
+
+        User savedUser = userRepository.updateUser(currentUser);
+
+        return new UpdateUserDetailsResult(
+                savedUser.getUserId(),
+                savedUser.getEmail(),
+                savedUser.getRole().toString()
+        );
     }
 
     //delete user
@@ -29,4 +47,7 @@ public class UserUseCaseImpl implements UserUseCase{
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
         userRepository.deleteUser(existingUser.getUserId());
     }
+
+
+
 }
