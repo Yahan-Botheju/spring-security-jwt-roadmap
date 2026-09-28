@@ -1,11 +1,11 @@
 package lk.spring_security.cookie_based_jwt_auth.web.auth.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lk.spring_security.cookie_based_jwt_auth.domain.models.User;
-import lk.spring_security.cookie_based_jwt_auth.domain.services.CookieService;
 import lk.spring_security.cookie_based_jwt_auth.usecase.auth.AuthUseCase;
+import lk.spring_security.cookie_based_jwt_auth.usecase.auth.LoginUseCase;
+import lk.spring_security.cookie_based_jwt_auth.usecase.auth.RegisterUseCase;
 import lk.spring_security.cookie_based_jwt_auth.web._shared.services.HttpCookieProvider;
 import lk.spring_security.cookie_based_jwt_auth.web.auth.DTOs.AuthRequestDTO;
 import lk.spring_security.cookie_based_jwt_auth.web.auth.DTOs.AuthResponseDTO;
@@ -21,16 +21,19 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     //inject required classes
-    private final AuthUseCase authUseCase;
+    private final LoginUseCase loginUseCase;
+    private final RegisterUseCase registerUseCase;
     private final HttpCookieProvider httpCookieProvider;
     private final AuthWebMapper authWebMapper;
 
     public AuthController(
-            AuthUseCase authUseCase,
+            LoginUseCase loginUseCase,
+            RegisterUseCase registerUseCase,
             HttpCookieProvider httpCookieProvider,
             AuthWebMapper authWebMapper
     ) {
-        this.authUseCase = authUseCase;
+        this.loginUseCase = loginUseCase;
+        this.registerUseCase = registerUseCase;
         this.httpCookieProvider = httpCookieProvider;
         this.authWebMapper = authWebMapper;
     }

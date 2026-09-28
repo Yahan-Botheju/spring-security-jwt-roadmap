@@ -31,39 +31,7 @@ public class AuthUseCaseImpl implements AuthUseCase{
         this.authenticationManager = authenticationManager;
     }
 
-    //register user
-    @Override
-    @Transactional
-    public String registerUser(User user){
-        //check user already exist in db
-        if(userRepository.userFindByEmail(user.getEmail()).isPresent()){
-            throw new IllegalArgumentException("User with email already exists");
-        }
 
-        //create user domain model
-        User createDomainModel = User.builder()
-                .email(user.getEmail())
-                .password(passwordEncoder.encode(user.getPassword()))
-                .role(Role.USER)
-                .build();
 
-        //save user through domain user repo
-        userRepository.registerUser(createDomainModel);
 
-        //generate token
-        return cookieService.generateToken(createDomainModel);
-    }
-
-    //login user
-    @Override
-    public String loginUser(String email, String password){
-        //check given username via CustomUserDetailsService and password check via Auth Provider
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
-
-        User user = userRepository.userFindByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
-        //generate token then return
-        return cookieService.generateToken(user);
-    }
 }
