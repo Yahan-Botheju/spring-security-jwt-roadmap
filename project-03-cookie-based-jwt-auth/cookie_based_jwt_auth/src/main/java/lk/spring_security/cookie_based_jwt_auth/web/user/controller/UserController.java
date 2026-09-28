@@ -1,20 +1,16 @@
 package lk.spring_security.cookie_based_jwt_auth.web.user.controller;
 
 import jakarta.validation.Valid;
-import lk.spring_security.cookie_based_jwt_auth.domain.models.User;
 import lk.spring_security.cookie_based_jwt_auth.infrastructure._security.user_spring_wrapper.CustomUserDetails;
 import lk.spring_security.cookie_based_jwt_auth.usecase.user.UserUseCase;
 import lk.spring_security.cookie_based_jwt_auth.usecase.user.records.UpdateUserDetailsCommand;
 import lk.spring_security.cookie_based_jwt_auth.usecase.user.records.UpdateUserDetailsResult;
 import lk.spring_security.cookie_based_jwt_auth.web.user.DTOs.UpdateUserRequestDTO;
 import lk.spring_security.cookie_based_jwt_auth.web.user.DTOs.UpdateUserResponseDTO;
-import lk.spring_security.cookie_based_jwt_auth.web.user.DTOs.UserRequestDTO;
-import lk.spring_security.cookie_based_jwt_auth.web.user.DTOs.UserResponseDTO;
 import lk.spring_security.cookie_based_jwt_auth.web.user.webMapper.UserWebMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
