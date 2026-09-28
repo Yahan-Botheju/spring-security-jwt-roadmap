@@ -23,7 +23,7 @@ public interface AuthWebMapper {
     RegisterResponseDTO  toRegisterResponseDTO(RegisterResult registerResult);
 
 
-    /* __REGISTER__ */
+    /* __LOGIN__ */
 
     //requestDTO to usecase
     LoginCommand  toLoginCommand(LoginRequestDTO loginRequestDTO);
