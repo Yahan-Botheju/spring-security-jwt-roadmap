@@ -26,4 +26,11 @@ public class User {
     public static User createNewUserModel( String email, String password, Role role) {
         return new User(null, email, password, role);
     }
+
+    /* __UPDATE_USER_DETAILS__ */
+
+    public void updateUser(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
 }
