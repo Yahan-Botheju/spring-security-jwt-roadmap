@@ -4,10 +4,10 @@ import jakarta.validation.Valid;
 import lk.spring_security.cookie_based_jwt_auth.domain.models.Note;
 import lk.spring_security.cookie_based_jwt_auth.infrastructure._security.user_spring_wrapper.CustomUserDetails;
 import lk.spring_security.cookie_based_jwt_auth.usecase.note.NoteUseCase;
+import lk.spring_security.cookie_based_jwt_auth.usecase.note.records.CreateNoteCommand;
+import lk.spring_security.cookie_based_jwt_auth.usecase.note.records.CreateNoteResult;
 import lk.spring_security.cookie_based_jwt_auth.usecase.note.records.NoteResult;
-import lk.spring_security.cookie_based_jwt_auth.web.note.DTOs.GetAllNotesResponseDTO;
-import lk.spring_security.cookie_based_jwt_auth.web.note.DTOs.NoteRequestDTO;
-import lk.spring_security.cookie_based_jwt_auth.web.note.DTOs.NoteResponseDTO;
+import lk.spring_security.cookie_based_jwt_auth.web.note.DTOs.*;
 import lk.spring_security.cookie_based_jwt_auth.web.note.webMapper.NoteWebMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,14 +48,15 @@ public class NoteController {
 
     //create new note
     @PostMapping
-    public ResponseEntity<NoteResponseDTO> createNote(
+    public ResponseEntity<CreateNoteResponseDTO> createNote(
             @AuthenticationPrincipal CustomUserDetails  customUserDetails,
-            @Valid @RequestBody NoteRequestDTO noteRequestDTO
+            @Valid @RequestBody CreateNoteRequestDTO createNoteRequestDTO
             ){
         Long getUserId = customUserDetails.getUserId();
-        Note toDomainModel = noteWebMapper.toDomainModel(noteRequestDTO);
 
-        NoteResponseDTO responseDTO = noteWebMapper.toResponseDTO(noteUseCase.createNote(getUserId, toDomainModel));
+        CreateNoteCommand noteCommand = noteWebMapper.toCreateNoteCommand(getUserId,createNoteRequestDTO);
+        CreateNoteResult createNoteResult = noteUseCase.createNote(noteCommand);
+        CreateNoteResponseDTO responseDTO = noteWebMapper.toCreateNoteResponseDTO(createNoteResult);
 
         return ResponseEntity.created(URI.create("/api/v1/notes")).body(responseDTO);
     }
