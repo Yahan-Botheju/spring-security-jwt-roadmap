@@ -4,9 +4,7 @@ import jakarta.validation.Valid;
 import lk.spring_security.cookie_based_jwt_auth.domain.models.Note;
 import lk.spring_security.cookie_based_jwt_auth.infrastructure._security.user_spring_wrapper.CustomUserDetails;
 import lk.spring_security.cookie_based_jwt_auth.usecase.note.NoteUseCase;
-import lk.spring_security.cookie_based_jwt_auth.usecase.note.records.CreateNoteCommand;
-import lk.spring_security.cookie_based_jwt_auth.usecase.note.records.CreateNoteResult;
-import lk.spring_security.cookie_based_jwt_auth.usecase.note.records.GetAllNotesResult;
+import lk.spring_security.cookie_based_jwt_auth.usecase.note.records.*;
 import lk.spring_security.cookie_based_jwt_auth.web.note.DTOs.*;
 import lk.spring_security.cookie_based_jwt_auth.web.note.webMapper.NoteWebMapper;
 import org.springframework.http.HttpStatus;
@@ -63,16 +61,18 @@ public class NoteController {
 
     //update note
     @PutMapping("/{noteId}")
-    public ResponseEntity<NoteResponseDTO> updateNote(
+    public ResponseEntity<UpdateNoteResponseDTO> updateNote(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @Valid @PathVariable Long noteId,
-            @Valid @RequestBody NoteRequestDTO noteRequestDTO
+            @Valid @RequestBody UpdateNoteRequestDTO updateNoteRequestDTO
     ){
-         Long  getUserId = customUserDetails.getUserId();
-         Note toDomainModel = noteWebMapper.toDomainModel(noteRequestDTO);
-         NoteResponseDTO responseDTO = noteWebMapper.toResponseDTO(noteUseCase.updateNote(getUserId,noteId, toDomainModel));
+        Long  getUserId = customUserDetails.getUserId();
 
-         return ResponseEntity.ok(responseDTO);
+        UpdateNoteCommand toCommand = noteWebMapper.toUpdateNoteCommand(getUserId, noteId, updateNoteRequestDTO);
+        UpdateNoteResult updateNoteResult = noteUseCase.updateNote(toCommand);
+        UpdateNoteResponseDTO responseDTO = noteWebMapper.toUpdateNoteResponseDTO(updateNoteResult);
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
     }
 
     //delete note
