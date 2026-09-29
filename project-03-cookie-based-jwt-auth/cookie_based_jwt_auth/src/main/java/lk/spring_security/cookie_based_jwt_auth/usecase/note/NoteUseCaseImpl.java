@@ -4,6 +4,8 @@ import lk.spring_security.cookie_based_jwt_auth.domain.models.Note;
 import lk.spring_security.cookie_based_jwt_auth.domain.models.User;
 import lk.spring_security.cookie_based_jwt_auth.domain.repositories.NoteRepository;
 import lk.spring_security.cookie_based_jwt_auth.domain.repositories.UserRepository;
+import lk.spring_security.cookie_based_jwt_auth.usecase.note.records.CreateNoteCommand;
+import lk.spring_security.cookie_based_jwt_auth.usecase.note.records.CreateNoteResult;
 import lk.spring_security.cookie_based_jwt_auth.usecase.note.records.NoteResult;
 
 import java.util.List;
@@ -31,18 +33,29 @@ public class NoteUseCaseImpl implements  NoteUseCase {
                         note.getUser().getUserId()))
                 .toList();
     }
-
     //create note
     @Override
-    public Note createNote(Long userId, Note note){
-        //check user availability
-        User existingUser = userRepository.userFindById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found" +  " , " +  userId));
+    public CreateNoteResult createNote(CreateNoteCommand createNoteCommand) {
+        //check user existence
+        User user = userRepository.userFindById(createNoteCommand.userId())
+                .orElseThrow(() -> new RuntimeException("user not found"));
+        //create note model
+        Note newNote = Note.createNewNote(
+                createNoteCommand.title(),
+                createNoteCommand.content(),
+                user
+        );
+        //save note
+        Note savedNote = noteRepository.createNote(newNote);
 
-        //set note to user
-        note.setUser(existingUser);
-
-        return noteRepository.createNote(note);
+        return new  CreateNoteResult(
+                user.getUserId(),
+                user.getEmail(),
+                user.getRole().toString(),
+                savedNote.getNoteId(),
+                savedNote.getTitle(),
+                savedNote.getContent()
+        );
     }
 
     //update note
