@@ -2,9 +2,8 @@ package lk.spring_security.cookie_based_jwt_auth.usecase.auth;
 
 import lk.spring_security.cookie_based_jwt_auth.domain.models.Role;
 import lk.spring_security.cookie_based_jwt_auth.domain.models.User;
-import lk.spring_security.cookie_based_jwt_auth.domain.repositories.IdentityManager;
 import lk.spring_security.cookie_based_jwt_auth.domain.repositories.UserRepository;
-import lk.spring_security.cookie_based_jwt_auth.domain.services.CookieService;
+import lk.spring_security.cookie_based_jwt_auth.domain.repositories.CookieService;
 import lk.spring_security.cookie_based_jwt_auth.usecase.auth.records.RegisterCommand;
 import lk.spring_security.cookie_based_jwt_auth.usecase.auth.records.RegisterResult;
 import org.springframework.security.crypto.password.PasswordEncoder;
