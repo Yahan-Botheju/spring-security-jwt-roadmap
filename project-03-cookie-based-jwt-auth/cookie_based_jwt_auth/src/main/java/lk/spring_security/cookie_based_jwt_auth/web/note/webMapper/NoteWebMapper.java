@@ -3,10 +3,8 @@ package lk.spring_security.cookie_based_jwt_auth.web.note.webMapper;
 import lk.spring_security.cookie_based_jwt_auth.domain.models.Note;
 import lk.spring_security.cookie_based_jwt_auth.usecase.note.records.CreateNoteCommand;
 import lk.spring_security.cookie_based_jwt_auth.usecase.note.records.CreateNoteResult;
-import lk.spring_security.cookie_based_jwt_auth.web.note.DTOs.CreateNoteRequestDTO;
-import lk.spring_security.cookie_based_jwt_auth.web.note.DTOs.CreateNoteResponseDTO;
-import lk.spring_security.cookie_based_jwt_auth.web.note.DTOs.NoteRequestDTO;
-import lk.spring_security.cookie_based_jwt_auth.web.note.DTOs.NoteResponseDTO;
+import lk.spring_security.cookie_based_jwt_auth.usecase.note.records.NoteResult;
+import lk.spring_security.cookie_based_jwt_auth.web.note.DTOs.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -18,6 +16,11 @@ public interface NoteWebMapper {
 
     //requestDTO to domain model
     Note toDomainModel(NoteRequestDTO noteRequestDTO);
+
+    /* __GET_ALL_NOTES__ */
+
+    //domain mode to responseDTO
+    GetAllNotesResponseDTO toGetAllNotesResponseDTO(NoteResult noteResult);
 
 
     /* __CREATE_NOTE__ */
