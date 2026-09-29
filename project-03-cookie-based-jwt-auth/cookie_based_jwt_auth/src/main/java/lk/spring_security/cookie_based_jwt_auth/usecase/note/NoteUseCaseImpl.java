@@ -4,9 +4,7 @@ import lk.spring_security.cookie_based_jwt_auth.domain.models.Note;
 import lk.spring_security.cookie_based_jwt_auth.domain.models.User;
 import lk.spring_security.cookie_based_jwt_auth.domain.repositories.NoteRepository;
 import lk.spring_security.cookie_based_jwt_auth.domain.repositories.UserRepository;
-import lk.spring_security.cookie_based_jwt_auth.usecase.note.records.CreateNoteCommand;
-import lk.spring_security.cookie_based_jwt_auth.usecase.note.records.CreateNoteResult;
-import lk.spring_security.cookie_based_jwt_auth.usecase.note.records.GetAllNotesResult;
+import lk.spring_security.cookie_based_jwt_auth.usecase.note.records.*;
 
 import java.util.List;
 
@@ -36,6 +34,10 @@ public class NoteUseCaseImpl implements  NoteUseCase {
     //create note
     @Override
     public CreateNoteResult createNote(CreateNoteCommand createNoteCommand) {
+        //check incoming fields
+        if(createNoteCommand.userId() == null || createNoteCommand.content().isEmpty() || createNoteCommand.title().isEmpty()){
+            throw new IllegalStateException("Required fields are missing");
+        }
         //check user existence
         User user = userRepository.userFindById(createNoteCommand.userId())
                 .orElseThrow(() -> new RuntimeException("user not found"));
@@ -56,6 +58,11 @@ public class NoteUseCaseImpl implements  NoteUseCase {
                 savedNote.getTitle(),
                 savedNote.getContent()
         );
+    }
+
+    @Override
+    public UpdateNoteResult updateNote(UpdateNoteCommand updateNoteCommand) {
+        return null;
     }
 
     //update note
