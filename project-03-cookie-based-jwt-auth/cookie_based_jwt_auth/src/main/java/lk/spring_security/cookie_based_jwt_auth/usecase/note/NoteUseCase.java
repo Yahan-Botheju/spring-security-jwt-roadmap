@@ -1,6 +1,8 @@
 package lk.spring_security.cookie_based_jwt_auth.usecase.note;
 
 import lk.spring_security.cookie_based_jwt_auth.domain.models.Note;
+import lk.spring_security.cookie_based_jwt_auth.usecase.note.records.CreateNoteCommand;
+import lk.spring_security.cookie_based_jwt_auth.usecase.note.records.CreateNoteResult;
 import lk.spring_security.cookie_based_jwt_auth.usecase.note.records.NoteResult;
 
 import java.util.List;
@@ -11,7 +13,7 @@ public interface NoteUseCase {
     List<NoteResult> getAllNotesByUserId(Long userId);
 
     //create note
-    Note createNote(Long userId ,Note note);
+    CreateNoteResult createNote(CreateNoteCommand createNoteCommand);
 
     //update note
     Note updateNote(Long userId ,Long noteId, Note note);
