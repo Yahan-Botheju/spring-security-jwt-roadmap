@@ -7,9 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateNoteResponseDTO {
+public class UpdateNoteResponseDTO {
+    private Long userId;
+    private String email;
     private Long noteId;
     private String title;
     private String content;
-    private Long userId;
 }

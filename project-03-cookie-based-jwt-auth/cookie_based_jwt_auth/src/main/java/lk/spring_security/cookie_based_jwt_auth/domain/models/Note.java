@@ -25,4 +25,11 @@ public class Note {
     public static Note createNewNote(String title, String content, User user) {
         return new Note(null, title, content, user);
     }
+
+    /* __UPDATE_NOTE__ */
+
+    public void updateNoteModel(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
 }

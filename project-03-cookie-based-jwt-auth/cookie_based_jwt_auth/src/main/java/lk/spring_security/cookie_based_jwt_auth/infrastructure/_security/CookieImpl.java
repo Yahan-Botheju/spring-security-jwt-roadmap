@@ -5,7 +5,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lk.spring_security.cookie_based_jwt_auth.domain.models.User;
-import lk.spring_security.cookie_based_jwt_auth.domain.services.CookieService;
+import lk.spring_security.cookie_based_jwt_auth.domain.repositories.CookieService;
 import lk.spring_security.cookie_based_jwt_auth.infrastructure._security.user_spring_wrapper.CustomUserDetails;
 import org.springframework.security.core.userdetails.UserDetails;
 

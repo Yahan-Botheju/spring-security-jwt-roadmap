@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateNoteResponseDTO {
+public class GetAllNotesResponseDTO {
     private Long noteId;
     private String title;
     private String content;

@@ -1,4 +1,4 @@
-package lk.spring_security.cookie_based_jwt_auth.domain.services;
+package lk.spring_security.cookie_based_jwt_auth.domain.repositories;
 
 import lk.spring_security.cookie_based_jwt_auth.domain.models.User;
 import org.springframework.security.core.userdetails.UserDetails;

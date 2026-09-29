@@ -1,11 +1,10 @@
 package lk.spring_security.cookie_based_jwt_auth.web.note.controller;
 
 import jakarta.validation.Valid;
-import lk.spring_security.cookie_based_jwt_auth.domain.models.Note;
 import lk.spring_security.cookie_based_jwt_auth.infrastructure._security.user_spring_wrapper.CustomUserDetails;
 import lk.spring_security.cookie_based_jwt_auth.usecase.note.NoteUseCase;
-import lk.spring_security.cookie_based_jwt_auth.web.note.DTOs.NoteRequestDTO;
-import lk.spring_security.cookie_based_jwt_auth.web.note.DTOs.NoteResponseDTO;
+import lk.spring_security.cookie_based_jwt_auth.usecase.note.records.*;
+import lk.spring_security.cookie_based_jwt_auth.web.note.DTOs.*;
 import lk.spring_security.cookie_based_jwt_auth.web.note.webMapper.NoteWebMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,43 +33,45 @@ public class NoteController {
 
     //get notes related to user
     @GetMapping
-    public ResponseEntity<List<NoteResponseDTO>> getAllNotes(
+    public ResponseEntity<List<GetAllNotesResponseDTO>> getAllNotes(
             @AuthenticationPrincipal CustomUserDetails  customUserDetails
-            ){
+    ){
+        List<GetAllNotesResult> getAllNotes = noteUseCase.getAllNotesByUserId(customUserDetails.getUserId());
+        List<GetAllNotesResponseDTO> responseDTOS = getAllNotes.stream()
+                .map(noteWebMapper::toGetAllNotesResponseDTO).collect(Collectors.toList());
 
-        List<Note> getAllNotes = noteUseCase.getAllNotesByUserId(customUserDetails.getUserId());
-        List<NoteResponseDTO> responseDTOS = getAllNotes.stream()
-                .map(noteWebMapper::toResponseDTO).collect(Collectors.toList());
-
-        return ResponseEntity.ok(responseDTOS);
+        return  ResponseEntity.status(HttpStatus.OK).body(responseDTOS);
     }
 
     //create new note
     @PostMapping
-    public ResponseEntity<NoteResponseDTO> createNote(
+    public ResponseEntity<CreateNoteResponseDTO> createNote(
             @AuthenticationPrincipal CustomUserDetails  customUserDetails,
-            @Valid @RequestBody NoteRequestDTO noteRequestDTO
+            @Valid @RequestBody CreateNoteRequestDTO createNoteRequestDTO
             ){
         Long getUserId = customUserDetails.getUserId();
-        Note toDomainModel = noteWebMapper.toDomainModel(noteRequestDTO);
 
-        NoteResponseDTO responseDTO = noteWebMapper.toResponseDTO(noteUseCase.createNote(getUserId, toDomainModel));
+        CreateNoteCommand noteCommand = noteWebMapper.toCreateNoteCommand(getUserId,createNoteRequestDTO);
+        CreateNoteResult createNoteResult = noteUseCase.createNote(noteCommand);
+        CreateNoteResponseDTO responseDTO = noteWebMapper.toCreateNoteResponseDTO(createNoteResult);
 
         return ResponseEntity.created(URI.create("/api/v1/notes")).body(responseDTO);
     }
 
     //update note
     @PutMapping("/{noteId}")
-    public ResponseEntity<NoteResponseDTO> updateNote(
+    public ResponseEntity<UpdateNoteResponseDTO> updateNote(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @Valid @PathVariable Long noteId,
-            @Valid @RequestBody NoteRequestDTO noteRequestDTO
+            @Valid @RequestBody UpdateNoteRequestDTO updateNoteRequestDTO
     ){
-         Long  getUserId = customUserDetails.getUserId();
-         Note toDomainModel = noteWebMapper.toDomainModel(noteRequestDTO);
-         NoteResponseDTO responseDTO = noteWebMapper.toResponseDTO(noteUseCase.updateNote(getUserId,noteId, toDomainModel));
+        Long  getUserId = customUserDetails.getUserId();
 
-         return ResponseEntity.ok(responseDTO);
+        UpdateNoteCommand toCommand = noteWebMapper.toUpdateNoteCommand(getUserId, noteId, updateNoteRequestDTO);
+        UpdateNoteResult updateNoteResult = noteUseCase.updateNote(toCommand);
+        UpdateNoteResponseDTO responseDTO = noteWebMapper.toUpdateNoteResponseDTO(updateNoteResult);
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
     }
 
     //delete note
@@ -85,18 +86,4 @@ public class NoteController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    //testing update note
-    //update note
-    @PutMapping("/testing-note-update-route/{noteId}")
-    public ResponseEntity<NoteResponseDTO> testingUpdateNote(
-            @AuthenticationPrincipal CustomUserDetails customUserDetails,
-            @Valid @PathVariable Long noteId,
-            @Valid @RequestBody NoteRequestDTO noteRequestDTO
-    ){
-        Long  getUserId = customUserDetails.getUserId();
-        Note toDomainModel = noteWebMapper.toDomainModel(noteRequestDTO);
-        NoteResponseDTO responseDTO = noteWebMapper.toResponseDTO(noteUseCase.testingUpdateNote(getUserId,noteId, toDomainModel));
-
-        return ResponseEntity.ok(responseDTO);
-    }
 }

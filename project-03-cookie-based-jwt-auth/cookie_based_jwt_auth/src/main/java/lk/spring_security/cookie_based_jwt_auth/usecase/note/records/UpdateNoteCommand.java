@@ -1,9 +1,9 @@
 package lk.spring_security.cookie_based_jwt_auth.usecase.note.records;
 
-public record NoteResult(
+public record UpdateNoteCommand(
+        Long userId,
         Long noteId,
         String title,
-        String content,
-        Long userId
+        String content
 ) {
 }
