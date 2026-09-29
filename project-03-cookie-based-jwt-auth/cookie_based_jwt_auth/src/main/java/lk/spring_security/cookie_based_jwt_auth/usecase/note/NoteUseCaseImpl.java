@@ -5,6 +5,7 @@ import lk.spring_security.cookie_based_jwt_auth.domain.models.User;
 import lk.spring_security.cookie_based_jwt_auth.domain.repositories.NoteRepository;
 import lk.spring_security.cookie_based_jwt_auth.domain.repositories.UserRepository;
 import lk.spring_security.cookie_based_jwt_auth.usecase.note.records.*;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 
 import java.util.List;
 
@@ -60,29 +61,40 @@ public class NoteUseCaseImpl implements  NoteUseCase {
         );
     }
 
+    //update note model
     @Override
     public UpdateNoteResult updateNote(UpdateNoteCommand updateNoteCommand) {
-        return null;
-    }
-
-    //update note
-    @Override
-    public Note updateNote(Long userId, Long noteId, Note note){
-        //check user availability
-        if (!userRepository.userFindById(userId).isPresent()) {
-            throw new RuntimeException("User not found" +  " , " +  userId);
+        //validate incoming fields
+        if(updateNoteCommand.noteId() == null || updateNoteCommand.content().isEmpty() || updateNoteCommand.title().isEmpty()){
+            throw new IllegalStateException("Required fields are missing");
         }
+        //check user availability
+        if (userRepository.userFindById(updateNoteCommand.userId()).isEmpty()) {
+            throw new ResourceNotFoundException("User not found" +  " , " +  updateNoteCommand.userId());
+        }
+
         //check note availability
-        Note existingNote = noteRepository.findById(noteId)
-                .orElseThrow(() -> new RuntimeException("Note not found" +  " , " +  noteId));
+        Note existingNote = noteRepository.findById(updateNoteCommand.noteId())
+                .orElseThrow(() -> new RuntimeException("Note not found" +  " , " +  updateNoteCommand.noteId()));
 
         //check note belongs to user
-        if (!existingNote.getUser().getUserId().equals(userId)) {
-            throw new RuntimeException("User not found" +  " , " +  userId);
+        if (!existingNote.getUser().getUserId().equals(updateNoteCommand.userId())) {
+            throw new ResourceNotFoundException("User not found" +  " , " +  updateNoteCommand.userId());
         }
+        //update note through domain
+        existingNote.updateNoteModel(updateNoteCommand.title(), updateNoteCommand.content());
 
-        return noteRepository.updateNote(noteId, note);
+        noteRepository.updateNote(existingNote.getNoteId(), existingNote);
+
+        return new UpdateNoteResult(
+                existingNote.getUser().getUserId(),
+                existingNote.getUser().getEmail(),
+                existingNote.getNoteId(),
+                existingNote.getTitle(),
+                existingNote.getContent()
+        );
     }
+
 
     //delete note
     @Override
