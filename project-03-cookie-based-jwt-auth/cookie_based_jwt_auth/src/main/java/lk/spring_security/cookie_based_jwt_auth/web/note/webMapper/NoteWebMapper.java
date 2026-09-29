@@ -26,7 +26,7 @@ public interface NoteWebMapper {
     /* __CREATE_NOTE__ */
 
     //requestDTO to command
-    CreateNoteCommand toCreateNoteCommand(CreateNoteRequestDTO createNoteRequestDTO);
+    CreateNoteCommand toCreateNoteCommand(Long userId ,CreateNoteRequestDTO createNoteRequestDTO);
 
     //domain model to usecase
     CreateNoteResponseDTO  toCreateNoteResponseDTO(CreateNoteResult createNoteResult);
