@@ -6,7 +6,7 @@ import lk.spring_security.cookie_based_jwt_auth.infrastructure._security.user_sp
 import lk.spring_security.cookie_based_jwt_auth.usecase.note.NoteUseCase;
 import lk.spring_security.cookie_based_jwt_auth.usecase.note.records.CreateNoteCommand;
 import lk.spring_security.cookie_based_jwt_auth.usecase.note.records.CreateNoteResult;
-import lk.spring_security.cookie_based_jwt_auth.usecase.note.records.NoteResult;
+import lk.spring_security.cookie_based_jwt_auth.usecase.note.records.GetAllNotesResult;
 import lk.spring_security.cookie_based_jwt_auth.web.note.DTOs.*;
 import lk.spring_security.cookie_based_jwt_auth.web.note.webMapper.NoteWebMapper;
 import org.springframework.http.HttpStatus;
@@ -39,7 +39,7 @@ public class NoteController {
     public ResponseEntity<List<GetAllNotesResponseDTO>> getAllNotes(
             @AuthenticationPrincipal CustomUserDetails  customUserDetails
     ){
-        List<NoteResult> getAllNotes = noteUseCase.getAllNotesByUserId(customUserDetails.getUserId());
+        List<GetAllNotesResult> getAllNotes = noteUseCase.getAllNotesByUserId(customUserDetails.getUserId());
         List<GetAllNotesResponseDTO> responseDTOS = getAllNotes.stream()
                 .map(noteWebMapper::toGetAllNotesResponseDTO).collect(Collectors.toList());
 
