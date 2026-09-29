@@ -1,9 +1,7 @@
 package lk.spring_security.cookie_based_jwt_auth.web.note.webMapper;
 
 import lk.spring_security.cookie_based_jwt_auth.domain.models.Note;
-import lk.spring_security.cookie_based_jwt_auth.usecase.note.records.CreateNoteCommand;
-import lk.spring_security.cookie_based_jwt_auth.usecase.note.records.CreateNoteResult;
-import lk.spring_security.cookie_based_jwt_auth.usecase.note.records.GetAllNotesResult;
+import lk.spring_security.cookie_based_jwt_auth.usecase.note.records.*;
 import lk.spring_security.cookie_based_jwt_auth.web.note.DTOs.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -30,4 +28,13 @@ public interface NoteWebMapper {
 
     //domain model to usecase
     CreateNoteResponseDTO  toCreateNoteResponseDTO(CreateNoteResult createNoteResult);
+
+
+    /* __UPDATE_NOTE__ */
+
+    //requestDTO to command
+    UpdateNoteCommand  toUpdateNoteCommand(Long userId ,Long noteId, UpdateNoteRequestDTO updateNoteRequestDTO);
+
+    //domain model to responseDTO
+    UpdateNoteResponseDTO toUpdateNoteResponseDTO(UpdateNoteResult updateNoteResult);
 }
