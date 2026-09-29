@@ -4,6 +4,8 @@ import jakarta.validation.Valid;
 import lk.spring_security.cookie_based_jwt_auth.domain.models.Note;
 import lk.spring_security.cookie_based_jwt_auth.infrastructure._security.user_spring_wrapper.CustomUserDetails;
 import lk.spring_security.cookie_based_jwt_auth.usecase.note.NoteUseCase;
+import lk.spring_security.cookie_based_jwt_auth.usecase.note.records.NoteResult;
+import lk.spring_security.cookie_based_jwt_auth.web.note.DTOs.GetAllNotesResponseDTO;
 import lk.spring_security.cookie_based_jwt_auth.web.note.DTOs.NoteRequestDTO;
 import lk.spring_security.cookie_based_jwt_auth.web.note.DTOs.NoteResponseDTO;
 import lk.spring_security.cookie_based_jwt_auth.web.note.webMapper.NoteWebMapper;
@@ -34,15 +36,14 @@ public class NoteController {
 
     //get notes related to user
     @GetMapping
-    public ResponseEntity<List<NoteResponseDTO>> getAllNotes(
+    public ResponseEntity<List<GetAllNotesResponseDTO>> getAllNotes(
             @AuthenticationPrincipal CustomUserDetails  customUserDetails
-            ){
+    ){
+        List<NoteResult> getAllNotes = noteUseCase.getAllNotesByUserId(customUserDetails.getUserId());
+        List<GetAllNotesResponseDTO> responseDTOS = getAllNotes.stream()
+                .map(noteWebMapper::toGetAllNotesResponseDTO).collect(Collectors.toList());
 
-        List<Note> getAllNotes = noteUseCase.getAllNotesByUserId(customUserDetails.getUserId());
-        List<NoteResponseDTO> responseDTOS = getAllNotes.stream()
-                .map(noteWebMapper::toResponseDTO).collect(Collectors.toList());
-
-        return ResponseEntity.ok(responseDTOS);
+        return  ResponseEntity.status(HttpStatus.OK).body(responseDTOS);
     }
 
     //create new note
