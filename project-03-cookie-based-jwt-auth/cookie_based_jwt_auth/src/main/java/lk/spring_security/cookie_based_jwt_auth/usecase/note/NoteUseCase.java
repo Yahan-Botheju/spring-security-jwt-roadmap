@@ -1,6 +1,5 @@
 package lk.spring_security.cookie_based_jwt_auth.usecase.note;
 
-import lk.spring_security.cookie_based_jwt_auth.domain.models.Note;
 import lk.spring_security.cookie_based_jwt_auth.usecase.note.records.*;
 
 import java.util.List;
@@ -18,7 +17,4 @@ public interface NoteUseCase {
 
     //delete note
     void deleteNote(Long noteId, Long userId);
-
-    //testing update note
-    Note testingUpdateNote(Long userId ,Long noteId, Note note);
 }

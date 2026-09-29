@@ -1,19 +1,11 @@
 package lk.spring_security.cookie_based_jwt_auth.web.note.webMapper;
 
-import lk.spring_security.cookie_based_jwt_auth.domain.models.Note;
 import lk.spring_security.cookie_based_jwt_auth.usecase.note.records.*;
 import lk.spring_security.cookie_based_jwt_auth.web.note.DTOs.*;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface NoteWebMapper {
-    //domain model to response
-    @Mapping(source = "user.userId", target = "userId")
-    NoteResponseDTO toResponseDTO(Note note);
-
-    //requestDTO to domain model
-    Note toDomainModel(NoteRequestDTO noteRequestDTO);
 
     /* __GET_ALL_NOTES__ */
 
