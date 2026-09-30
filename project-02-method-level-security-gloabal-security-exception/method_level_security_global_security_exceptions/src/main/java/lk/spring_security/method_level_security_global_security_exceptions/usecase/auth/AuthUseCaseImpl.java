@@ -1,10 +1,10 @@
 package lk.spring_security.method_level_security_global_security_exceptions.usecase.auth;
 
-import jakarta.transaction.Transactional;
-import lk.spring_security.method_level_security_global_security_exceptions.domain.models.Role;
 import lk.spring_security.method_level_security_global_security_exceptions.domain.models.User;
 import lk.spring_security.method_level_security_global_security_exceptions.domain.repositories.UserRepository;
 import lk.spring_security.method_level_security_global_security_exceptions.domain.services.JwtService;
+import lk.spring_security.method_level_security_global_security_exceptions.usecase.auth.records.RegisterCommand;
+import lk.spring_security.method_level_security_global_security_exceptions.usecase.auth.records.RegisterResult;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -30,28 +30,51 @@ public class AuthUseCaseImpl implements AuthUseCase {
         this.authenticationManager = authenticationManager;
     }
 
+
     //register user
     @Override
-    @Transactional
-    public String registerUser(User user ){
-        //check email availability
-        if(userRepository.findByEmail(user.getEmail()).isPresent()){
-            throw new IllegalArgumentException("email already exists");
+    public RegisterResult register(RegisterCommand registerCommand) {
+        //check incoming fields
+        if(registerCommand.email().isEmpty() || registerCommand.password().isEmpty()){
+            throw new IllegalArgumentException("email or password is empty");
         }
 
-        //create domain model
-        User createDomainModel = User.builder()
-                .email(user.getEmail())
-                .password(passwordEncoder.encode(user.getPassword()))
-                .role(Role.USER)
-                .build();
+        //check email availability
+        if(userRepository.findByEmail(registerCommand.email()).isPresent()){
+            throw new IllegalArgumentException("email already exists");
+        }
+        //create user model
+        User createNewUser = User.createUser(
+                registerCommand.email(),
+                passwordEncoder.encode(registerCommand.password()),
+                null
+        );
+        //set role through the domain
+        createNewUser.roleUser();
+        //save user
+        User savedUser = userRepository.saveUser(createNewUser);
+        //generate token
+        String token = jwtService.generateToken(createNewUser);
 
-        //save user in db
-        userRepository.saveUser(createDomainModel);
-
-        //generate token then return
-        return  jwtService.generateToken(createDomainModel);
+        return new RegisterResult(
+                savedUser.getUserId(),
+                savedUser.getEmail(),
+                token,
+                savedUser.getRole().toString()
+        );
     }
+
+
+
+
+
+
+
+
+
+
+
+
 
     //login user
     @Override
