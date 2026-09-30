@@ -1,11 +1,13 @@
 package lk.spring_security.method_level_security_global_security_exceptions.usecase.auth;
 
 import lk.spring_security.method_level_security_global_security_exceptions.domain.models.User;
+import lk.spring_security.method_level_security_global_security_exceptions.domain.repositories.IdentityManager;
 import lk.spring_security.method_level_security_global_security_exceptions.domain.repositories.UserRepository;
 import lk.spring_security.method_level_security_global_security_exceptions.domain.services.JwtService;
+import lk.spring_security.method_level_security_global_security_exceptions.usecase.auth.records.LoginCommand;
+import lk.spring_security.method_level_security_global_security_exceptions.usecase.auth.records.LoginResult;
 import lk.spring_security.method_level_security_global_security_exceptions.usecase.auth.records.RegisterCommand;
 import lk.spring_security.method_level_security_global_security_exceptions.usecase.auth.records.RegisterResult;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,18 +18,18 @@ public class AuthUseCaseImpl implements AuthUseCase {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
-    private final AuthenticationManager authenticationManager;
+    private final IdentityManager identityManager;
 
     public AuthUseCaseImpl(
             UserRepository userRepository,
             PasswordEncoder passwordEncoder,
             JwtService jwtService,
-            AuthenticationManager authenticationManager
+            IdentityManager identityManager
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
-        this.authenticationManager = authenticationManager;
+        this.identityManager = identityManager;
     }
 
 
@@ -64,16 +66,13 @@ public class AuthUseCaseImpl implements AuthUseCase {
         );
     }
 
+    @Override
+    public LoginResult login(LoginCommand loginCommand) {
 
 
 
-
-
-
-
-
-
-
+        return null;
+    }
 
 
     //login user
