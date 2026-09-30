@@ -1,6 +1,5 @@
 package lk.spring_security.method_level_security_global_security_exceptions.web.auth.webMappers;
 
-import lk.spring_security.method_level_security_global_security_exceptions.domain.models.User;
 import lk.spring_security.method_level_security_global_security_exceptions.usecase.auth.records.LoginCommand;
 import lk.spring_security.method_level_security_global_security_exceptions.usecase.auth.records.LoginResult;
 import lk.spring_security.method_level_security_global_security_exceptions.usecase.auth.records.RegisterCommand;
@@ -10,13 +9,6 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface AuthWebMapper {
-    //requestDTO to domain model
-    User authToDomainModel(AuthRequestDTO authRequestDTO);
-
-    //domain model to responseDTO
-    default AuthResponseDTO authResponse(String token){
-        return new AuthResponseDTO(token);
-    }
 
     /* __LOGIN__ */
 
