@@ -1,12 +1,13 @@
 package lk.spring_security.method_level_security_global_security_exceptions.usecase.auth;
 
-import jakarta.transaction.Transactional;
-import lk.spring_security.method_level_security_global_security_exceptions.domain.models.Role;
 import lk.spring_security.method_level_security_global_security_exceptions.domain.models.User;
+import lk.spring_security.method_level_security_global_security_exceptions.domain.repositories.IdentityManager;
 import lk.spring_security.method_level_security_global_security_exceptions.domain.repositories.UserRepository;
 import lk.spring_security.method_level_security_global_security_exceptions.domain.services.JwtService;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import lk.spring_security.method_level_security_global_security_exceptions.usecase.auth.records.LoginCommand;
+import lk.spring_security.method_level_security_global_security_exceptions.usecase.auth.records.LoginResult;
+import lk.spring_security.method_level_security_global_security_exceptions.usecase.auth.records.RegisterCommand;
+import lk.spring_security.method_level_security_global_security_exceptions.usecase.auth.records.RegisterResult;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -16,54 +17,76 @@ public class AuthUseCaseImpl implements AuthUseCase {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
-    private final AuthenticationManager authenticationManager;
+    private final IdentityManager identityManager;
 
     public AuthUseCaseImpl(
             UserRepository userRepository,
             PasswordEncoder passwordEncoder,
             JwtService jwtService,
-            AuthenticationManager authenticationManager
+            IdentityManager identityManager
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
-        this.authenticationManager = authenticationManager;
+        this.identityManager = identityManager;
     }
+
 
     //register user
     @Override
-    @Transactional
-    public String registerUser(User user ){
-        //check email availability
-        if(userRepository.findByEmail(user.getEmail()).isPresent()){
-            throw new IllegalArgumentException("email already exists");
+    public RegisterResult register(RegisterCommand registerCommand) {
+        //check incoming fields
+        if(registerCommand.email().isEmpty() || registerCommand.password().isEmpty()){
+            throw new IllegalArgumentException("email or password is empty");
         }
 
-        //create domain model
-        User createDomainModel = User.builder()
-                .email(user.getEmail())
-                .password(passwordEncoder.encode(user.getPassword()))
-                .role(Role.USER)
-                .build();
+        //check email availability
+        if(userRepository.findByEmail(registerCommand.email()).isPresent()){
+            throw new IllegalArgumentException("email already exists");
+        }
+        //create user model
+        User createNewUser = User.createUser(
+                registerCommand.email(),
+                passwordEncoder.encode(registerCommand.password()),
+                null
+        );
+        //set role through the domain
+        createNewUser.roleUser();
+        //save user
+        User savedUser = userRepository.saveUser(createNewUser);
+        //generate token
+        String token = jwtService.generateToken(createNewUser);
 
-        //save user in db
-        userRepository.saveUser(createDomainModel);
-
-        //generate token then return
-        return  jwtService.generateToken(createDomainModel);
+        return new RegisterResult(
+                savedUser.getUserId(),
+                savedUser.getEmail(),
+                token,
+                savedUser.getRole().toString()
+        );
     }
 
     //login user
     @Override
-    public String loginUser(String  email, String password){
+    public LoginResult login(LoginCommand loginCommand) {
+
+        if(loginCommand.email().isEmpty() || loginCommand.password().isEmpty()){
+            throw new IllegalArgumentException("email or password is empty");
+        }
         //check username and password using spring security
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
+        identityManager.authenticate(loginCommand.email(), loginCommand.password());
 
         //check and find user in db
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("Invalid email or password"));
+        User user = userRepository.findByEmail(loginCommand.email())
+                .orElseThrow(() -> new UsernameNotFoundException("Email not found"));
+        //generate token
+        String token = jwtService.generateToken(user);
 
-        //generate token, then return
-        return jwtService.generateToken(user);
+        return new  LoginResult(
+                user.getUserId(),
+                user.getEmail(),
+                token,
+                user.getRole().toString()
+        );
     }
+
 }
