@@ -25,4 +25,14 @@ public class User {
     public static User createUser(String email, String password, Role role) {
         return new User(null, email, password, role);
     }
+
+    /* __DOMAIN_LOGIC__ */
+
+    //set user ROLE.USER
+    public void roleUser(){
+        if(this.role == Role.USER || this.role == Role.ADMIN ){
+            throw  new SecurityException("User has assign a role");
+        }
+        this.role = Role.USER;
+    }
 }
