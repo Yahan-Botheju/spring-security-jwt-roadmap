@@ -3,7 +3,7 @@ package lk.spring_security.method_level_security_global_security_exceptions.usec
 public record RegisterResult(
         Long userId,
         String email,
-        String password,
+        String token,
         String role
 ) {
 }
