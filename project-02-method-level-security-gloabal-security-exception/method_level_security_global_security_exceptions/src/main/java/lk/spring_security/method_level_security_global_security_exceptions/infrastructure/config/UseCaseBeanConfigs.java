@@ -19,15 +19,26 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 public class UseCaseBeanConfigs {
 
+    /* __AUTH_USE_CASE__ */
+
     @Bean
     public AuthUseCase authUseCase(
             UserRepository userRepository,
             PasswordEncoder passwordEncoder,
             JwtService jwtService,
+            IdentityManager identityManager
+    ){
+        return new AuthUseCaseImpl(userRepository,passwordEncoder,jwtService, identityManager);
+    }
+
+    /* __IDENTITY_MANAGER__ */
+    @Bean
+    public IdentityManager identityManager(
             AuthenticationManager authenticationManager
     ){
-        return new AuthUseCaseImpl(userRepository,passwordEncoder,jwtService,authenticationManager);
+        return new IdentityManagerImpl(authenticationManager);
     }
+
 
     @Bean
     public UserUseCase userUseCase(
@@ -44,11 +55,5 @@ public class UseCaseBeanConfigs {
         return new TaskUseCaseImpl(taskRepository, userRepository);
     }
 
-    /* __IDENTITY_MANAGER__ */
-    @Bean
-    public IdentityManager identityManager(
-            AuthenticationManager authenticationManager
-    ){
-        return new IdentityManagerImpl(authenticationManager);
-    }
+
 }
