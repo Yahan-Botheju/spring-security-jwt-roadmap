@@ -19,4 +19,10 @@ public class User {
     public String getPassword() { return password; }
     public Role getRole() { return role; }
 
+
+    /* __FACTORY_METHOD__ */
+
+    public static User createUser(String email, String password, Role role) {
+        return new User(null, email, password, role);
+    }
 }
