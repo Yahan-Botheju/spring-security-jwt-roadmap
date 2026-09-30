@@ -2,12 +2,11 @@ package lk.spring_security.method_level_security_global_security_exceptions.web.
 
 import jakarta.validation.Valid;
 import lk.spring_security.method_level_security_global_security_exceptions.usecase.auth.AuthUseCase;
+import lk.spring_security.method_level_security_global_security_exceptions.usecase.auth.records.LoginCommand;
+import lk.spring_security.method_level_security_global_security_exceptions.usecase.auth.records.LoginResult;
 import lk.spring_security.method_level_security_global_security_exceptions.usecase.auth.records.RegisterCommand;
 import lk.spring_security.method_level_security_global_security_exceptions.usecase.auth.records.RegisterResult;
-import lk.spring_security.method_level_security_global_security_exceptions.web.auth.DTOs.AuthRequestDTO;
-import lk.spring_security.method_level_security_global_security_exceptions.web.auth.DTOs.AuthResponseDTO;
-import lk.spring_security.method_level_security_global_security_exceptions.web.auth.DTOs.RegisterRequestDTO;
-import lk.spring_security.method_level_security_global_security_exceptions.web.auth.DTOs.RegisterResponseDTO;
+import lk.spring_security.method_level_security_global_security_exceptions.web.auth.DTOs.*;
 import lk.spring_security.method_level_security_global_security_exceptions.web.auth.webMappers.AuthWebMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,15 +45,13 @@ public class AuthController {
 
     //user login
     @PostMapping("/login")
-    public ResponseEntity<AuthResponseDTO> login(
-            @Valid @RequestBody AuthRequestDTO authRequestDTO
+    public ResponseEntity<LoginResponseDTO> login(
+            @Valid @RequestBody LoginRequestDTO loginRequestDTO
     ){
-        //get token by using email and paw
-        String getToken = authUseCase.loginUser(authRequestDTO.getEmail(), authRequestDTO.getPassword());
+        LoginCommand toCommand = authWebMapper.toLoginCommand(loginRequestDTO);
+        LoginResult toUseCase = authUseCase.login(toCommand);
+        LoginResponseDTO responseDTO = authWebMapper.toLoginResponseDTO(toUseCase);
 
-        //turn to response
-        AuthResponseDTO authResponseDTO = authWebMapper.authResponse(getToken);
-
-        return ResponseEntity.ok(authResponseDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
     }
 }
