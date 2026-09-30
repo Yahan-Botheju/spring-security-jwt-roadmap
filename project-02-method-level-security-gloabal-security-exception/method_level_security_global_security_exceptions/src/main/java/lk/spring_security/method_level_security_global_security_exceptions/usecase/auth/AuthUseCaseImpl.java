@@ -8,7 +8,6 @@ import lk.spring_security.method_level_security_global_security_exceptions.useca
 import lk.spring_security.method_level_security_global_security_exceptions.usecase.auth.records.LoginResult;
 import lk.spring_security.method_level_security_global_security_exceptions.usecase.auth.records.RegisterCommand;
 import lk.spring_security.method_level_security_global_security_exceptions.usecase.auth.records.RegisterResult;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -66,26 +65,28 @@ public class AuthUseCaseImpl implements AuthUseCase {
         );
     }
 
+    //login user
     @Override
     public LoginResult login(LoginCommand loginCommand) {
 
-
-
-        return null;
-    }
-
-
-    //login user
-    @Override
-    public String loginUser(String  email, String password){
+        if(loginCommand.email().isEmpty() || loginCommand.password().isEmpty()){
+            throw new IllegalArgumentException("email or password is empty");
+        }
         //check username and password using spring security
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
+        identityManager.authenticate(loginCommand.email(), loginCommand.password());
 
         //check and find user in db
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("Invalid email or password"));
+        User user = userRepository.findByEmail(loginCommand.email())
+                .orElseThrow(() -> new UsernameNotFoundException("Email not found"));
+        //generate token
+        String token = jwtService.generateToken(user);
 
-        //generate token, then return
-        return jwtService.generateToken(user);
+        return new  LoginResult(
+                user.getUserId(),
+                user.getEmail(),
+                token,
+                user.getRole().toString()
+        );
     }
+
 }
