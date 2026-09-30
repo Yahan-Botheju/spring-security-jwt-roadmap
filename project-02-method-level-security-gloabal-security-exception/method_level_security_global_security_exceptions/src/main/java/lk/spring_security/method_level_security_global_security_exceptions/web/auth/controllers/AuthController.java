@@ -1,11 +1,15 @@
 package lk.spring_security.method_level_security_global_security_exceptions.web.auth.controllers;
 
 import jakarta.validation.Valid;
-import lk.spring_security.method_level_security_global_security_exceptions.domain.models.User;
 import lk.spring_security.method_level_security_global_security_exceptions.usecase.auth.AuthUseCase;
+import lk.spring_security.method_level_security_global_security_exceptions.usecase.auth.records.RegisterCommand;
+import lk.spring_security.method_level_security_global_security_exceptions.usecase.auth.records.RegisterResult;
 import lk.spring_security.method_level_security_global_security_exceptions.web.auth.DTOs.AuthRequestDTO;
 import lk.spring_security.method_level_security_global_security_exceptions.web.auth.DTOs.AuthResponseDTO;
+import lk.spring_security.method_level_security_global_security_exceptions.web.auth.DTOs.RegisterRequestDTO;
+import lk.spring_security.method_level_security_global_security_exceptions.web.auth.DTOs.RegisterResponseDTO;
 import lk.spring_security.method_level_security_global_security_exceptions.web.auth.webMappers.AuthWebMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,18 +31,17 @@ public class AuthController {
 
     //register new user
     @PostMapping("/register")
-    public ResponseEntity<AuthResponseDTO> register(
-            @Valid @RequestBody AuthRequestDTO authRequestDTO
+    public ResponseEntity<RegisterResponseDTO> register(
+            @Valid @RequestBody RegisterRequestDTO registerRequestDTO
     ){
-        //turn to domain model
-        User toDomainModel = authWebMapper.authToDomainModel(authRequestDTO);
-        //get token
-        String getToken = authUseCase.registerUser(toDomainModel);
+        //turn to command
+        RegisterCommand toCommand = authWebMapper.toRegisterCommand(registerRequestDTO);
+        //set command to usecase
+        RegisterResult toUseCase = authUseCase.register(toCommand);
+        //result to response
+        RegisterResponseDTO responseDTO = authWebMapper.toRegisterResponseDTO(toUseCase);
 
-        //create response using token
-        AuthResponseDTO authResponseDTO = authWebMapper.authResponse(getToken);
-
-        return ResponseEntity.ok(authResponseDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
     }
 
     //user login
