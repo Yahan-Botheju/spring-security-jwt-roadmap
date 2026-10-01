@@ -4,6 +4,8 @@ import jakarta.validation.Valid;
 import lk.spring_security.method_level_security_global_security_exceptions.domain.models.Task;
 import lk.spring_security.method_level_security_global_security_exceptions.infrastructure.security.user.CustomUserDetails;
 import lk.spring_security.method_level_security_global_security_exceptions.usecase.task.TaskUseCase;
+import lk.spring_security.method_level_security_global_security_exceptions.usecase.task.record.GetAllTaskResult;
+import lk.spring_security.method_level_security_global_security_exceptions.web.task.DTOs.GetAllTaskResponseDTO;
 import lk.spring_security.method_level_security_global_security_exceptions.web.task.DTOs.TaskRequestDTO;
 import lk.spring_security.method_level_security_global_security_exceptions.web.task.DTOs.TaskResponseDTO;
 import lk.spring_security.method_level_security_global_security_exceptions.web.task.webMappers.TaskWebMapper;
@@ -35,10 +37,13 @@ public class TaskController {
     //get all tasks
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<TaskResponseDTO>> getAllTasks(){
-        List<Task> tasks = taskUseCase.getAllTasks();
-        List<TaskResponseDTO> responseDTO =tasks.stream().map(taskWebMapper::toResponseDTO).toList();
-        return ResponseEntity.ok(responseDTO);
+    public ResponseEntity<List<GetAllTaskResponseDTO>> getAllTasks(){
+
+        List<GetAllTaskResult> toAllTaskResults = taskUseCase.getAllTasks().stream().toList();
+        List<GetAllTaskResponseDTO> responseDTO = toAllTaskResults.stream()
+                .map(taskWebMapper::toGetAllTaskResponseDTO).toList();
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
     }
 
     //create task
