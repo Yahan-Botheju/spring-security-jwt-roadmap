@@ -10,6 +10,7 @@ import lk.spring_security.method_level_security_global_security_exceptions.infra
 import lk.spring_security.method_level_security_global_security_exceptions.infrastructure.user.persistence.jpa.JpaUserRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public class TaskPersistenceImpl implements TaskRepository {
 
@@ -26,6 +27,13 @@ public class TaskPersistenceImpl implements TaskRepository {
         this.jpaTaskRepository = taskRepository;
         this.taskPersistenceMapper = taskPersistenceMapper;
         this.jpaUserRepository = jpaUserRepository;
+    }
+
+    //task find by its id
+    @Override
+    public Optional<Task> taskFindById(Long taskId) {
+        return jpaTaskRepository.findByTaskId(taskId)
+                .map(taskPersistenceMapper::toDomainModel);
     }
 
     //get all task
