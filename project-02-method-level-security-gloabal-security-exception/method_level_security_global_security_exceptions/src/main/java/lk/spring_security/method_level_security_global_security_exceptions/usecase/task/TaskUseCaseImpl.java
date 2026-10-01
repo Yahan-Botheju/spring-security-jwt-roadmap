@@ -4,8 +4,12 @@ import lk.spring_security.method_level_security_global_security_exceptions.domai
 import lk.spring_security.method_level_security_global_security_exceptions.domain.models.User;
 import lk.spring_security.method_level_security_global_security_exceptions.domain.repositories.TaskRepository;
 import lk.spring_security.method_level_security_global_security_exceptions.domain.repositories.UserRepository;
+import lk.spring_security.method_level_security_global_security_exceptions.usecase.task.record.CreateTaskCommand;
+import lk.spring_security.method_level_security_global_security_exceptions.usecase.task.record.CreateTaskResult;
 import lk.spring_security.method_level_security_global_security_exceptions.usecase.task.record.GetAllTaskResult;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 
+import java.security.InvalidParameterException;
 import java.util.List;
 
 public class TaskUseCaseImpl implements TaskUseCase{
@@ -37,12 +41,38 @@ public class TaskUseCaseImpl implements TaskUseCase{
 
     //create task
     @Override
-    public Task createTask(Long userId,Task task){
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("user not found"));
-        task.setUser(user);
-        return taskRepository.createTask(userId, task);
+    public CreateTaskResult createTask(CreateTaskCommand createTaskCommand) {
+
+        //validate incoming fields
+        if(createTaskCommand.userId() == null
+                || createTaskCommand.taskTitle().isBlank()
+                || createTaskCommand.taskDescription().isBlank()
+        ){
+            throw new InvalidParameterException("Required fields are empty");
+        }
+        //get user
+        User user = userRepository.findById(createTaskCommand.userId())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        //create task model using domain
+        Task newTask = Task.createNewTask(
+                createTaskCommand.taskTitle(),
+                createTaskCommand.taskDescription(),
+                false,
+                createTaskCommand.userId(),
+                user
+        );
+
+        Task savedTask = taskRepository.createTask(newTask);
+
+        return new CreateTaskResult(
+                savedTask.getTaskId(),
+                savedTask.getTaskTitle(),
+                savedTask.getTaskDescription(),
+                savedTask.isCompleted(),
+                savedTask.getUserId()
+        );
     }
+
 
     //update task
     @Override
@@ -56,3 +86,27 @@ public class TaskUseCaseImpl implements TaskUseCase{
         taskRepository.deleteTask(taskId);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
