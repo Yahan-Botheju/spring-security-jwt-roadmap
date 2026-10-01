@@ -54,8 +54,8 @@ public class TaskPersistenceImpl implements TaskRepository {
     }
 
     //update task
-    public Task updateTask(Long taskId, Task task){
-        TaskEntity existingEntity = jpaTaskRepository.findById(taskId)
+    public Task updateTask(Task task){
+        TaskEntity existingEntity = jpaTaskRepository.findById(task.getTaskId())
                 .orElseThrow(() -> new EntityNotFoundException("Task not found"));
 
         TaskEntity updatedTaskEntity = taskPersistenceMapper.updateTaskEntity(task, existingEntity);
