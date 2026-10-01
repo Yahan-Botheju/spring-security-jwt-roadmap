@@ -28,4 +28,16 @@ public class Task {
     public User getUser() { return user; }
 
 
+    /* __FACTORY_METHOD__ */
+
+    public static Task createNewTask(
+            String taskTitle,
+            String taskDescription,
+            boolean completed,
+            Long userId,
+            User user
+    ) {
+        return new Task(null, taskTitle, taskDescription, completed, userId, user);
+    }
+
 }
