@@ -1,12 +1,13 @@
 package lk.spring_security.method_level_security_global_security_exceptions.usecase.task;
 
 import lk.spring_security.method_level_security_global_security_exceptions.domain.models.Task;
+import lk.spring_security.method_level_security_global_security_exceptions.usecase.task.record.GetAllTaskResult;
 
 import java.util.List;
 
 public interface TaskUseCase {
     //get all task
-    List<Task> getAllTasks();
+    List<GetAllTaskResult> getAllTasks();
 
     //create task
     Task createTask(Long userId, Task task);
