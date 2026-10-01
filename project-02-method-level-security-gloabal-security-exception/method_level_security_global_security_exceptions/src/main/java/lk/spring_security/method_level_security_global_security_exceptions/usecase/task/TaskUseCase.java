@@ -1,6 +1,8 @@
 package lk.spring_security.method_level_security_global_security_exceptions.usecase.task;
 
 import lk.spring_security.method_level_security_global_security_exceptions.domain.models.Task;
+import lk.spring_security.method_level_security_global_security_exceptions.usecase.task.record.CreateTaskCommand;
+import lk.spring_security.method_level_security_global_security_exceptions.usecase.task.record.CreateTaskResult;
 import lk.spring_security.method_level_security_global_security_exceptions.usecase.task.record.GetAllTaskResult;
 
 import java.util.List;
@@ -10,7 +12,7 @@ public interface TaskUseCase {
     List<GetAllTaskResult> getAllTasks();
 
     //create task
-    Task createTask(Long userId, Task task);
+    CreateTaskResult createTask(CreateTaskCommand createTaskCommand);
 
     //update task
     Task updateTask(Long taskId, Task task);
