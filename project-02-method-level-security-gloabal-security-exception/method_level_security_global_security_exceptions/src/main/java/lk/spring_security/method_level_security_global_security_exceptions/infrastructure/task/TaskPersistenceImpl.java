@@ -10,6 +10,7 @@ import lk.spring_security.method_level_security_global_security_exceptions.infra
 import lk.spring_security.method_level_security_global_security_exceptions.infrastructure.user.persistence.jpa.JpaUserRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public class TaskPersistenceImpl implements TaskRepository {
 
@@ -28,6 +29,13 @@ public class TaskPersistenceImpl implements TaskRepository {
         this.jpaUserRepository = jpaUserRepository;
     }
 
+    //task find by its id
+    @Override
+    public Optional<Task> taskFindById(Long taskId) {
+        return jpaTaskRepository.findByTaskId(taskId)
+                .map(taskPersistenceMapper::toDomainModel);
+    }
+
     //get all task
     public List<Task> getAllTasks(){
         List<TaskEntity> entityList = jpaTaskRepository.findAll();
@@ -35,9 +43,9 @@ public class TaskPersistenceImpl implements TaskRepository {
     }
 
     //create task
-    public Task createTask(Long userId, Task task){
-        UserEntity availableUserEntity = jpaUserRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + userId));
+    public Task createTask(Task task){
+        UserEntity availableUserEntity = jpaUserRepository.findById(task.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + task.getUserId()));
 
         TaskEntity taskEntity = taskPersistenceMapper.toEntity(task);
         taskEntity.setUser(availableUserEntity);
@@ -46,8 +54,8 @@ public class TaskPersistenceImpl implements TaskRepository {
     }
 
     //update task
-    public Task updateTask(Long taskId, Task task){
-        TaskEntity existingEntity = jpaTaskRepository.findById(taskId)
+    public Task updateTask(Task task){
+        TaskEntity existingEntity = jpaTaskRepository.findById(task.getTaskId())
                 .orElseThrow(() -> new EntityNotFoundException("Task not found"));
 
         TaskEntity updatedTaskEntity = taskPersistenceMapper.updateTaskEntity(task, existingEntity);
