@@ -4,6 +4,7 @@ import lk.spring_security.method_level_security_global_security_exceptions.domai
 import lk.spring_security.method_level_security_global_security_exceptions.domain.models.User;
 import lk.spring_security.method_level_security_global_security_exceptions.domain.repositories.TaskRepository;
 import lk.spring_security.method_level_security_global_security_exceptions.domain.repositories.UserRepository;
+import lk.spring_security.method_level_security_global_security_exceptions.usecase.task.record.GetAllTaskResult;
 
 import java.util.List;
 
@@ -21,8 +22,17 @@ public class TaskUseCaseImpl implements TaskUseCase{
 
     //get all task
     @Override
-    public List<Task> getAllTasks(){
-        return taskRepository.getAllTasks();
+    public List<GetAllTaskResult> getAllTasks(){
+
+        return taskRepository.getAllTasks().stream().map(
+                task -> new GetAllTaskResult(
+                        task.getTaskId(),
+                        task.getTaskTitle(),
+                        task.getTaskDescription(),
+                        task.isCompleted(),
+                        task.getUserId()
+                )
+        ).toList();
     }
 
     //create task
