@@ -4,10 +4,10 @@ import jakarta.validation.Valid;
 import lk.spring_security.method_level_security_global_security_exceptions.domain.models.Task;
 import lk.spring_security.method_level_security_global_security_exceptions.infrastructure.security.user.CustomUserDetails;
 import lk.spring_security.method_level_security_global_security_exceptions.usecase.task.TaskUseCase;
+import lk.spring_security.method_level_security_global_security_exceptions.usecase.task.record.CreateTaskCommand;
+import lk.spring_security.method_level_security_global_security_exceptions.usecase.task.record.CreateTaskResult;
 import lk.spring_security.method_level_security_global_security_exceptions.usecase.task.record.GetAllTaskResult;
-import lk.spring_security.method_level_security_global_security_exceptions.web.task.DTOs.GetAllTaskResponseDTO;
-import lk.spring_security.method_level_security_global_security_exceptions.web.task.DTOs.TaskRequestDTO;
-import lk.spring_security.method_level_security_global_security_exceptions.web.task.DTOs.TaskResponseDTO;
+import lk.spring_security.method_level_security_global_security_exceptions.web.task.DTOs.*;
 import lk.spring_security.method_level_security_global_security_exceptions.web.task.webMappers.TaskWebMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,13 +48,16 @@ public class TaskController {
 
     //create task
     @PostMapping
-    public ResponseEntity<TaskResponseDTO> createTask(
+    public ResponseEntity<CreateTaskResponseDTO> createTask(
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
-            @Valid @RequestBody TaskRequestDTO taskRequestDTO
+            @Valid @RequestBody CreateTaskRequestDTO createTaskRequestDTO
     ){
         Long userId = customUserDetails.getUserId();
-        TaskResponseDTO responseDTO = taskWebMapper.toResponseDTO(
-                taskUseCase.createTask(userId,taskWebMapper.toDomainModel(taskRequestDTO )));
+
+        CreateTaskCommand toCommand = taskWebMapper.toCreateTaskCommand(userId, createTaskRequestDTO);
+        CreateTaskResult toCreteResult = taskUseCase.createTask(toCommand);
+        CreateTaskResponseDTO responseDTO = taskWebMapper.toCreateTaskResponseDTO(toCreteResult);
+
         return ResponseEntity.created(URI.create("/api/v2/tasks")).body(responseDTO);
     }
 
