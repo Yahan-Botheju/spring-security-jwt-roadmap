@@ -30,7 +30,7 @@ public class User {
 
     //update user email
     public void updateUserEmail(String newEmail, Long userId){
-        if(newEmail.isBlank() || newEmail.equals(this.getEmail())){
+        if(newEmail.isBlank() || newEmail.equals(this.getEmail()) && !this.userId.equals(userId)){
             throw new IllegalStateException("Please, use different email addresses!");
         }
         this.email = newEmail;
