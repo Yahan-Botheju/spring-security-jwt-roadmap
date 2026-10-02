@@ -1,4 +1,7 @@
 package lk.spring_security.method_level_security_global_security_exceptions.usecase.user.records;
 
-public record UpdateUserCommand() {
+public record UpdateUserCommand(
+        Long userId,
+        String email
+) {
 }
