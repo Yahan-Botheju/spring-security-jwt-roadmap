@@ -28,6 +28,15 @@ public class User {
 
     /* __DOMAIN_LOGIC__ */
 
+    //update user email
+    public void updateUserEmail(String newEmail, Long userId){
+        if(newEmail.isBlank() || newEmail.equals(this.getEmail())){
+            throw new IllegalStateException("Please, use different email addresses!");
+        }
+        this.email = newEmail;
+        this.userId = userId;
+    }
+
     //set user ROLE.USER
     public void roleUser(){
         if(this.role == Role.USER || this.role == Role.ADMIN ){
