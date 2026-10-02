@@ -7,11 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TaskResponseDTO {
+public class UpdateTaskResponseDTO {
     private Long taskId;
     private String taskTitle;
     private String taskDescription;
     private Boolean completed;
-
     private Long userId;
 }

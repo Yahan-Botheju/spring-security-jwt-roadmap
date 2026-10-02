@@ -15,8 +15,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
+@EnableTransactionManagement
 public class UseCaseBeanConfigs {
 
     /* __AUTH_USE_CASE__ */
@@ -39,6 +41,7 @@ public class UseCaseBeanConfigs {
         return new IdentityManagerImpl(authenticationManager);
     }
 
+    /* __USER_USE_CASE__ */
 
     @Bean
     public UserUseCase userUseCase(
@@ -46,6 +49,9 @@ public class UseCaseBeanConfigs {
     ) {
         return new UserUseCaseImpl(userRepository);
     }
+
+
+    /* __TASK_USE_CASE__ */
 
     @Bean
     public TaskUseCase taskUseCase(

@@ -7,13 +7,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class UserRequestDTO {
-    @Email
+@NoArgsConstructor
+public class UpdateUserRequestDTO {
+    @Email(message = "Please provide a correct email")
     @NotBlank(message = "Email cannot be empty")
-    private String email;
-
-    @NotBlank(message = "Password cannot be empty")
-    private String password;
+    String email;
 }
