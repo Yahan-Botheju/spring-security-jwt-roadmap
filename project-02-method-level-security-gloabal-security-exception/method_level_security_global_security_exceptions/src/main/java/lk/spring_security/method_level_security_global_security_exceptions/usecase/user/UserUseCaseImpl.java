@@ -48,6 +48,11 @@ public class UserUseCaseImpl implements UserUseCase {
     //delete user
     @Override
     public void deleteUser(Long userId) {
+
+        if(userId == null){
+            throw new IllegalStateException("userId cannot be empty!!");
+        }
+
         User existingUser = userRepository.findById(userId)
                 .orElseThrow(() -> new UsernameNotFoundException("user not found" + " , " + userId));
         userRepository.deleteUser(existingUser);
