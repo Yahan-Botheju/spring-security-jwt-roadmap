@@ -13,6 +13,9 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class PersistenceBeanConfigs {
+
+    /* __USER__ */
+
     @Bean
     public UserRepository userRepository(
             JpaUserRepository jpaUserRepository,
@@ -20,6 +23,8 @@ public class PersistenceBeanConfigs {
     ) {
         return new UserPersistenceImpl(jpaUserRepository, userPersistenceMapper);
     }
+
+    /* __TASK__ */
 
     @Bean
     public TaskRepository taskRepository(

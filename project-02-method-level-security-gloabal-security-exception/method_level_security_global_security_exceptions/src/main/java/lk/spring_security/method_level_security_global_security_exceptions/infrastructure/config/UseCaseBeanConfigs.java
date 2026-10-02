@@ -39,6 +39,7 @@ public class UseCaseBeanConfigs {
         return new IdentityManagerImpl(authenticationManager);
     }
 
+    /* __USER_USE_CASE__ */
 
     @Bean
     public UserUseCase userUseCase(
@@ -46,6 +47,9 @@ public class UseCaseBeanConfigs {
     ) {
         return new UserUseCaseImpl(userRepository);
     }
+
+
+    /* __TASK_USE_CASE__ */
 
     @Bean
     public TaskUseCase taskUseCase(
