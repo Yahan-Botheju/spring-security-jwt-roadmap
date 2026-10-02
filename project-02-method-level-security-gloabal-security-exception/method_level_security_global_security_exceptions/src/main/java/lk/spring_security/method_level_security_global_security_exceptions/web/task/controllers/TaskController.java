@@ -1,12 +1,9 @@
 package lk.spring_security.method_level_security_global_security_exceptions.web.task.controllers;
 
 import jakarta.validation.Valid;
-import lk.spring_security.method_level_security_global_security_exceptions.domain.models.Task;
 import lk.spring_security.method_level_security_global_security_exceptions.infrastructure.security.user.CustomUserDetails;
 import lk.spring_security.method_level_security_global_security_exceptions.usecase.task.TaskUseCase;
-import lk.spring_security.method_level_security_global_security_exceptions.usecase.task.record.CreateTaskCommand;
-import lk.spring_security.method_level_security_global_security_exceptions.usecase.task.record.CreateTaskResult;
-import lk.spring_security.method_level_security_global_security_exceptions.usecase.task.record.GetAllTaskResult;
+import lk.spring_security.method_level_security_global_security_exceptions.usecase.task.record.*;
 import lk.spring_security.method_level_security_global_security_exceptions.web.task.DTOs.*;
 import lk.spring_security.method_level_security_global_security_exceptions.web.task.webMappers.TaskWebMapper;
 import org.springframework.http.HttpStatus;
@@ -63,15 +60,18 @@ public class TaskController {
 
     //update task
     @PutMapping("/{taskId}")
-    public ResponseEntity<TaskResponseDTO> updateTask(
+    public ResponseEntity<UpdateTaskResponseDTO> updateTask(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @Valid @PathVariable Long taskId,
-            @Valid @RequestBody TaskRequestDTO taskRequestDTO
+            @Valid @RequestBody UpdateTaskRequestDTO updateTaskRequestDTO
     ){
-        Task toDomainModel = taskWebMapper.toDomainModel(taskRequestDTO);
-        TaskResponseDTO responseDTO = taskWebMapper.toResponseDTO(
-                taskUseCase.updateTask(taskId, toDomainModel));
 
-        return ResponseEntity.ok(responseDTO);
+        Long userId = customUserDetails.getUserId();
+        UpdateTaskCommand toCommand = taskWebMapper.toUpdateTaskCommand(userId,taskId,updateTaskRequestDTO);
+        UpdateTaskResult toCreteResult = taskUseCase.updateTask(toCommand);
+        UpdateTaskResponseDTO responseDTO = taskWebMapper.toUpdateTaskResponseDTO(toCreteResult);
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
     }
 
     //delete task
