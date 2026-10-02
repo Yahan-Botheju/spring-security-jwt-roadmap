@@ -106,6 +106,9 @@ public class TaskUseCaseImpl implements TaskUseCase {
     //delete task
     @Override
     public void deleteTask(Long taskId) {
+        if(taskId == null){
+            throw new IllegalStateException("Required parameter cannot be empty!!");
+        }
         taskRepository.deleteTask(taskId);
     }
 }
