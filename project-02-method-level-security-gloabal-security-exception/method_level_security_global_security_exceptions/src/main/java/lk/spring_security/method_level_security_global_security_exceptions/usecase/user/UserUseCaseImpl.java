@@ -3,6 +3,7 @@ package lk.spring_security.method_level_security_global_security_exceptions.usec
 import lk.spring_security.method_level_security_global_security_exceptions.domain.models.User;
 import lk.spring_security.method_level_security_global_security_exceptions.domain.repositories.UserRepository;
 import lk.spring_security.method_level_security_global_security_exceptions.usecase.user.records.UpdateUserCommand;
+import lk.spring_security.method_level_security_global_security_exceptions.usecase.user.records.UpdateUserResult;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 
@@ -20,10 +21,9 @@ public class UserUseCaseImpl implements UserUseCase {
 
     //update user
     @Override
-    public UpdateUserCommand updateUser(UpdateUserCommand updateUserCommand) {
+    public UpdateUserResult updateUser(UpdateUserCommand updateUserCommand) {
         //validate incoming fields
         if (updateUserCommand.email().isBlank()
-                || updateUserCommand.password().isBlank()
                 || updateUserCommand.userId() == null
         ) {
             throw new IllegalStateException("Required fields cannot be empty!!");
@@ -37,7 +37,7 @@ public class UserUseCaseImpl implements UserUseCase {
 
         User updatedUser = userRepository.updateUser(exsitingUser);
 
-        return new UpdateUserCommand(
+        return new UpdateUserResult(
                 updatedUser.getUserId(),
                 updateUserCommand.email(),
                 exsitingUser.getRole().toString()
