@@ -1,9 +1,10 @@
 package lk.spring_security.method_level_security_global_security_exceptions.usecase.user;
 
-import jakarta.transaction.Transactional;
 import lk.spring_security.method_level_security_global_security_exceptions.domain.models.User;
 import lk.spring_security.method_level_security_global_security_exceptions.domain.repositories.UserRepository;
+import lk.spring_security.method_level_security_global_security_exceptions.usecase.user.records.UpdateUserCommand;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
 
 public class UserUseCaseImpl implements UserUseCase {
 
@@ -19,22 +20,65 @@ public class UserUseCaseImpl implements UserUseCase {
 
     //update user
     @Override
-    @Transactional
-    public User updateUser(Long userId,  User user) {
-        User exsitingUser = userRepository.findById(userId)
-                .orElseThrow(() -> new UsernameNotFoundException("user not found" + " , " +  userId));
-        if(user.getEmail() != null && !user.getEmail().isEmpty()){
-            exsitingUser.setEmail(user.getEmail());
+    public UpdateUserCommand updateUser(UpdateUserCommand updateUserCommand) {
+        //validate incoming fields
+        if (updateUserCommand.email().isBlank()
+                || updateUserCommand.password().isBlank()
+                || updateUserCommand.userId() == null
+        ) {
+            throw new IllegalStateException("Required fields cannot be empty!!");
         }
-        user.setUserId(userId);
-        return userRepository.updateUser(user);
+
+        User exsitingUser = userRepository.findById(updateUserCommand.userId())
+                .orElseThrow(() -> new UsernameNotFoundException("user not found" + " , " + updateUserCommand.userId()));
+
+        //update user email and password through domain
+        exsitingUser.updateUserEmail(updateUserCommand.email(),  updateUserCommand.userId());
+
+        User updatedUser = userRepository.updateUser(exsitingUser);
+
+        return new UpdateUserCommand(
+                updatedUser.getUserId(),
+                updateUserCommand.email(),
+                exsitingUser.getRole().toString()
+        );
     }
+
 
     //delete user
     @Override
     public void deleteUser(Long userId) {
         User existingUser = userRepository.findById(userId)
-                .orElseThrow(() -> new UsernameNotFoundException("user not found" + " , " +  userId));
+                .orElseThrow(() -> new UsernameNotFoundException("user not found" + " , " + userId));
         userRepository.deleteUser(existingUser);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
