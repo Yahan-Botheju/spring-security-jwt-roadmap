@@ -1,6 +1,8 @@
 package lk.spring_security.stateless_jwt.usecase.user;
 
 import lk.spring_security.stateless_jwt.domain.models.User;
+import lk.spring_security.stateless_jwt.usecase.user.records.GetUserProfileCommand;
+import lk.spring_security.stateless_jwt.usecase.user.records.GetUserProfileResult;
 
 public interface UserUseCase {
 
@@ -12,4 +14,7 @@ public interface UserUseCase {
 
     //delete user
     void deleteUser(String email);
+
+    //get user profile
+    GetUserProfileResult userProfile(GetUserProfileCommand getUserProfileCommand);
 }
