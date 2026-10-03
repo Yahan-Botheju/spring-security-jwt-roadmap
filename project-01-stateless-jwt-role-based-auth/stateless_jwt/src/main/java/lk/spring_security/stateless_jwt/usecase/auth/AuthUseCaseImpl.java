@@ -4,7 +4,7 @@ import lk.spring_security.stateless_jwt.domain.models.Role;
 import lk.spring_security.stateless_jwt.domain.models.User;
 import lk.spring_security.stateless_jwt.domain.repositories.IdentityManger;
 import lk.spring_security.stateless_jwt.domain.repositories.UserRepository;
-import lk.spring_security.stateless_jwt.domain.services.JwtService;
+import lk.spring_security.stateless_jwt.domain.repositories.JwtService;
 import lk.spring_security.stateless_jwt.infrastructure.security.user.CustomUserDetails;
 import lk.spring_security.stateless_jwt.usecase.auth.records.LoginCommand;
 import lk.spring_security.stateless_jwt.usecase.auth.records.LoginResult;
