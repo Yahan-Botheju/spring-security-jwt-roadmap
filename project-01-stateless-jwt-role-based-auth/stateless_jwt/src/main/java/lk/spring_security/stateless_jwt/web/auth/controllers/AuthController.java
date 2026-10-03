@@ -1,9 +1,16 @@
 package lk.spring_security.stateless_jwt.web.auth.controllers;
 
+import jakarta.validation.Valid;
 import lk.spring_security.stateless_jwt.usecase.auth.AuthUseCase;
+import lk.spring_security.stateless_jwt.usecase.auth.records.RegisterCommand;
+import lk.spring_security.stateless_jwt.usecase.auth.records.RegisterResult;
 import lk.spring_security.stateless_jwt.web.auth.DTOs.AuthRequestDTO;
 import lk.spring_security.stateless_jwt.web.auth.DTOs.AuthResponseDTO;
+import lk.spring_security.stateless_jwt.web.auth.DTOs.RegisterRequestDTO;
+import lk.spring_security.stateless_jwt.web.auth.DTOs.RegisterResponseDTO;
+import lk.spring_security.stateless_jwt.web.auth.webMapper.AuthWebMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,14 +24,23 @@ public class AuthController {
 
     //inject auth usecase
     private final AuthUseCase authUseCase;
+    private final AuthWebMapper authWebMapper;
+
 
     //register new user
     @PostMapping("/register")
-    public ResponseEntity<AuthResponseDTO> register(
-            @RequestBody AuthRequestDTO authRequestDTO
+    public ResponseEntity<RegisterResponseDTO> register(
+            @Valid @RequestBody RegisterRequestDTO registerRequestDTO
     ){
-        return  ResponseEntity.ok(authUseCase.register(authRequestDTO));
+        RegisterCommand toRegisterCommand = authWebMapper.toRegisterCommand(registerRequestDTO);
+        RegisterResult registerResult = authUseCase.register(toRegisterCommand);
+        RegisterResponseDTO registerResponseDTO = authWebMapper.toRegisterResponseDTO(registerResult);
+
+        return  ResponseEntity.status(HttpStatus.OK).body(registerResponseDTO);
     }
+
+
+
 
     //user login
     @PostMapping("/login")
