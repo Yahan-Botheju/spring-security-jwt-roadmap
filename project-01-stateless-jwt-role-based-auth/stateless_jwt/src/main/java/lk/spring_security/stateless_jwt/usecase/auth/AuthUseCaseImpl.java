@@ -4,38 +4,34 @@ import lk.spring_security.stateless_jwt.domain.models.Role;
 import lk.spring_security.stateless_jwt.domain.models.User;
 import lk.spring_security.stateless_jwt.domain.repositories.IdentityManger;
 import lk.spring_security.stateless_jwt.domain.repositories.UserRepository;
+import lk.spring_security.stateless_jwt.domain.services.JwtService;
 import lk.spring_security.stateless_jwt.infrastructure.security.user.CustomUserDetails;
-import lk.spring_security.stateless_jwt.infrastructure.security.JwtImpl;
 import lk.spring_security.stateless_jwt.usecase.auth.records.LoginCommand;
 import lk.spring_security.stateless_jwt.usecase.auth.records.LoginResult;
 import lk.spring_security.stateless_jwt.usecase.auth.records.RegisterCommand;
 import lk.spring_security.stateless_jwt.usecase.auth.records.RegisterResult;
-import lk.spring_security.stateless_jwt.web.auth.DTOs.AuthRequestDTO;
-import lk.spring_security.stateless_jwt.web.auth.DTOs.AuthResponseDTO;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.transaction.annotation.Transactional;
+
 
 public class AuthUseCaseImpl implements AuthUseCase{
 
     //inject required classes and spring classes
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final JwtImpl jwtImpl;
-    private final AuthenticationManager authenticationManager;
-    private final IdentityManger identityManger;
+    private UserRepository userRepository;
+    private PasswordEncoder passwordEncoder;
+    private JwtService jwtService;
+    private IdentityManger identityManger;
 
     public AuthUseCaseImpl(
             UserRepository userRepository,
-            PasswordEncoder passwordEncoder, JwtImpl jwtImpl, AuthenticationManager authenticationManager, IdentityManger identityManger) {
+            PasswordEncoder passwordEncoder,
+            JwtService jwtService,
+            IdentityManger identityManger
+    ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.jwtImpl = jwtImpl;
-        this.authenticationManager = authenticationManager;
+        this.jwtService = jwtService;
         this.identityManger = identityManger;
-
     }
 
     //register new user
@@ -56,7 +52,7 @@ public class AuthUseCaseImpl implements AuthUseCase{
 
         User savedUser = userRepository.saveUser(newUser);
         //create token
-        String token = jwtImpl.generateToken(new CustomUserDetails(newUser));
+        String token = jwtService.generateToken(new CustomUserDetails(newUser));
 
         return new RegisterResult(
                 savedUser.getUserId(),
@@ -80,7 +76,7 @@ public class AuthUseCaseImpl implements AuthUseCase{
         User user = userRepository.userFindByEmail(loginCommand.email())
                 .orElseThrow(() -> new UsernameNotFoundException("Invalid email or password"));
 
-        String token = jwtImpl.generateToken(new CustomUserDetails(user));
+        String token = jwtService.generateToken(new CustomUserDetails(user));
 
         return new LoginResult(
                 user.getEmail(),
