@@ -2,9 +2,12 @@ package lk.spring_security.stateless_jwt.usecase.auth;
 
 import lk.spring_security.stateless_jwt.domain.models.Role;
 import lk.spring_security.stateless_jwt.domain.models.User;
+import lk.spring_security.stateless_jwt.domain.repositories.IdentityManger;
 import lk.spring_security.stateless_jwt.domain.repositories.UserRepository;
 import lk.spring_security.stateless_jwt.infrastructure.security.user.CustomUserDetails;
 import lk.spring_security.stateless_jwt.infrastructure.security.JwtImpl;
+import lk.spring_security.stateless_jwt.usecase.auth.records.LoginCommand;
+import lk.spring_security.stateless_jwt.usecase.auth.records.LoginResult;
 import lk.spring_security.stateless_jwt.usecase.auth.records.RegisterCommand;
 import lk.spring_security.stateless_jwt.usecase.auth.records.RegisterResult;
 import lk.spring_security.stateless_jwt.web.auth.DTOs.AuthRequestDTO;
@@ -22,12 +25,17 @@ public class AuthUseCaseImpl implements AuthUseCase{
     private final PasswordEncoder passwordEncoder;
     private final JwtImpl jwtImpl;
     private final AuthenticationManager authenticationManager;
+    private final IdentityManger identityManger;
 
-    public AuthUseCaseImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtImpl jwtImpl, AuthenticationManager authenticationManager) {
+    public AuthUseCaseImpl(
+            UserRepository userRepository,
+            PasswordEncoder passwordEncoder, JwtImpl jwtImpl, AuthenticationManager authenticationManager, IdentityManger identityManger) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtImpl = jwtImpl;
         this.authenticationManager = authenticationManager;
+        this.identityManger = identityManger;
+
     }
 
     //register new user
@@ -58,26 +66,26 @@ public class AuthUseCaseImpl implements AuthUseCase{
         );
     }
 
-
-    //auth response
+    //login user
     @Override
-    public AuthResponseDTO login(AuthRequestDTO authRequestDTO){
-        //check email and password through spring sec
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        authRequestDTO.getEmail(),
-                        authRequestDTO.getPassword()
-                )
-        );
+    public LoginResult login(LoginCommand loginCommand) {
+        //check incoming fields
+        if(loginCommand.password().isBlank() || loginCommand.email().isBlank()){
+            throw new IllegalStateException("Required fields cannot be empty");
+        }
+        //authenticate user
+        identityManger.authenticateUser(loginCommand.email(), loginCommand.password());
 
-        //find user in db
-        User user = userRepository.userFindByEmail(authRequestDTO.getEmail())
+        //find user
+        User user = userRepository.userFindByEmail(loginCommand.email())
                 .orElseThrow(() -> new UsernameNotFoundException("Invalid email or password"));
 
-        //generate JWT
-        String jwtToken = jwtImpl.generateToken(new CustomUserDetails(user));
-        return new AuthResponseDTO(jwtToken);
-    }
+        String token = jwtImpl.generateToken(new CustomUserDetails(user));
 
+        return new LoginResult(
+                user.getEmail(),
+                token
+        );
+    }
 
 }
