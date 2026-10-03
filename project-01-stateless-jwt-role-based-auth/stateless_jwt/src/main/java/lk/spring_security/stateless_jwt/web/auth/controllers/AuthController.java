@@ -2,12 +2,11 @@ package lk.spring_security.stateless_jwt.web.auth.controllers;
 
 import jakarta.validation.Valid;
 import lk.spring_security.stateless_jwt.usecase.auth.AuthUseCase;
+import lk.spring_security.stateless_jwt.usecase.auth.records.LoginCommand;
+import lk.spring_security.stateless_jwt.usecase.auth.records.LoginResult;
 import lk.spring_security.stateless_jwt.usecase.auth.records.RegisterCommand;
 import lk.spring_security.stateless_jwt.usecase.auth.records.RegisterResult;
-import lk.spring_security.stateless_jwt.web.auth.DTOs.AuthRequestDTO;
-import lk.spring_security.stateless_jwt.web.auth.DTOs.AuthResponseDTO;
-import lk.spring_security.stateless_jwt.web.auth.DTOs.RegisterRequestDTO;
-import lk.spring_security.stateless_jwt.web.auth.DTOs.RegisterResponseDTO;
+import lk.spring_security.stateless_jwt.web.auth.DTOs.*;
 import lk.spring_security.stateless_jwt.web.auth.webMapper.AuthWebMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -39,14 +38,15 @@ public class AuthController {
         return  ResponseEntity.status(HttpStatus.OK).body(registerResponseDTO);
     }
 
-
-
-
     //user login
     @PostMapping("/login")
-    public ResponseEntity<AuthResponseDTO> login(
-            @RequestBody AuthRequestDTO authRequestDTO
+    public ResponseEntity<LoginResponseDTO> login(
+            @Valid @RequestBody LoginRequestDTO loginRequestDTO
     ){
-        return  ResponseEntity.ok(authUseCase.login(authRequestDTO));
+        LoginCommand toLoginCommand = authWebMapper.toLoginCommand(loginRequestDTO);
+        LoginResult loginResult = authUseCase.login(toLoginCommand);
+        LoginResponseDTO loginResponseDTO = authWebMapper.toLoginResponseDTO(loginResult);
+
+        return  ResponseEntity.status(HttpStatus.OK).body(loginResponseDTO);
     }
 }
