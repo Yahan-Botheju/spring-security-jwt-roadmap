@@ -5,7 +5,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import lk.spring_security.stateless_jwt.domain.services.JwtService;
+import lk.spring_security.stateless_jwt.domain.repositories.JwtService;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.crypto.SecretKey;

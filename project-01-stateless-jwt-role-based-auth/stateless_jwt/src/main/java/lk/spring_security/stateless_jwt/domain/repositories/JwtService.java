@@ -1,4 +1,4 @@
-package lk.spring_security.stateless_jwt.domain.services;
+package lk.spring_security.stateless_jwt.domain.repositories;
 
 import org.springframework.security.core.userdetails.UserDetails;
 

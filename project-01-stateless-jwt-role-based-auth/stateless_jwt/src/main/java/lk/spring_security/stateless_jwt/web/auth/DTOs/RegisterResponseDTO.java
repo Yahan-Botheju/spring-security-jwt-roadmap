@@ -7,7 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthRequestDTO {
+public class RegisterResponseDTO {
+    private Long userId;
     private String email;
-    private String password;
+    private String role;
+    private String token;
 }
