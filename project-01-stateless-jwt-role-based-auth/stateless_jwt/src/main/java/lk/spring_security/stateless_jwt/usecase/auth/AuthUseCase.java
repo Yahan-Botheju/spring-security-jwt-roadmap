@@ -1,5 +1,7 @@
 package lk.spring_security.stateless_jwt.usecase.auth;
 
+import lk.spring_security.stateless_jwt.usecase.auth.records.RegisterCommand;
+import lk.spring_security.stateless_jwt.usecase.auth.records.RegisterResult;
 import lk.spring_security.stateless_jwt.web.auth.DTOs.AuthRequestDTO;
 import lk.spring_security.stateless_jwt.web.auth.DTOs.AuthResponseDTO;
 
@@ -8,4 +10,7 @@ public interface AuthUseCase {
     AuthResponseDTO register(AuthRequestDTO authRequestDTO);
     //initiate auth response
     AuthResponseDTO login(AuthRequestDTO authRequestDTO);
+
+    //register user
+    RegisterResult register(RegisterCommand registerCommand);
 }
