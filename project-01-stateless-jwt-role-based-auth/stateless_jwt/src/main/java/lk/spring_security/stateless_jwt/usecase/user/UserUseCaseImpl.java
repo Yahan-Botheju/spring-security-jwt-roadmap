@@ -2,6 +2,9 @@ package lk.spring_security.stateless_jwt.usecase.user;
 
 import lk.spring_security.stateless_jwt.domain.models.User;
 import lk.spring_security.stateless_jwt.domain.repositories.UserRepository;
+import lk.spring_security.stateless_jwt.usecase.user.records.GetUserProfileCommand;
+import lk.spring_security.stateless_jwt.usecase.user.records.GetUserProfileResult;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 
 public class UserUseCaseImpl implements  UserUseCase {
@@ -13,13 +16,26 @@ public class UserUseCaseImpl implements  UserUseCase {
         this.userRepository = userRepository;
     }
 
-
     //get user profile
     @Override
-    public User getUserProfile(String email) {
-        return userRepository.userFindByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+    public GetUserProfileResult userProfile(GetUserProfileCommand getUserProfileCommand) {
+        //check incoming fields
+        if(getUserProfileCommand.email().isEmpty()){
+            throw new IllegalStateException("User email is required");
+        }
+        //get user
+        User user = userRepository.userFindByEmail(getUserProfileCommand.email())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+
+        return new GetUserProfileResult(
+                user.getUserId(),
+                user.getEmail(),
+                user.getRole().toString()
+        );
     }
+
+
 
     //update user profile
     @Override
@@ -42,4 +58,6 @@ public class UserUseCaseImpl implements  UserUseCase {
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
         userRepository.deleteUser(existingUser);
     }
+
+
 }
