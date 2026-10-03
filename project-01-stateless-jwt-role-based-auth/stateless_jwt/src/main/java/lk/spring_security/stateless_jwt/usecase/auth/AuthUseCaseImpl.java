@@ -5,6 +5,8 @@ import lk.spring_security.stateless_jwt.domain.models.User;
 import lk.spring_security.stateless_jwt.domain.repositories.UserRepository;
 import lk.spring_security.stateless_jwt.infrastructure.security.user.CustomUserDetails;
 import lk.spring_security.stateless_jwt.infrastructure.security.JwtImpl;
+import lk.spring_security.stateless_jwt.usecase.auth.records.RegisterCommand;
+import lk.spring_security.stateless_jwt.usecase.auth.records.RegisterResult;
 import lk.spring_security.stateless_jwt.web.auth.DTOs.AuthRequestDTO;
 import lk.spring_security.stateless_jwt.web.auth.DTOs.AuthResponseDTO;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -30,28 +32,32 @@ public class AuthUseCaseImpl implements AuthUseCase{
 
     //register new user
     @Override
-    @Transactional
-    public AuthResponseDTO register(AuthRequestDTO authRequestDTO){
+    public RegisterResult register(RegisterCommand registerCommand) {
 
-        //check user by email
-        if(userRepository.userFindByEmail(authRequestDTO.getEmail()).isPresent()){
-            throw new UsernameNotFoundException("Email already exists");
+        //check incoming fields
+        if(registerCommand.password().isBlank() || registerCommand.email().isBlank()){
+            throw new IllegalStateException("Required fields cannot be empty");
         }
 
-        //create domain model
-        User user = User.builder()
-                .email(authRequestDTO.getEmail())
-                .password(passwordEncoder.encode(authRequestDTO.getPassword()))
-                .role(Role.USER)
-                .build();
+        //create new user through domain
+        User newUser = User.createNewUser(
+                registerCommand.email(),
+                passwordEncoder.encode(registerCommand.password()),
+                Role.USER
+        );
 
-        //save in db
-        userRepository.saveUser(user);
+        User savedUser = userRepository.saveUser(newUser);
+        //create token
+        String token = jwtImpl.generateToken(new CustomUserDetails(newUser));
 
-        //generate JWT
-        String jwtToken = jwtImpl.generateToken(new CustomUserDetails(user));
-        return new AuthResponseDTO(jwtToken);
+        return new RegisterResult(
+                savedUser.getUserId(),
+                savedUser.getEmail(),
+                savedUser.getRole().toString(),
+                token
+        );
     }
+
 
     //auth response
     @Override
@@ -72,4 +78,6 @@ public class AuthUseCaseImpl implements AuthUseCase{
         String jwtToken = jwtImpl.generateToken(new CustomUserDetails(user));
         return new AuthResponseDTO(jwtToken);
     }
+
+
 }
