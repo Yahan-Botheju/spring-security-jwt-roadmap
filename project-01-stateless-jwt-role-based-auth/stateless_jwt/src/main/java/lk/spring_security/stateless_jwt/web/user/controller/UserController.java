@@ -1,11 +1,11 @@
 package lk.spring_security.stateless_jwt.web.user.controller;
 
-import lk.spring_security.stateless_jwt.domain.models.User;
 import lk.spring_security.stateless_jwt.usecase.user.UserUseCase;
-import lk.spring_security.stateless_jwt.web.user.DTOs.UserRequestDTO;
-import lk.spring_security.stateless_jwt.web.user.DTOs.UserResponseDTO;
+import lk.spring_security.stateless_jwt.usecase.user.records.*;
+import lk.spring_security.stateless_jwt.web.user.DTOs.*;
 import lk.spring_security.stateless_jwt.web.user.webMappers.UserWebMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,30 +24,31 @@ public class UserController {
 
     //get user profile
     @GetMapping("/profile")
-    public ResponseEntity<UserResponseDTO> getUserProfile(
+    public ResponseEntity<GetUserProfileResponseDTO> getUserProfile(
             @AuthenticationPrincipal UserDetails userDetails
     ) {
-        String email = userDetails.getUsername();
+        // turn to command
+        GetUserProfileCommand toCommand = userWebMapper.toGetUserProfileCommand(userDetails.getUsername());
+        // obj set to usecase
+        GetUserProfileResult toResult = userUseCase.userProfile(toCommand);
+        // turn to response
+        GetUserProfileResponseDTO  toResponseDTO = userWebMapper.toGetUserProfileResponseDTO(toResult);
 
-        User user = userUseCase.getUserProfile(email);
-        UserResponseDTO responseDTO = userWebMapper.toResponseDTO(user);
-        return ResponseEntity.ok(responseDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(toResponseDTO);
     }
 
     //update user profile
     @PutMapping("/profile")
-    public ResponseEntity<UserResponseDTO> updateUserProfile(
+    public ResponseEntity<UpdateUserProfileResponseDTO> updateUserProfile(
             @AuthenticationPrincipal UserDetails userDetails,
-            @RequestBody UserRequestDTO userRequestDTO
+            @RequestBody UpdateUserProfileRequestDTO updateUserProfileRequestDTO
     ){
-        String email = userDetails.getUsername();
+        UpdateUserProfileCommand toCommand =  userWebMapper
+                .toUpdateUserProfileCommand(userDetails.getUsername(), updateUserProfileRequestDTO);
+        UpdateUserProfileResult toResult = userUseCase.updateProfile(toCommand);
+        UpdateUserProfileResponseDTO responseDTO = userWebMapper.toUpdateUserProfileResponseDTO(toResult);
 
-        UserResponseDTO responseDTO = userWebMapper.toResponseDTO(
-                userUseCase.updateUser(
-                        userWebMapper.toDomainModel(
-                                userRequestDTO),email));
-
-        return ResponseEntity.ok(responseDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
     }
 
     //delete user
@@ -55,9 +56,9 @@ public class UserController {
     public ResponseEntity<String> deleteUser(
             @AuthenticationPrincipal UserDetails userDetails
     ){
-        String  email = userDetails.getUsername();
-        userUseCase.deleteUser(email);
+        DeleteUserCommand toCommand = userWebMapper.toDeleteUserCommand(userDetails.getUsername());
+        userUseCase.deleteUser(toCommand);
 
-        return ResponseEntity.ok(" user deleted successfully" + " , " +  email);
+        return ResponseEntity.ok(" user deleted successfully" + " , " +  toCommand.email());
     }
 }

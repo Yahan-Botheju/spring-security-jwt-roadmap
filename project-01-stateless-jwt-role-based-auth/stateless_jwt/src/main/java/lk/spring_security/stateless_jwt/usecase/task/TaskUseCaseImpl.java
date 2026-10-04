@@ -2,6 +2,7 @@ package lk.spring_security.stateless_jwt.usecase.task;
 
 import lk.spring_security.stateless_jwt.domain.models.Task;
 import lk.spring_security.stateless_jwt.domain.repositories.TaskRepository;
+import lk.spring_security.stateless_jwt.usecase.task.records.GetAllTaskResult;
 
 import java.util.List;
 
@@ -16,8 +17,15 @@ public class TaskUseCaseImpl implements TaskUseCase {
 
     //get all tasks
     @Override
-    public List<Task> getAllTasks(){
-        return taskRepository.getAllTasks();
+    public List<GetAllTaskResult> getAllTasks(){
+        return taskRepository.getAllTasks().stream()
+                .map(task -> new GetAllTaskResult(
+                        task.getTaskId(),
+                        task.getTaskTitle(),
+                        task.getTaskDescription(),
+                        task.isCompleted(),
+                        task.getTaskId()
+                )).toList();
     }
 
     //save tasks

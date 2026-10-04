@@ -2,10 +2,8 @@ package lk.spring_security.stateless_jwt.usecase.user;
 
 import lk.spring_security.stateless_jwt.domain.models.User;
 import lk.spring_security.stateless_jwt.domain.repositories.UserRepository;
-import lk.spring_security.stateless_jwt.usecase.user.records.GetUserProfileCommand;
-import lk.spring_security.stateless_jwt.usecase.user.records.GetUserProfileResult;
+import lk.spring_security.stateless_jwt.usecase.user.records.*;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
-import org.springframework.transaction.annotation.Transactional;
 
 public class UserUseCaseImpl implements  UserUseCase {
 
@@ -35,29 +33,66 @@ public class UserUseCaseImpl implements  UserUseCase {
         );
     }
 
-
-
     //update user profile
     @Override
-    @Transactional
-    public User updateUser(User user,String currentEmail){
-        User checkUser = userRepository.userFindByEmail(currentEmail)
-                .orElseThrow(() ->  new IllegalArgumentException("User not found"));
-
-        //check user has given new email
-        if(user.getEmail() != null && !user.getEmail().isEmpty()){
-            checkUser.setEmail(user.getEmail());
+    public UpdateUserProfileResult updateProfile(UpdateUserProfileCommand updateUserProfileCommand) {
+        //check incoming fields
+        if(updateUserProfileCommand.currentEmail().isEmpty() || updateUserProfileCommand.newEmail().isEmpty()){
+            throw new IllegalStateException("User email is required");
         }
+        //get user
+        User checkUser = userRepository.userFindByEmail(updateUserProfileCommand.currentEmail())
+                .orElseThrow(() ->  new IllegalArgumentException("User not found"));
+        //update email using domain logic
+        checkUser.updateEmail(updateUserProfileCommand.newEmail());
 
-        return userRepository.updateUser(checkUser);
+        User updateUser = userRepository.updateUser(checkUser);
+
+        return new  UpdateUserProfileResult(
+                updateUser.getUserId(),
+                updateUser.getEmail(),
+                updateUser.getRole().toString()
+        );
     }
 
     //delete user
-    public void deleteUser(String email){
-        User existingUser = userRepository.userFindByEmail(email)
+    @Override
+    public void deleteUser(DeleteUserCommand deleteUserCommand) {
+        //check incoming fields
+        if(deleteUserCommand.email().isEmpty()){
+            throw new IllegalStateException("User email is required");
+        }
+        User existingUser = userRepository.userFindByEmail(deleteUserCommand.email())
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
         userRepository.deleteUser(existingUser);
     }
 
 
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
