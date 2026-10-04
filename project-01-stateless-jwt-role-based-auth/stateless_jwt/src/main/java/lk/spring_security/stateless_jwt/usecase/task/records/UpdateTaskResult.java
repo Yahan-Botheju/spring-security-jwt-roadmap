@@ -1,4 +1,10 @@
 package lk.spring_security.stateless_jwt.usecase.task.records;
 
-public record UpdateTaskResult() {
+public record UpdateTaskResult(
+        Long taskId,
+        String taskTitle,
+        String  taskDescription,
+        boolean completed,
+        Long userId
+) {
 }
