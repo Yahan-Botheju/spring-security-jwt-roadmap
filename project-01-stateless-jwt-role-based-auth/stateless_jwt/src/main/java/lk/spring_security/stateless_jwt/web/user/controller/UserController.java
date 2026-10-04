@@ -1,11 +1,14 @@
 package lk.spring_security.stateless_jwt.web.user.controller;
 
-import lk.spring_security.stateless_jwt.domain.models.User;
 import lk.spring_security.stateless_jwt.usecase.user.UserUseCase;
+import lk.spring_security.stateless_jwt.usecase.user.records.GetUserProfileCommand;
+import lk.spring_security.stateless_jwt.usecase.user.records.GetUserProfileResult;
+import lk.spring_security.stateless_jwt.web.user.DTOs.GetUserProfileResponseDTO;
 import lk.spring_security.stateless_jwt.web.user.DTOs.UserRequestDTO;
 import lk.spring_security.stateless_jwt.web.user.DTOs.UserResponseDTO;
 import lk.spring_security.stateless_jwt.web.user.webMappers.UserWebMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,14 +27,14 @@ public class UserController {
 
     //get user profile
     @GetMapping("/profile")
-    public ResponseEntity<UserResponseDTO> getUserProfile(
+    public ResponseEntity<GetUserProfileResponseDTO> getUserProfile(
             @AuthenticationPrincipal UserDetails userDetails
     ) {
-        String email = userDetails.getUsername();
+        GetUserProfileCommand toCommand = userWebMapper.toGetUserProfileCommand(userDetails.getUsername());
+        GetUserProfileResult toResult = userUseCase.userProfile(toCommand);
+        GetUserProfileResponseDTO  toResponseDTO = userWebMapper.toGetUserProfileResponseDTO(toResult);
 
-        User user = userUseCase.getUserProfile(email);
-        UserResponseDTO responseDTO = userWebMapper.toResponseDTO(user);
-        return ResponseEntity.ok(responseDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(toResponseDTO);
     }
 
     //update user profile
