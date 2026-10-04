@@ -1,12 +1,15 @@
 package lk.spring_security.stateless_jwt.infrastructure.configs;
 
 import lk.spring_security.stateless_jwt.domain.repositories.IdentityManger;
+import lk.spring_security.stateless_jwt.domain.repositories.TaskRepository;
 import lk.spring_security.stateless_jwt.domain.repositories.UserRepository;
 import lk.spring_security.stateless_jwt.domain.repositories.JwtService;
 import lk.spring_security.stateless_jwt.infrastructure.security.IdentityManagerImpl;
 import lk.spring_security.stateless_jwt.infrastructure.security.user.CustomUserDetailsService;
 import lk.spring_security.stateless_jwt.usecase.auth.AuthUseCase;
 import lk.spring_security.stateless_jwt.usecase.auth.AuthUseCaseImpl;
+import lk.spring_security.stateless_jwt.usecase.task.TaskUseCase;
+import lk.spring_security.stateless_jwt.usecase.task.TaskUseCaseImpl;
 import lk.spring_security.stateless_jwt.usecase.user.UserUseCase;
 import lk.spring_security.stateless_jwt.usecase.user.UserUseCaseImpl;
 import org.springframework.context.annotation.Bean;
@@ -50,5 +53,13 @@ public class UseCaseBeanConfigs {
             UserRepository userRepository
     ) {
         return new UserUseCaseImpl(userRepository);
+    }
+
+    //task use case impl
+    @Bean
+    public TaskUseCase taskUseCase(
+            TaskRepository taskRepository
+    ) {
+        return new TaskUseCaseImpl(taskRepository);
     }
 }
