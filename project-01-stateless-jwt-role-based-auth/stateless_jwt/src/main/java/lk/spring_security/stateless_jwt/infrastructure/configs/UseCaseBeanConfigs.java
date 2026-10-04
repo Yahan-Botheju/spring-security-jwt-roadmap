@@ -6,6 +6,8 @@ import lk.spring_security.stateless_jwt.domain.repositories.JwtService;
 import lk.spring_security.stateless_jwt.infrastructure.security.IdentityManagerImpl;
 import lk.spring_security.stateless_jwt.usecase.auth.AuthUseCase;
 import lk.spring_security.stateless_jwt.usecase.auth.AuthUseCaseImpl;
+import lk.spring_security.stateless_jwt.usecase.user.UserUseCase;
+import lk.spring_security.stateless_jwt.usecase.user.UserUseCaseImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -31,5 +33,13 @@ public class UseCaseBeanConfigs {
             IdentityManger identityManger
     ){
         return new AuthUseCaseImpl(userRepository, passwordEncoder, jwtService, identityManger);
+    }
+
+    //user use case impl
+    @Bean
+    public UserUseCase userUseCase(
+            UserRepository userRepository
+    ) {
+        return new UserUseCaseImpl(userRepository);
     }
 }
