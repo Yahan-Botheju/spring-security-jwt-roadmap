@@ -1,10 +1,7 @@
 package lk.spring_security.stateless_jwt.web.user.webMappers;
 
 import lk.spring_security.stateless_jwt.domain.models.User;
-import lk.spring_security.stateless_jwt.usecase.user.records.GetUserProfileCommand;
-import lk.spring_security.stateless_jwt.usecase.user.records.GetUserProfileResult;
-import lk.spring_security.stateless_jwt.usecase.user.records.UpdateUserProfileCommand;
-import lk.spring_security.stateless_jwt.usecase.user.records.UpdateUserProfileResult;
+import lk.spring_security.stateless_jwt.usecase.user.records.*;
 import lk.spring_security.stateless_jwt.web.user.DTOs.*;
 import org.mapstruct.Mapper;
 
@@ -31,4 +28,9 @@ public interface UserWebMapper {
 
     //domain model to response
     UpdateUserProfileResponseDTO toUpdateUserProfileResponseDTO(UpdateUserProfileResult updateUserProfileResult);
+
+    /* __DELETE_USER__ */
+
+    //request to command
+    DeleteUserCommand toDeleteUserCommand(String email);
 }
