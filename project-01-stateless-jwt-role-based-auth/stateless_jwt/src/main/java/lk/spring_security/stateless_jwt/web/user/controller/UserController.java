@@ -1,10 +1,7 @@
 package lk.spring_security.stateless_jwt.web.user.controller;
 
 import lk.spring_security.stateless_jwt.usecase.user.UserUseCase;
-import lk.spring_security.stateless_jwt.usecase.user.records.GetUserProfileCommand;
-import lk.spring_security.stateless_jwt.usecase.user.records.GetUserProfileResult;
-import lk.spring_security.stateless_jwt.usecase.user.records.UpdateUserProfileCommand;
-import lk.spring_security.stateless_jwt.usecase.user.records.UpdateUserProfileResult;
+import lk.spring_security.stateless_jwt.usecase.user.records.*;
 import lk.spring_security.stateless_jwt.web.user.DTOs.*;
 import lk.spring_security.stateless_jwt.web.user.webMappers.UserWebMapper;
 import lombok.RequiredArgsConstructor;
@@ -59,9 +56,9 @@ public class UserController {
     public ResponseEntity<String> deleteUser(
             @AuthenticationPrincipal UserDetails userDetails
     ){
-        String  email = userDetails.getUsername();
-        userUseCase.deleteUser(email);
+        DeleteUserCommand toCommand = userWebMapper.toDeleteUserCommand(userDetails.getUsername());
+        userUseCase.deleteUser(toCommand);
 
-        return ResponseEntity.ok(" user deleted successfully" + " , " +  email);
+        return ResponseEntity.ok(" user deleted successfully" + " , " +  toCommand.email());
     }
 }
