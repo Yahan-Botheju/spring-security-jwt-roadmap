@@ -4,6 +4,7 @@ import lk.spring_security.stateless_jwt.domain.repositories.IdentityManger;
 import lk.spring_security.stateless_jwt.domain.repositories.UserRepository;
 import lk.spring_security.stateless_jwt.domain.repositories.JwtService;
 import lk.spring_security.stateless_jwt.infrastructure.security.IdentityManagerImpl;
+import lk.spring_security.stateless_jwt.infrastructure.security.user.CustomUserDetailsService;
 import lk.spring_security.stateless_jwt.usecase.auth.AuthUseCase;
 import lk.spring_security.stateless_jwt.usecase.auth.AuthUseCaseImpl;
 import lk.spring_security.stateless_jwt.usecase.user.UserUseCase;
@@ -17,6 +18,12 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @EnableTransactionManagement
 public class UseCaseBeanConfigs {
+
+    //spring security contract impl
+    @Bean
+    public CustomUserDetailsService customUserDetailsImpl (UserRepository userRepository) {
+        return new CustomUserDetailsService(userRepository);
+    }
 
     //identity manager
     @Bean
