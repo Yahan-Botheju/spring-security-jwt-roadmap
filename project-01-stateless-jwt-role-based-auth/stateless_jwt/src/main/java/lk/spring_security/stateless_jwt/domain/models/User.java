@@ -24,4 +24,15 @@ public class User{
     public static User createNewUser(String email, String password, Role role) {
         return new User(null, email, password, role);
     }
+
+    /* __DOMAIN_LOGIC__ */
+
+    //update email
+    public void updateEmail(String newEmail) {
+        if(newEmail.isBlank()) {
+            throw new IllegalArgumentException("Email cannot be empty");
+        }
+        this.email = newEmail;
+    }
+
 }
