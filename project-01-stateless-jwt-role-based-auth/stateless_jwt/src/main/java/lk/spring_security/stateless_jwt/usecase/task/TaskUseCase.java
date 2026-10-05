@@ -16,5 +16,5 @@ public interface TaskUseCase {
     UpdateTaskResult updateTask(UpdateTaskCommand updateTaskCommand);
 
     //delete task
-    void deleteTask(Long taskId);
+    void deleteTask(DeleteTaskCommand deleteTaskCommand);
 }
