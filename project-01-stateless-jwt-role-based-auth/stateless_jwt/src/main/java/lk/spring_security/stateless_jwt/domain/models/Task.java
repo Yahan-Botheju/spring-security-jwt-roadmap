@@ -31,4 +31,13 @@ public class Task {
         return new Task(null, taskTitle, taskDescription, completed, userId);
     }
 
+    /* __UPDATE_TASK__ */
+
+    public void updateTask(String taskTitle, String taskDescription, boolean completed, Long userId) {
+        this.taskTitle = taskTitle;
+        this.taskDescription = taskDescription;
+        this.completed = completed;
+        this.userId = userId;
+    }
+
 }
