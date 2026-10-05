@@ -109,10 +109,14 @@ public class TaskUseCaseImpl implements TaskUseCase {
         );
     }
 
-
+    //delete task
     @Override
-    public void deleteTask(Long taskId) {
-        taskRepository.deleteTask(taskId);
+    public void deleteTask(DeleteTaskCommand deleteTaskCommand) {
+
+        if(deleteTaskCommand.taskId() == null)
+            throw new IllegalStateException("Required fields cannot be empty");
+
+        taskRepository.deleteTask(deleteTaskCommand.taskId());
     }
 }
 
