@@ -1,6 +1,7 @@
 package lk.spring_security.stateless_jwt.usecase.task;
 
 import lk.spring_security.stateless_jwt.domain.models.Task;
+import lk.spring_security.stateless_jwt.domain.models.User;
 import lk.spring_security.stateless_jwt.domain.repositories.TaskRepository;
 import lk.spring_security.stateless_jwt.domain.repositories.UserRepository;
 import lk.spring_security.stateless_jwt.usecase.task.records.GetAllTaskResult;
@@ -37,29 +38,38 @@ public class TaskUseCaseImpl implements TaskUseCase {
                 )).toList();
     }
 
+    //create new task
     @Override
     public SaveTaskResult saveTask(SaveTaskCommand saveTaskCommand) {
 
+        //check incoming fields
         if(saveTaskCommand.userId() == null
                 || saveTaskCommand.taskTitle().isEmpty()
                 || saveTaskCommand.taskDescription().isEmpty()
         ) {
             throw new IllegalStateException("Required fields cannot be empty");
         }
+        //get user
+        User user = userRepository.userFindById(saveTaskCommand.userId())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
+        //create new task with related user through domain model
         Task newTask = Task.createNewTask(
                 saveTaskCommand.taskTitle(),
                 saveTaskCommand.taskDescription(),
-                false
+                false,
+                user.getUserId()
         );
+        //save task
+        Task savedTask = taskRepository.saveTask(newTask);
 
-        return null;
-    }
-
-    //save tasks
-    @Override
-    public Task saveTask(Task task){
-        return taskRepository.saveTask(task);
+        return new  SaveTaskResult(
+                savedTask.getTaskId(),
+                saveTaskCommand.taskTitle(),
+                saveTaskCommand.taskDescription(),
+                savedTask.isCompleted(),
+                savedTask.getUserId()
+        );
     }
 
     //update task
