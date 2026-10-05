@@ -4,9 +4,7 @@ import lk.spring_security.stateless_jwt.domain.models.Task;
 import lk.spring_security.stateless_jwt.domain.models.User;
 import lk.spring_security.stateless_jwt.domain.repositories.TaskRepository;
 import lk.spring_security.stateless_jwt.domain.repositories.UserRepository;
-import lk.spring_security.stateless_jwt.usecase.task.records.GetAllTaskResult;
-import lk.spring_security.stateless_jwt.usecase.task.records.SaveTaskCommand;
-import lk.spring_security.stateless_jwt.usecase.task.records.SaveTaskResult;
+import lk.spring_security.stateless_jwt.usecase.task.records.*;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 
 import java.util.List;
@@ -27,7 +25,7 @@ public class TaskUseCaseImpl implements TaskUseCase {
 
     //get all tasks
     @Override
-    public List<GetAllTaskResult> getAllTasks(){
+    public List<GetAllTaskResult> getAllTasks() {
         return taskRepository.getAllTasks().stream()
                 .map(task -> new GetAllTaskResult(
                         task.getTaskId(),
@@ -43,7 +41,7 @@ public class TaskUseCaseImpl implements TaskUseCase {
     public SaveTaskResult saveTask(SaveTaskCommand saveTaskCommand) {
 
         //check incoming fields
-        if(saveTaskCommand.userId() == null
+        if (saveTaskCommand.userId() == null
                 || saveTaskCommand.taskTitle().isEmpty()
                 || saveTaskCommand.taskDescription().isEmpty()
         ) {
@@ -63,7 +61,7 @@ public class TaskUseCaseImpl implements TaskUseCase {
         //save task
         Task savedTask = taskRepository.saveTask(newTask);
 
-        return new  SaveTaskResult(
+        return new SaveTaskResult(
                 savedTask.getTaskId(),
                 saveTaskCommand.taskTitle(),
                 saveTaskCommand.taskDescription(),
@@ -74,12 +72,82 @@ public class TaskUseCaseImpl implements TaskUseCase {
 
     //update task
     @Override
-    public Task updateTask(Task task, Long taskId){
-        return taskRepository.updateTask(task,taskId);
+    public UpdateTaskResult updateTask(UpdateTaskCommand updateTaskCommand) {
+
+        //check incoming fields
+        if (updateTaskCommand.email().isEmpty()
+                || updateTaskCommand.taskId() == null
+                || updateTaskCommand.taskTitle().isEmpty()
+                || updateTaskCommand.taskDescription().isEmpty()
+                || updateTaskCommand.completed() == null
+        ) {
+            throw new IllegalStateException("Required fields cannot be empty");
+        }
+        //get task
+        Task task = taskRepository.findByTaskId(updateTaskCommand.taskId())
+                .orElseThrow(() -> new ResourceNotFoundException("Task not found"));
+        //get user
+        User user = userRepository.userFindByEmail(updateTaskCommand.email())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        //update tasks through domain
+        task.updateTask(
+                updateTaskCommand.taskTitle(),
+                updateTaskCommand.taskDescription(),
+                updateTaskCommand.completed(),
+                user.getUserId()
+        );
+
+        Task savedTask = taskRepository.saveTask(task);
+
+        return new  UpdateTaskResult(
+                savedTask.getTaskId(),
+                savedTask.getTaskTitle(),
+                savedTask.getTaskDescription(),
+                savedTask.isCompleted(),
+                savedTask.getUserId()
+        );
     }
 
+
     @Override
-    public void deleteTask(Long taskId){
+    public void deleteTask(Long taskId) {
         taskRepository.deleteTask(taskId);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
