@@ -22,4 +22,13 @@ public class Task {
     public String getTaskTitle() { return taskTitle; }
     public String getTaskDescription() { return taskDescription; }
     public boolean isCompleted() { return completed; }
-    public Long getUserId() { return userId; }}
+    public Long getUserId() { return userId; }
+
+
+    /* __FACTORY_METHOD__ */
+
+    public static Task createNewTask(String taskTitle, String taskDescription, boolean completed, Long userId) {
+        return new Task(null, taskTitle, taskDescription, completed, userId);
+    }
+
+}
