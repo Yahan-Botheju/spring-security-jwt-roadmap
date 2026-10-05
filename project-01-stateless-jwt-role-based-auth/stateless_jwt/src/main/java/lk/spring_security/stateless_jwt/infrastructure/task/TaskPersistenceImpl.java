@@ -9,26 +9,31 @@ import lk.spring_security.stateless_jwt.infrastructure.user.persistence.entities
 import lk.spring_security.stateless_jwt.infrastructure.user.persistence.jpa.JpaUserRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public class TaskPersistenceImpl implements TaskRepository {
 
-    //inject task jpa repo
+    //inject required dependencies
     private final JpaTaskRepository jpaTaskRepository;
-
-    //inject task persistence mapper
     private final TaskPersistenceMapper taskPersistenceMapper;
-
-    //inject user jpa repo
     private final JpaUserRepository jpaUserRepository;
 
-    public TaskPersistenceImpl(JpaTaskRepository jpaTaskRepository, TaskPersistenceMapper taskPersistenceMapper, JpaUserRepository jpaUserRepository) {
+    public TaskPersistenceImpl(
+            JpaTaskRepository jpaTaskRepository,
+            TaskPersistenceMapper taskPersistenceMapper,
+            JpaUserRepository jpaUserRepository
+    ) {
         this.jpaTaskRepository = jpaTaskRepository;
         this.taskPersistenceMapper = taskPersistenceMapper;
         this.jpaUserRepository = jpaUserRepository;
     }
 
-
-    /* ----- HELPER METHOD ----- */
+    //task find by its id
+    @Override
+    public Optional<Task> findByTaskId(Long taskId) {
+        return jpaTaskRepository.findByTaskId(taskId)
+                .map(taskPersistenceMapper::toDomainModel);
+    }
 
     //get user tasks list
     @Override
