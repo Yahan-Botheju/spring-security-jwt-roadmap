@@ -58,8 +58,9 @@ public class UseCaseBeanConfigs {
     //task use case impl
     @Bean
     public TaskUseCase taskUseCase(
-            TaskRepository taskRepository
+            TaskRepository taskRepository,
+            UserRepository userRepository
     ) {
-        return new TaskUseCaseImpl(taskRepository);
+        return new TaskUseCaseImpl(taskRepository, userRepository);
     }
 }
