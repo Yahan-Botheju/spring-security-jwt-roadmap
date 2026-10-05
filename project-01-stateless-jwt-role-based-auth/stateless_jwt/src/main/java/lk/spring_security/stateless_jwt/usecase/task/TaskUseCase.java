@@ -1,9 +1,6 @@
 package lk.spring_security.stateless_jwt.usecase.task;
 
-import lk.spring_security.stateless_jwt.domain.models.Task;
-import lk.spring_security.stateless_jwt.usecase.task.records.GetAllTaskResult;
-import lk.spring_security.stateless_jwt.usecase.task.records.SaveTaskCommand;
-import lk.spring_security.stateless_jwt.usecase.task.records.SaveTaskResult;
+import lk.spring_security.stateless_jwt.usecase.task.records.*;
 
 import java.util.List;
 
@@ -16,7 +13,7 @@ public interface TaskUseCase {
     SaveTaskResult saveTask(SaveTaskCommand saveTaskCommand);
 
     //update task
-    Task updateTask(Task task, Long taskId);
+    UpdateTaskResult updateTask(UpdateTaskCommand updateTaskCommand);
 
     //delete task
     void deleteTask(Long taskId);
