@@ -1,16 +1,19 @@
 package lk.spring_security.stateless_jwt.web.task.controllers;
 
+import jakarta.validation.Valid;
 import lk.spring_security.stateless_jwt.domain.models.Task;
 import lk.spring_security.stateless_jwt.usecase.task.TaskUseCase;
 import lk.spring_security.stateless_jwt.usecase.task.records.GetAllTaskResult;
-import lk.spring_security.stateless_jwt.web.task.DTOs.GetAllTaskResponseDTO;
-import lk.spring_security.stateless_jwt.web.task.DTOs.TaskRequestDTO;
-import lk.spring_security.stateless_jwt.web.task.DTOs.TaskResponseDTO;
+import lk.spring_security.stateless_jwt.usecase.task.records.SaveTaskCommand;
+import lk.spring_security.stateless_jwt.usecase.task.records.SaveTaskResult;
+import lk.spring_security.stateless_jwt.web.task.DTOs.*;
 import lk.spring_security.stateless_jwt.web.task.webMappers.TaskWebMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -40,12 +43,16 @@ public class TaskController {
 
     //save task
     @PostMapping
-    public ResponseEntity<String> saveTasks(
-            @RequestBody TaskRequestDTO taskRequestDTO
-            ){
-        Task taskDomainModel = taskUseCase.saveTask(taskWebMapper.toDomainModel(taskRequestDTO));
-        TaskResponseDTO responseDTO = taskWebMapper.toResponseDTO(taskDomainModel);
-        return ResponseEntity.created(URI.create("/api/v1/tasks")).body(responseDTO.toString());
+    public ResponseEntity<SaveTaskResponseDTO> saveTasks(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @Valid @RequestBody SaveTaskRequestDTO saveTaskRequestDTO
+    ){
+        String email = userDetails.getUsername();
+        SaveTaskCommand taskCommand = taskWebMapper.toSaveTaskCommand(email, saveTaskRequestDTO);
+        SaveTaskResult taskResult = taskUseCase.saveTask(taskCommand);
+        SaveTaskResponseDTO responseDTO = taskWebMapper.toSaveTaskResponseDTO(taskResult);
+
+        return ResponseEntity.created(URI.create("/api/v1/tasks")).body(responseDTO);
     }
 
     //update task
