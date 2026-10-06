@@ -2,6 +2,8 @@ package lk.spring_security.stateless_jwt.web.task.controllers;
 
 import lk.spring_security.stateless_jwt.domain.models.Task;
 import lk.spring_security.stateless_jwt.usecase.task.TaskUseCase;
+import lk.spring_security.stateless_jwt.usecase.task.records.GetAllTaskResult;
+import lk.spring_security.stateless_jwt.web.task.DTOs.GetAllTaskResponseDTO;
 import lk.spring_security.stateless_jwt.web.task.DTOs.TaskRequestDTO;
 import lk.spring_security.stateless_jwt.web.task.DTOs.TaskResponseDTO;
 import lk.spring_security.stateless_jwt.web.task.webMappers.TaskWebMapper;
@@ -28,9 +30,11 @@ public class TaskController {
     //get all tasks
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<TaskResponseDTO>> getAllTasks() {
-        List<Task> tasks =  taskUseCase.getAllTasks();
-        List<TaskResponseDTO> responseDTOS =  tasks.stream().map(taskWebMapper::toResponseDTO).toList();
+    public ResponseEntity<List<GetAllTaskResponseDTO>> getAllTasks() {
+
+        List<GetAllTaskResult> tasks =  taskUseCase.getAllTasks();
+        List<GetAllTaskResponseDTO> responseDTOS =  tasks.stream().map(taskWebMapper::toGetAllTaskResponseDTO).toList();
+
         return ResponseEntity.ok(responseDTOS);
     }
 
