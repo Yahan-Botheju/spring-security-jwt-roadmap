@@ -1,11 +1,8 @@
 package lk.spring_security.stateless_jwt.web.task.controllers;
 
 import jakarta.validation.Valid;
-import lk.spring_security.stateless_jwt.domain.models.Task;
 import lk.spring_security.stateless_jwt.usecase.task.TaskUseCase;
-import lk.spring_security.stateless_jwt.usecase.task.records.GetAllTaskResult;
-import lk.spring_security.stateless_jwt.usecase.task.records.SaveTaskCommand;
-import lk.spring_security.stateless_jwt.usecase.task.records.SaveTaskResult;
+import lk.spring_security.stateless_jwt.usecase.task.records.*;
 import lk.spring_security.stateless_jwt.web.task.DTOs.*;
 import lk.spring_security.stateless_jwt.web.task.webMappers.TaskWebMapper;
 import lombok.RequiredArgsConstructor;
@@ -36,9 +33,10 @@ public class TaskController {
     public ResponseEntity<List<GetAllTaskResponseDTO>> getAllTasks() {
 
         List<GetAllTaskResult> tasks =  taskUseCase.getAllTasks();
-        List<GetAllTaskResponseDTO> responseDTOS =  tasks.stream().map(taskWebMapper::toGetAllTaskResponseDTO).toList();
+        List<GetAllTaskResponseDTO> responseDTOS =  tasks.stream()
+                .map(taskWebMapper::toGetAllTaskResponseDTO).toList();
 
-        return ResponseEntity.ok(responseDTOS);
+        return ResponseEntity.status(HttpStatus.OK).body(responseDTOS);
     }
 
     //save task
@@ -47,8 +45,7 @@ public class TaskController {
             @AuthenticationPrincipal UserDetails userDetails,
             @Valid @RequestBody SaveTaskRequestDTO saveTaskRequestDTO
     ){
-        String email = userDetails.getUsername();
-        SaveTaskCommand taskCommand = taskWebMapper.toSaveTaskCommand(email, saveTaskRequestDTO);
+        SaveTaskCommand taskCommand = taskWebMapper.toSaveTaskCommand(userDetails.getUsername(), saveTaskRequestDTO);
         SaveTaskResult taskResult = taskUseCase.saveTask(taskCommand);
         SaveTaskResponseDTO responseDTO = taskWebMapper.toSaveTaskResponseDTO(taskResult);
 
@@ -57,13 +54,17 @@ public class TaskController {
 
     //update task
     @PutMapping("/{taskId}")
-    public ResponseEntity<TaskResponseDTO> updateTask(
-            @PathVariable Long taskId,
-            @RequestBody TaskRequestDTO taskRequestDTO
+    public ResponseEntity<UpdateTaskResponseDTO> updateTask(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @Valid @PathVariable Long taskId,
+            @Valid @RequestBody UpdateTaskRequestDTO updateTaskRequestDTO
     ){
-        Task toDomainModel = taskUseCase.updateTask(taskWebMapper.toDomainModel(taskRequestDTO), taskId);
-        TaskResponseDTO responseDTO = taskWebMapper.toResponseDTO(toDomainModel);
-        return ResponseEntity.ok(responseDTO);
+        UpdateTaskCommand taskCommand = taskWebMapper
+                .toUpdateTaskCommand(userDetails.getUsername(), taskId, updateTaskRequestDTO);
+        UpdateTaskResult taskResult = taskUseCase.updateTask(taskCommand);
+        UpdateTaskResponseDTO responseDTO = taskWebMapper.toUpdateTaskResponseDTO(taskResult);
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
     }
 
     //delete task
