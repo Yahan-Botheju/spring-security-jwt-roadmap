@@ -24,7 +24,7 @@ public interface TaskWebMapper {
     /* __CREATE_TASK__ */
 
     //request to command
-    SaveTaskCommand  toSaveTaskCommand(SaveTaskRequestDTO saveTaskRequestDTO);
+    SaveTaskCommand  toSaveTaskCommand(String email, SaveTaskRequestDTO saveTaskRequestDTO);
 
     //domain model to response
     SaveTaskResponseDTO toSaveTaskResponseDTO(SaveTaskResult saveTaskResult);
