@@ -36,4 +36,9 @@ public interface TaskWebMapper {
 
     //domain model to response
     UpdateTaskResponseDTO toUpdateTaskResponseDTO(UpdateTaskResult updateTaskResult);
+
+    /* __DELETE_TASK__ */
+
+    //request to command
+    DeleteTaskCommand toDeleteTaskCommand(DeleteTaskRequestDTO deleteTaskRequestDTO);
 }
