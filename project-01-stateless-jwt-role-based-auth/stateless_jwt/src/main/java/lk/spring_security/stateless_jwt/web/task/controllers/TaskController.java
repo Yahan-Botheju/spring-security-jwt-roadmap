@@ -21,10 +21,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TaskController {
 
-    //inject task usecase
+    //inject required dependencies
     private final TaskUseCase taskUseCase;
-
-    //inject task web mapper
     private final TaskWebMapper taskWebMapper;
 
     //get all tasks
@@ -70,9 +68,11 @@ public class TaskController {
     //delete task
     @DeleteMapping("/{taskId}")
     public ResponseEntity<String> deleteTask(
-            @PathVariable Long taskId
+            @Valid @PathVariable Long taskId
     ){
-        taskUseCase.deleteTask(taskId);
+        DeleteTaskCommand taskCommand = taskWebMapper.toDeleteTaskCommand(taskId);
+        taskUseCase.deleteTask(taskCommand);
+
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Task deleted");
     }
 }
