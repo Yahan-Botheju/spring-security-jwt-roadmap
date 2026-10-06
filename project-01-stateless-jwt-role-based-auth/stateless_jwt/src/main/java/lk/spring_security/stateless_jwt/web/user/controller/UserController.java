@@ -16,10 +16,8 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class UserController {
 
-    //inject user usecase
+    //inject required dependencies
     private final UserUseCase userUseCase;
-
-    //inject user web mapper
     private final UserWebMapper userWebMapper;
 
     //get user profile
