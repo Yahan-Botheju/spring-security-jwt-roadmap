@@ -1,9 +1,7 @@
 package lk.spring_security.stateless_jwt.web.task.webMappers;
 
 import lk.spring_security.stateless_jwt.domain.models.Task;
-import lk.spring_security.stateless_jwt.usecase.task.records.GetAllTaskResult;
-import lk.spring_security.stateless_jwt.usecase.task.records.SaveTaskCommand;
-import lk.spring_security.stateless_jwt.usecase.task.records.SaveTaskResult;
+import lk.spring_security.stateless_jwt.usecase.task.records.*;
 import lk.spring_security.stateless_jwt.web.task.DTOs.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -26,8 +24,21 @@ public interface TaskWebMapper {
     /* __CREATE_TASK__ */
 
     //request to command
-    SaveTaskCommand  toSaveTaskCommand(SaveTaskRequestDTO saveTaskRequestDTO);
+    SaveTaskCommand  toSaveTaskCommand(String email, SaveTaskRequestDTO saveTaskRequestDTO);
 
     //domain model to response
     SaveTaskResponseDTO toSaveTaskResponseDTO(SaveTaskResult saveTaskResult);
+
+    /* __UPDATE_TASK__ */
+
+    //request to command
+    UpdateTaskCommand toUpdateTaskCommand(String email, Long taskId, UpdateTaskRequestDTO updateTaskRequestDTO);
+
+    //domain model to response
+    UpdateTaskResponseDTO toUpdateTaskResponseDTO(UpdateTaskResult updateTaskResult);
+
+    /* __DELETE_TASK__ */
+
+    //request to command
+    DeleteTaskCommand toDeleteTaskCommand(Long taskId);
 }

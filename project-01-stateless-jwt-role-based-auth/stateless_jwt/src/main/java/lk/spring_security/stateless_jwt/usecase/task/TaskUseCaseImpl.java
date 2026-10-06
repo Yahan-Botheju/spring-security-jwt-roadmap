@@ -41,14 +41,14 @@ public class TaskUseCaseImpl implements TaskUseCase {
     public SaveTaskResult saveTask(SaveTaskCommand saveTaskCommand) {
 
         //check incoming fields
-        if (saveTaskCommand.userId() == null
+        if (saveTaskCommand.email().isEmpty()
                 || saveTaskCommand.taskTitle().isEmpty()
                 || saveTaskCommand.taskDescription().isEmpty()
         ) {
             throw new IllegalStateException("Required fields cannot be empty");
         }
         //get user
-        User user = userRepository.userFindById(saveTaskCommand.userId())
+        User user = userRepository.userFindByEmail(saveTaskCommand.email())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         //create new task with related user through domain model
