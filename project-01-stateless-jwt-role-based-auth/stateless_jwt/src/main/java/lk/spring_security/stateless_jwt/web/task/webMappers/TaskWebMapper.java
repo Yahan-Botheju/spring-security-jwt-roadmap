@@ -32,7 +32,7 @@ public interface TaskWebMapper {
     /* __UPDATE_TASK__ */
 
     //request to command
-    UpdateTaskCommand toUpdateTaskCommand(UpdateTaskRequestDTO updateTaskRequestDTO);
+    UpdateTaskCommand toUpdateTaskCommand(String email, Long taskId, UpdateTaskRequestDTO updateTaskRequestDTO);
 
     //domain model to response
     UpdateTaskResponseDTO toUpdateTaskResponseDTO(UpdateTaskResult updateTaskResult);
