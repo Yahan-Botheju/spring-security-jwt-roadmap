@@ -40,5 +40,5 @@ public interface TaskWebMapper {
     /* __DELETE_TASK__ */
 
     //request to command
-    DeleteTaskCommand toDeleteTaskCommand(DeleteTaskRequestDTO deleteTaskRequestDTO);
+    DeleteTaskCommand toDeleteTaskCommand(Long taskId);
 }
