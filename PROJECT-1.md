@@ -48,7 +48,7 @@ The application follows a layered architecture with clear separation of concerns
 -  DTO Mapping using MapStruct
 -  Request Validation
 -  Layered Modular Structure
--  BCrypt Password Encryption
+-  Bcrypt Password Encryption
 -  Method-Level Security
 -  PostgreSQL Integration
 -  Swagger/OpenAPI Support
@@ -83,16 +83,16 @@ The project follows Clean Architecture principles.
 
 ```text
                🌐 Web Layer
-         (Controllers, DTOs, APIs)
+         (Controllers, DTOs, WebMappers)
                      ↓
              🛠️ Use Case Layer
-        (Business Application Logic)
+        (UseCases and Logics, Commands, Results)
                      ↓
               🧠 Domain Layer
-         (Core Business Rules)
+        (Core Business Rules and Core Models, Repository)
                      ↑
-          ⚙️ Infrastructure Layer
-      (Database, Security, Persistence)
+          ⚙️ Infrastructure Layer (Infrastructure implements Domain interfaces)
+      (Database, JPA Entities, Security, Adapters)
 ```
 
 ---
@@ -107,31 +107,45 @@ stateless_jwt
 │   │   ├── Task.java                                # Task Domain Model
 │   │   └── User.java                                # User Domain Model
 │   ├── 📁 repositories                              @Domain Repository Interfaces (Outbound Ports)
-│   │   ├── TaskRepository.java
-│   │   └── UserRepository.java
+│   │   ├── TaskRepository.java                      # Task Repository Port
+│   │   └── UserRepository.java                      # User Repository Port
 │   └── 📁 services                                  @Domain Services (Pure Business Contracts)
 │       └── JwtService.java                          # Core Token Operations Interface
 │
 ├── 📁 usecase                                       @Application Specific Business Rules
 │   ├── 📁 auth                                      @Inbound Port for Auth Operations
+│   │   ├── 📁 records
+│   │   │   ├── LoginCommand.java
+│   │   │   ├── LoginResult.java
+│   │   │   ├── RegisterCommand.java
+│   │   │   └── RegisterResult.java
 │   │   ├── AuthUseCase.java                         # Feature Interface
 │   │   └── AuthUseCaseImpl.java                     # Orchestration of Auth Logic
 │   ├── 📁 task                                      @Inbound Port for Task Operations
+│   │   ├── 📁 records
+│   │   │   ├── DeleteTaskCommand.java
+│   │   │   ├── GetAllTaskResult.java
+│   │   │   ├── SaveTaskCommand.java
+│   │   │   ├── SaveTaskResult.java
+│   │   │   ├── UpdateTaskCommand.java
+│   │   │   └── UpdateTaskResult.java
 │   │   ├── TaskUseCase.java
 │   │   └── TaskUseCaseImpl.java
 │   └── 📁 user                                      @Inbound Port for User Management
+│       ├── 📁 records
+│       │   ├── DeleteUserCommand.java
+│       │   ├── GetUserProfileCommand.java
+│       │   ├── GetUserProfileResult.java
+│       │   ├── UpdateUserProfileCommand.java
+│       │   └── UpdateUserProfileResult.java
 │       ├── UserUseCase.java
 │       └── UserUseCaseImpl.java
 │
 ├── 📁 infrastructure                                @External Frameworks, Tools & Adapters
-│   ├── 📁 auth                                      @Authentication Adapter Configuration
-│   │   └── 📁 config                                # Bean Definitions (DI Configuration)
-│   │       └── AuthBeanConfig.java
 │   ├── 📁 security                                  @Spring Security Configuration & Core Extensions
 │   │   ├── 📁 config
 │   │   │   ├── ApplicationConfig.java               # Auth Manager, Provider, Password Encoder
-│   │   │   ├── CustomUserDetailsBeanConfig.java
-│   │   │   ├── JwtBeanConfig.java
+│   │   │   ├── JwtBeanConfig.java                   # JWT Related Beans
 │   │   │   └── SecurityConfiguration.java           # SecurityFilterChain & Rule Interceptors
 │   │   ├── 📁 filter
 │   │   │   └── JwtAuthenticationFilter.java         # Stateless Session Token Interceptor
@@ -141,8 +155,7 @@ stateless_jwt
 │   │   └── JwtImpl.java                             # Concrete implementation of Domain JwtService
 │   ├── 📁 task                                      @Infrastructure Implementation for Task Module
 │   │   ├── 📁 config
-│   │   │   ├── TaskPersistenceBeanConfig.java
-│   │   │   └── TaskUseCaseBeanConfig.java
+│   │   │   └── TaskPersistenceBeanConfig.java       # Task Bean Definitions
 │   │   └── 📁 persistence                           @Database Layer (PostgreSQL/H2/MySQL)
 │   │       ├── 📁 entities
 │   │       │   └── TaskEntity.java                  # JPA @Entity Definition
@@ -153,8 +166,7 @@ stateless_jwt
 │   │       └── TaskPersistenceImpl.java             # Adapter connecting Domain Repo to JPA Repo
 │   └── 📁 user                                      @Infrastructure Implementation for User Module
 │       ├── 📁 config
-│       │   ├── UserPersistenceBeanConfig.java
-│       │   └── UserUseCaseBeanConfig.java
+│       │   └── UserPersistenceBeanConfig.java       # User Bean Definitions
 │       └── 📁 persistence
 │           ├── 📁 entities
 │           │   └── UserEntity.java                  # JPA @Entity Definition
@@ -168,25 +180,37 @@ stateless_jwt
 │   ├── 📁 auth                                      @Auth Delivery Layer
 │   │   ├── 📁 controllers
 │   │   │   └── AuthController.java                  # REST API Endpoint (@RestController)
-│   │   └── 📁 DTOs                                  @API Request/Response Data Contracts
-│   │       ├── AuthRequestDTO.java
-│   │       └── AuthResponseDTO.java
+│   │   ├── 📁 DTOs                                  @API Request/Response Data Contracts
+│   │   │   ├── LoginRequestDTO.java
+│   │   │   ├── LoginResponseDTO.java
+│   │   │   ├── RegisterRequestDTO.java
+│   │   │   └── RegisterResponseDTO.java
+│   │   └── 📁 webMappers
+│   │       └── AuthWebMapper.java                   # Auth DTO <-> UseCase Command/Result Mapping
 │   ├── 📁 task                                      @Task Delivery Layer
 │   │   ├── 📁 controllers
 │   │   │   └── TaskController.java
 │   │   ├── 📁 DTOs
+│   │   │   ├── GetAllTaskResponseDTO.java
+│   │   │   ├── SaveTaskRequestDTO.java
+│   │   │   ├── SaveTaskResponseDTO.java
 │   │   │   ├── TaskRequestDTO.java
-│   │   │   └── TaskResponseDTO.java
-│   │   └── 📁 webMappers                            @Web DTO <-> Domain Mapping
-│   │       └── TaskWebMapper.java
+│   │   │   ├── TaskResponseDTO.java
+│   │   │   ├── UpdateTaskRequestDTO.java
+│   │   │   └── UpdateTaskResponseDTO.java
+│   │   └── 📁 webMappers
+│   │       └── TaskWebMapper.java                   # Web DTO <-> Domain/Command Mapping
 │   └── 📁 user                                      @User Delivery Layer
 │       ├── 📁 controller
 │       │   └── UserController.java
 │       ├── 📁 DTOs
+│       │   ├── GetUserProfileResponseDTO.java
+│       │   ├── UpdateUserProfileRequestDTO.java
+│       │   ├── UpdateUserProfileResponseDTO.java
 │       │   ├── UserRequestDTO.java
 │       │   └── UserResponseDTO.java
-│       └── 📁 webMappers                            @Web DTO <-> Domain Mapping
-│           └── UserWebMapper.java
+│       └── 📁 webMappers
+│           └── UserWebMapper.java                   # Web DTO <-> Domain/Command Mapping
 │
 └── StatelessJwtApplication.java                     @Spring Boot Main Class
 ```
@@ -391,7 +415,8 @@ Used in:
 
 The project uses MapStruct for:
 
-- DTO → Domain
+- DTO Request and Response → UseCase Command and Results
+- UseCase Command and Results → DTO Request and Response
 - Domain → Entity
 - Entity → Domain
 - Update entity mapping
@@ -562,9 +587,9 @@ After completing this project, the following concepts were practiced:
 - Authentication Filters
 - Security Context Handling
 - Repository Abstraction
-- DTO Mapping Strategies
+- Mapping Strategies
 - Stateless API Design
-- Clean Architecture Separation
+- Clean Architecture Separation and Data Flows between layers
 - Role-Based Authorization
 - JPA Relationships & Persistence
 
